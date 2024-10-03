@@ -1,16 +1,17 @@
-import type { Metadata } from "next";
-import "./globals.css";
+import type { Metadata } from 'next';
+import './globals.css';
 
-import { Roboto } from "next/font/google";
+import { Roboto } from 'next/font/google';
+import Providers from '@/lib/Providers';
 
 const roboto = Roboto({
-  weight: ["400", "500", "700"],
-  subsets: ["latin"],
+  weight: ['400', '500', '700'],
+  subsets: ['latin'],
 });
 
 export const metadata: Metadata = {
-  title: "Gardening Tips & Advice Platform",
-  description: "Your go-to platform for gardening knowledge and tips.",
+  title: 'Gardening Tips & Advice Platform',
+  description: 'Your go-to platform for gardening knowledge and tips.',
 };
 
 export default function RootLayout({
@@ -20,7 +21,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={roboto.className}>{children}</body>
+      <body className={roboto.className}>
+        <Providers>{children}</Providers>
+      </body>
     </html>
   );
 }

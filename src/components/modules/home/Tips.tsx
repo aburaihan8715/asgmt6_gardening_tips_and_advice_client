@@ -1,5 +1,5 @@
 'use client';
-import React from 'react';
+import React, { useState } from 'react';
 import Image from 'next/image';
 import {
   FaThumbsUp,
@@ -10,6 +10,8 @@ import {
 import Link from 'next/link';
 
 const Tips = () => {
+  const [isFollowing, setIsFollowing] = useState(false);
+
   const postData = {
     title: 'Top 10 Tips for Growing Tomatoes',
     content:
@@ -51,6 +53,10 @@ const Tips = () => {
     } else {
       alert('Share API is not supported in your browser.');
     }
+  };
+
+  const handleFollow = () => {
+    setIsFollowing(!isFollowing);
   };
 
   return (
@@ -101,8 +107,8 @@ const Tips = () => {
       </h2>
 
       {/* Author Information */}
-      <div className="mt-2 flex items-center text-sm text-gray-500">
-        <div>
+      <div className="mt-2 flex items-center justify-between text-sm text-gray-500">
+        <div className="flex items-center">
           <div className="relative mr-3 h-10 w-10 rounded-full object-cover">
             <Image
               fill
@@ -112,25 +118,35 @@ const Tips = () => {
               className="rounded-full object-cover"
             />
           </div>
-        </div>
-
-        <div>
-          <div className="flex items-center">
-            <span>by {postData.author.name}</span>
-            <span className="mx-2">•</span>
-            <span>
-              {new Date(postData.createdAt).toLocaleDateString()}
-            </span>
-          </div>
-          <div className="text-xs text-gray-400">
-            {postData.author.followers} Followers
-            {postData.author.isPremiumUser && (
-              <span className="ml-2 rounded-full bg-yellow-400 px-2 py-1 text-xs font-semibold text-yellow-900">
-                Premium User 💎
+          <div>
+            <div className="flex items-center">
+              <span>by {postData.author.name}</span>
+              <span className="mx-2">•</span>
+              <span>
+                {new Date(postData.createdAt).toLocaleDateString()}
               </span>
-            )}
+            </div>
+            <div className="text-xs text-gray-400">
+              {postData.author.followers} Followers
+              {postData.author.isPremiumUser && (
+                <span className="ml-2 rounded-full bg-yellow-400 px-2 py-1 text-xs font-semibold text-yellow-900">
+                  Premium User 💎
+                </span>
+              )}
+            </div>
           </div>
         </div>
+        {/* Follow Button */}
+        <button
+          onClick={handleFollow}
+          className={`rounded-full px-4 py-1 text-xs font-semibold ${
+            isFollowing
+              ? 'bg-gray-300 text-gray-800'
+              : 'bg-green-500 text-white hover:bg-green-600'
+          }`}
+        >
+          {isFollowing ? 'Following' : 'Follow'}
+        </button>
       </div>
 
       {/* Content Preview */}
@@ -160,7 +176,7 @@ const Tips = () => {
 
         <button
           onClick={handleShare}
-          className="flex items-center space-x-1 text-blue-500 hover:text-blue-600"
+          className="flex items-center space-x-1 text-green-500 hover:text-green-600"
         >
           <FaShareAlt />
           <span>Share</span>
