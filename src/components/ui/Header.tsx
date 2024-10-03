@@ -14,10 +14,15 @@ import Image from 'next/image';
 import BrandLogo from './BrandLogo';
 import { MdClose, MdMenu } from 'react-icons/md';
 import ActiveLink from './ActiveLink';
+import { useUser } from '@/context/user.provider';
 
 // HEADER COMPONENT
 const Header = () => {
   const [open, setOpen] = useState(true);
+
+  const { user } = useUser();
+
+  console.log(user);
 
   const menuItems = (
     <>
@@ -56,19 +61,25 @@ const Header = () => {
 
         {/* LOGIN,PROFILE GROUP */}
         <div className="flex items-center gap-4">
-          <div className="flex items-center">
-            <ProfilePopover />
-          </div>
+          {user && (
+            <div className="flex items-center">
+              <ProfilePopover />
+            </div>
+          )}
 
-          <div>
-            <Link href={`/login`}>
-              <Button>Login</Button>
-            </Link>
-          </div>
+          {!user && (
+            <div>
+              <Link href={`/login`}>
+                <Button>Login</Button>
+              </Link>
+            </div>
+          )}
 
-          <div>
-            <Button>Logout</Button>
-          </div>
+          {user && (
+            <div>
+              <Button>Logout</Button>
+            </div>
+          )}
         </div>
       </div>
 
