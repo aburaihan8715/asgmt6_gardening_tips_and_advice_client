@@ -1,15 +1,15 @@
 import LoadingSpinner from '@/components/ui/LoadingSpinner';
 import React from 'react';
 
-const RootLayoutLoading = () => {
+const DashboardLayoutLoading = () => {
   return (
-    <div className="mt-[80px]">
+    <div>
       <LoadingSpinner />
     </div>
   );
 };
 
-export default RootLayoutLoading;
+export default DashboardLayoutLoading;
 
 // const LoadingSpinner = () => {
 //   return (
