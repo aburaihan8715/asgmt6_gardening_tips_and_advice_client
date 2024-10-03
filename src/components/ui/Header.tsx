@@ -15,14 +15,17 @@ import BrandLogo from './BrandLogo';
 import { MdClose, MdMenu } from 'react-icons/md';
 import ActiveLink from './ActiveLink';
 import { useUser } from '@/context/user.provider';
+import { logout } from '@/services/AuthService';
+import { protectedRoutes } from '@/constant';
+import { usePathname, useRouter } from 'next/navigation';
 
 // HEADER COMPONENT
 const Header = () => {
   const [open, setOpen] = useState(true);
+  const { user, setIsLoading: userLoading } = useUser();
 
-  const { user } = useUser();
-
-  console.log(user);
+  const router = useRouter();
+  const pathname = usePathname();
 
   const menuItems = (
     <>
@@ -44,6 +47,15 @@ const Header = () => {
       </li>
     </>
   );
+
+  const handleLogout = () => {
+    logout();
+    userLoading(true);
+
+    if (protectedRoutes.some((route) => pathname.match(route))) {
+      router.push('/');
+    }
+  };
 
   return (
     <header>
@@ -77,7 +89,7 @@ const Header = () => {
 
           {user && (
             <div>
-              <Button>Logout</Button>
+              <Button onClick={handleLogout}>Logout</Button>
             </div>
           )}
         </div>
@@ -112,7 +124,7 @@ const Header = () => {
             </div>
 
             <div>
-              <Button>Logout</Button>
+              <Button onClick={handleLogout}>Logout</Button>
             </div>
           </div>
         </div>

@@ -10,7 +10,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { useUser } from '@/context/user.provider';
 import { useUserLogin } from '@/hooks/auth.hook';
 import { useEffect } from 'react';
-import Loading from '@/components/ui/Loading';
+import LoadingWithOverlay from '@/components/ui/LoadingWithOverlay';
 
 interface LoginFormValues {
   email: string;
@@ -35,7 +35,6 @@ const Login = () => {
   });
 
   const onSubmit = (data: LoginFormValues) => {
-    console.log('Form Submitted', data);
     handleUserLogin(data);
     userLoading(true);
   };
@@ -52,7 +51,7 @@ const Login = () => {
 
   return (
     <>
-      {isPending && <Loading />}
+      {isPending && <LoadingWithOverlay />}
       <div className="mt-[80px] flex min-h-screen justify-center bg-gray-50 py-12 sm:px-6 lg:px-8">
         <motion.div
           className="w-full max-w-md rounded-lg bg-white p-8 shadow-lg"
