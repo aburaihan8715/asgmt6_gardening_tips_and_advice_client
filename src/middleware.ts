@@ -6,6 +6,7 @@ const AuthRoutes = ['/login', '/register'];
 
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
+  console.log('testing');
 
   const user = await getCurrentUser();
 
@@ -32,14 +33,23 @@ export async function middleware(request: NextRequest) {
     return NextResponse.next();
   }
 
+  if (user.role === 'USER' && pathname.match(/^\/profile/)) {
+    return NextResponse.next();
+  }
+  if (user.role === 'ADMIN' && pathname.match(/^\/profile/)) {
+    return NextResponse.next();
+  }
+
   return NextResponse.redirect(new URL('/', request.url));
 }
 
 // See "Matching Paths" below to learn more
 export const config = {
   matcher: [
-    '/user-dashboard/:page*',
-    '/admin-dashboard/:page*',
+    '/user-dashboard/:path*',
+    '/admin-dashboard/:path*',
+    '/profile/change-password/:path*',
+    '/profile/settings-profile/:path*',
     '/login',
     '/register',
   ],

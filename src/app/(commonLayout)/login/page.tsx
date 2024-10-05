@@ -46,7 +46,6 @@ const Login = () => {
     setIsUserLoading(true);
   };
 
-  // NOTE: uerEffect needed cause loginMutate is not async
   useEffect(() => {
     if (!isPending && isSuccess) {
       if (redirect) {
@@ -77,12 +76,20 @@ const Login = () => {
                 animate={{ opacity: 1 }}
                 transition={{ duration: 0.3 }}
               >
-                <label
-                  htmlFor="email"
-                  className="block text-sm font-medium text-green-700"
-                >
-                  Email
-                </label>
+                <div className="flex items-center justify-between">
+                  <label
+                    htmlFor="email"
+                    className="block text-sm font-medium text-green-700"
+                  >
+                    Email
+                  </label>
+                  <Link
+                    href="/forget-password"
+                    className="text-sm text-green-700 hover:text-green-800"
+                  >
+                    Forget Password?
+                  </Link>
+                </div>
                 <input
                   id="email"
                   type="email"

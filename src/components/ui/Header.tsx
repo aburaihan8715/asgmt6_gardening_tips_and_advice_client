@@ -9,7 +9,6 @@ import {
   PopoverTrigger,
 } from '@/components/ui/popover';
 
-import Link from 'next/link';
 import Image from 'next/image';
 import BrandLogo from './BrandLogo';
 import { MdClose, MdMenu } from 'react-icons/md';
@@ -18,6 +17,7 @@ import { useUser } from '@/context/user.provider';
 import { logout } from '@/services/AuthService';
 import { protectedRoutes } from '@/constant';
 import { usePathname, useRouter } from 'next/navigation';
+import Link from 'next/link';
 
 // HEADER COMPONENT
 const Header = () => {
@@ -45,7 +45,12 @@ const Header = () => {
       </li>
 
       <li>
-        <ActiveLink href={`/user-dashboard`}>Dashboard</ActiveLink>
+        {user && user.role === 'USER' && (
+          <ActiveLink href={`/user-dashboard`}>Dashboard</ActiveLink>
+        )}
+        {user && user.role === 'ADMIN' && (
+          <ActiveLink href={`/admin-dashboard`}>Dashboard</ActiveLink>
+        )}
       </li>
     </>
   );
@@ -182,40 +187,66 @@ const ProfilePopover = () => {
         <h4 className="text-lg font-semibold">My account</h4>
         <hr className="my-2 border-gray-300" />
 
-        {user && user.role === 'ADMIN' ? (
-          <>
-            <div className="flex flex-col gap-2">
-              <Link
-                href="/admin-dashboard"
-                className="w-fit border-b-2 border-b-transparent hover:border-b-2 hover:border-b-primary"
-              >
-                Dashboard
-              </Link>
-              <button
-                onClick={handleLogout}
-                className="w-fit border-b-2 border-b-transparent text-left hover:border-b-2 hover:border-b-primary"
-              >
-                Logout
-              </button>
-            </div>
-          </>
-        ) : (
-          <>
-            <div className="flex flex-col gap-2">
-              <Link
-                href="/user-dashboard"
-                className="w-fit border-b-2 border-b-transparent hover:border-b-2 hover:border-b-primary"
-              >
-                Dashboard
-              </Link>
-              <button
-                onClick={handleLogout}
-                className="w-fit border-b-2 border-b-transparent text-left hover:border-b-2 hover:border-b-primary"
-              >
-                Logout
-              </button>
-            </div>
-          </>
+        {user && user.role === 'ADMIN' && (
+          <div className="flex flex-col gap-2">
+            <Link
+              href="/admin-dashboard"
+              className="w-fit border-b-2 border-b-transparent hover:border-b-2 hover:border-b-primary"
+            >
+              Dashboard
+            </Link>
+
+            <Link
+              href="/profile/change-password"
+              className="w-fit border-b-2 border-b-transparent hover:border-b-2 hover:border-b-primary"
+            >
+              Change Password
+            </Link>
+
+            <Link
+              href="/profile/settings-profile"
+              className="w-fit border-b-2 border-b-transparent hover:border-b-2 hover:border-b-primary"
+            >
+              Settings Profile
+            </Link>
+            <button
+              onClick={handleLogout}
+              className="w-fit border-b-2 border-b-transparent text-left hover:border-b-2 hover:border-b-primary"
+            >
+              Logout
+            </button>
+          </div>
+        )}
+
+        {user && user.role === 'USER' && (
+          <div className="flex flex-col gap-2">
+            <Link
+              href="/user-dashboard"
+              className="w-fit border-b-2 border-b-transparent hover:border-b-2 hover:border-b-primary"
+            >
+              Dashboard
+            </Link>
+
+            <Link
+              href="/profile/change-password"
+              className="w-fit border-b-2 border-b-transparent hover:border-b-2 hover:border-b-primary"
+            >
+              Change Password
+            </Link>
+
+            <Link
+              href="/profile/settings-profile"
+              className="w-fit border-b-2 border-b-transparent hover:border-b-2 hover:border-b-primary"
+            >
+              Settings Profile
+            </Link>
+            <button
+              onClick={handleLogout}
+              className="w-fit border-b-2 border-b-transparent text-left hover:border-b-2 hover:border-b-primary"
+            >
+              Logout
+            </button>
+          </div>
         )}
       </PopoverContent>
     </Popover>
