@@ -27,6 +27,8 @@ const Header = () => {
   const router = useRouter();
   const pathname = usePathname();
 
+  // console.log(user);
+
   const menuItems = (
     <>
       <li>
@@ -43,7 +45,7 @@ const Header = () => {
       </li>
 
       <li>
-        <ActiveLink href={`/dashboard/user`}>Dashboard</ActiveLink>
+        <ActiveLink href={`/user-dashboard`}>Dashboard</ActiveLink>
       </li>
     </>
   );
@@ -117,15 +119,19 @@ const Header = () => {
               <ProfilePopover />
             </div>
 
-            <div>
-              <Link href={`/login`}>
-                <Button>Login</Button>
-              </Link>
-            </div>
+            {!user && (
+              <div>
+                <Link href={`/login`}>
+                  <Button>Login</Button>
+                </Link>
+              </div>
+            )}
 
-            <div>
-              <Button onClick={handleLogout}>Logout</Button>
-            </div>
+            {user && (
+              <div>
+                <Button onClick={handleLogout}>Logout</Button>
+              </div>
+            )}
           </div>
         </div>
 
@@ -147,6 +153,19 @@ export default Header;
 
 // PROFILE POPOVER COMPONENT
 const ProfilePopover = () => {
+  const { user, setIsLoading: userLoading } = useUser();
+  const router = useRouter();
+  const pathname = usePathname();
+
+  const handleLogout = () => {
+    logout();
+    userLoading(true);
+
+    if (protectedRoutes.some((route) => pathname.match(route))) {
+      router.push('/');
+    }
+  };
+
   return (
     <Popover>
       <PopoverTrigger>
@@ -163,33 +182,41 @@ const ProfilePopover = () => {
         <h4 className="text-lg font-semibold">My account</h4>
         <hr className="my-2 border-gray-300" />
 
-        <>
-          <div className="flex flex-col gap-2">
-            <Link
-              href="/dashboard/admin"
-              className="w-fit border-b-2 border-b-transparent hover:border-b-2 hover:border-b-primary"
-            >
-              Dashboard
-            </Link>
-            <button className="w-fit border-b-2 border-b-transparent text-left hover:border-b-2 hover:border-b-primary">
-              Logout
-            </button>
-          </div>
-        </>
-
-        <>
-          <div className="flex flex-col gap-2">
-            <Link
-              href="/dashboard/my-bookings"
-              className="w-fit border-b-2 border-b-transparent hover:border-b-2 hover:border-b-primary"
-            >
-              My booking
-            </Link>
-            <button className="w-fit border-b-2 border-b-transparent text-left hover:border-b-2 hover:border-b-primary">
-              Logout
-            </button>
-          </div>
-        </>
+        {user && user.role === 'ADMIN' ? (
+          <>
+            <div className="flex flex-col gap-2">
+              <Link
+                href="/admin-dashboard"
+                className="w-fit border-b-2 border-b-transparent hover:border-b-2 hover:border-b-primary"
+              >
+                Dashboard
+              </Link>
+              <button
+                onClick={handleLogout}
+                className="w-fit border-b-2 border-b-transparent text-left hover:border-b-2 hover:border-b-primary"
+              >
+                Logout
+              </button>
+            </div>
+          </>
+        ) : (
+          <>
+            <div className="flex flex-col gap-2">
+              <Link
+                href="/user-dashboard"
+                className="w-fit border-b-2 border-b-transparent hover:border-b-2 hover:border-b-primary"
+              >
+                Dashboard
+              </Link>
+              <button
+                onClick={handleLogout}
+                className="w-fit border-b-2 border-b-transparent text-left hover:border-b-2 hover:border-b-primary"
+              >
+                Logout
+              </button>
+            </div>
+          </>
+        )}
       </PopoverContent>
     </Popover>
   );

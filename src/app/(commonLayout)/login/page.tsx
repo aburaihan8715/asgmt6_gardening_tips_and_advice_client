@@ -8,9 +8,10 @@ import Link from 'next/link';
 import loginValidationSchema from '@/schemas/login.schema';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useUser } from '@/context/user.provider';
-import { useUserLogin } from '@/hooks/auth.hook';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
+import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import LoadingWithOverlay from '@/components/ui/LoadingWithOverlay';
+import { useLoginMutation } from '@/hooks/auth.hook';
 
 interface LoginFormValues {
   email: string;
@@ -20,11 +21,11 @@ interface LoginFormValues {
 const Login = () => {
   const searchParams = useSearchParams();
   const router = useRouter();
-  const { setIsLoading: userLoading } = useUser();
+  const { setIsLoading: setIsUserLoading } = useUser();
 
   const redirect = searchParams.get('redirect');
 
-  const { mutate: handleUserLogin, isPending, isSuccess } = useUserLogin();
+  const { mutate: loginMutate, isPending, isSuccess } = useLoginMutation();
 
   const {
     register,
@@ -34,11 +35,18 @@ const Login = () => {
     resolver: zodResolver(loginValidationSchema),
   });
 
-  const onSubmit = (data: LoginFormValues) => {
-    handleUserLogin(data);
-    userLoading(true);
+  const [showPassword, setShowPassword] = useState(false);
+
+  const togglePasswordVisibility = () => {
+    setShowPassword((prev) => !prev);
   };
 
+  const onSubmit = (data: LoginFormValues) => {
+    loginMutate(data);
+    setIsUserLoading(true);
+  };
+
+  // NOTE: uerEffect needed cause loginMutate is not async
   useEffect(() => {
     if (!isPending && isSuccess) {
       if (redirect) {
@@ -47,7 +55,7 @@ const Login = () => {
         router.push('/');
       }
     }
-  }, [isPending, isSuccess]);
+  }, [isPending, isSuccess, redirect, router]);
 
   return (
     <>
@@ -107,20 +115,29 @@ const Login = () => {
                 >
                   Password
                 </label>
-                <input
-                  id="password"
-                  type="password"
-                  {...register('password')}
-                  className={`mt-1 block w-full rounded-md border ${
-                    errors.password
-                      ? 'border-red-500'
-                      : 'border-gray-300 focus:border-green-700'
-                  } bg-gray-100 px-3 py-2 text-gray-800 shadow-sm focus:outline-none focus:ring-2 ${
-                    errors.password
-                      ? 'focus:ring-red-500'
-                      : 'focus:ring-green-700'
-                  } sm:text-sm`}
-                />
+                <div className="relative">
+                  <input
+                    id="password"
+                    type={showPassword ? 'text' : 'password'}
+                    {...register('password')}
+                    className={`mt-1 block w-full rounded-md border ${
+                      errors.password
+                        ? 'border-red-500'
+                        : 'border-gray-300 focus:border-green-700'
+                    } bg-gray-100 px-3 py-2 text-gray-800 shadow-sm focus:outline-none focus:ring-2 ${
+                      errors.password
+                        ? 'focus:ring-red-500'
+                        : 'focus:ring-green-700'
+                    } sm:text-sm`}
+                  />
+                  <button
+                    type="button"
+                    onClick={togglePasswordVisibility}
+                    className="absolute inset-y-0 right-3 flex items-center text-gray-500 hover:text-green-700"
+                  >
+                    {showPassword ? <FaEyeSlash /> : <FaEye />}
+                  </button>
+                </div>
                 {errors.password && (
                   <p className="mt-1 text-sm text-red-600">
                     {errors.password.message}
