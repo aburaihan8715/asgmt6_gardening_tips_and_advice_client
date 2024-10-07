@@ -5,4 +5,5 @@ export const protectedRoutes = [
   '/profile/settings-profile/:path*',
   '/login',
   '/register',
+  '/forget-password',
 ];

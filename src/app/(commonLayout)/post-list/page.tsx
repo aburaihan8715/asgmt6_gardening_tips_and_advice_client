@@ -1,9 +1,9 @@
-import Tips from '@/components/modules/home/Tips';
+import Post from '@/components/modules/home/Post';
 import Gallery from '@/components/ui/Gallery';
 import SectionHeading from '@/components/ui/SectionHeading';
 import React from 'react';
 
-const TipsList = () => {
+const PostList = () => {
   return (
     <div className="mt-[80px] flex h-[calc(100vh-80px)]">
       {/* Left Sidebar */}
@@ -21,12 +21,12 @@ const TipsList = () => {
           <SectionHeading heading="All Tips and Advice" />
         </div>
         <ul className="space-y-10 md:p-5">
-          <Tips />
-          <Tips />
-          <Tips />
-          <Tips />
-          <Tips />
-          <Tips />
+          <Post />
+          <Post />
+          <Post />
+          <Post />
+          <Post />
+          <Post />
         </ul>
       </div>
 
@@ -42,4 +42,4 @@ const TipsList = () => {
   );
 };
 
-export default TipsList;
+export default PostList;

@@ -2,11 +2,15 @@ import { NextResponse } from 'next/server';
 import { NextRequest } from 'next/server';
 import { getCurrentUser } from './services/AuthService';
 
-const AuthRoutes = ['/login', '/register'];
+const AuthRoutes = [
+  '/login',
+  '/register',
+  '/forget-password',
+  '/reset-password',
+];
 
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
-  console.log('testing');
 
   const user = await getCurrentUser();
 
@@ -52,5 +56,7 @@ export const config = {
     '/profile/settings-profile/:path*',
     '/login',
     '/register',
+    '/forget-password',
+    '/reset-password',
   ],
 };

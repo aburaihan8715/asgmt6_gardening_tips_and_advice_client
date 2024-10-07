@@ -1,4 +1,4 @@
-import Tips from '@/components/modules/home/Tips';
+import Post from '@/components/modules/home/Post';
 import Gallery from '@/components/ui/Gallery';
 import SectionHeading from '@/components/ui/SectionHeading';
 import React from 'react';
@@ -19,12 +19,12 @@ const Home = () => {
           <SectionHeading heading="Tips and Advice" />
         </div>
         <ul className="space-y-10 md:p-5">
-          <Tips />
-          <Tips />
-          <Tips />
-          <Tips />
-          <Tips />
-          <Tips />
+          <Post />
+          <Post />
+          <Post />
+          <Post />
+          <Post />
+          <Post />
         </ul>
       </div>
 

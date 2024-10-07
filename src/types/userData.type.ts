@@ -7,7 +7,7 @@ export interface IUser {
   profilePicture?: string;
   followers: string[];
   following: string[];
-  verified: boolean;
+  isVerified: boolean;
   role: 'USER' | 'ADMIN' | 'VERIFIED_USER';
   favourites: string[];
 }

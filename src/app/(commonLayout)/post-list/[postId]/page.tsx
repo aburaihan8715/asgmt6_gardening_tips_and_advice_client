@@ -8,7 +8,7 @@ import {
   FaShareAlt,
 } from 'react-icons/fa';
 
-const TipsDetails = () => {
+const PostDetails = () => {
   const postData = {
     title: 'Top 10 Tips for Growing Tomatoes',
     content:
@@ -205,4 +205,4 @@ const TipsDetails = () => {
   );
 };
 
-export default TipsDetails;
+export default PostDetails;

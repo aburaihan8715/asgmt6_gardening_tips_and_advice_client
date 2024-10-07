@@ -35,7 +35,7 @@ const Header = () => {
         <ActiveLink href="/">Home</ActiveLink>
       </li>
       <li>
-        <ActiveLink href="/tips-list">All Tips</ActiveLink>
+        <ActiveLink href="/post-list">All Posts</ActiveLink>
       </li>
       <li>
         <ActiveLink href="/about">About Us</ActiveLink>

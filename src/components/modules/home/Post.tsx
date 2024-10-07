@@ -9,7 +9,7 @@ import {
 } from 'react-icons/fa';
 import Link from 'next/link';
 
-const Tips = () => {
+const Post = () => {
   const [isFollowing, setIsFollowing] = useState(false);
 
   const postData = {
@@ -75,7 +75,7 @@ const Tips = () => {
         {/* Overlay with Details Button */}
         <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
           <Link
-            href={`/tips-list/123`}
+            href={`/post-list/123`}
             className="rounded-md bg-white px-4 py-2 font-semibold text-gray-900 shadow-md hover:bg-gray-100"
           >
             View Details
@@ -186,4 +186,4 @@ const Tips = () => {
   );
 };
 
-export default Tips;
+export default Post;
