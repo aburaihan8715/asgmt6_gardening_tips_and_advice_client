@@ -31,4 +31,9 @@
     "statusBar.background": "#7603b4",
     "statusBar.foreground": "#edeaf0",
   },
+  "cSpell.words": [
+    "favourites",
+    "sonner",
+    "tanstack"
+  ],
 }

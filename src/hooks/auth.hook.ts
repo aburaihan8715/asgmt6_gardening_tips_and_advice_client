@@ -1,9 +1,11 @@
+import { useUser } from '@/context/user.provider';
 import {
   changePassword,
   forgetPassword,
   loginUser,
   registerUser,
   resetPassword,
+  settingsProfile,
 } from '@/services/AuthService';
 import { useMutation } from '@tanstack/react-query';
 import { FieldValues } from 'react-hook-form';
@@ -12,7 +14,7 @@ import { toast } from 'sonner';
 export const useRegisterMutation = () => {
   return useMutation<any, Error, FieldValues>({
     mutationKey: ['USER_REGISTRATION'],
-    mutationFn: async (userData) => await registerUser(userData),
+    mutationFn: async (registerData) => await registerUser(registerData),
     onSuccess: () => {
       toast.success('User registration successful.');
     },
@@ -25,7 +27,7 @@ export const useRegisterMutation = () => {
 export const useLoginMutation = () => {
   return useMutation<any, Error, FieldValues>({
     mutationKey: ['USER_LOGIN'],
-    mutationFn: async (userData) => await loginUser(userData),
+    mutationFn: async (loginData) => await loginUser(loginData),
     onSuccess: () => {
       toast.success('User login successful.');
     },
@@ -68,6 +70,21 @@ export const useResetPasswordMutation = () => {
       await resetPassword(passwordResetData),
     onSuccess: async () => {
       toast.success('Password reset successfully');
+    },
+    onError: (error) => {
+      toast.error(error.message);
+    },
+  });
+};
+
+export const useSettingsProfileMutation = () => {
+  const { setIsLoading } = useUser();
+  return useMutation<any, Error, FieldValues>({
+    mutationKey: ['SETTINGS_PROFILE'],
+    mutationFn: async (profileData) => await settingsProfile(profileData),
+    onSuccess: async () => {
+      toast.success('Profile updated successfully');
+      setIsLoading(true);
     },
     onError: (error) => {
       toast.error(error.message);

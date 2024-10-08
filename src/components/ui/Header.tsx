@@ -27,7 +27,7 @@ const Header = () => {
   const router = useRouter();
   const pathname = usePathname();
 
-  // console.log(user);
+  console.log(user);
 
   const menuItems = (
     <>
@@ -176,7 +176,11 @@ const ProfilePopover = () => {
       <PopoverTrigger>
         <Image
           className="h-10 w-10 rounded-full object-cover"
-          src="https://images.pexels.com/photos/1134062/pexels-photo-1134062.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
+          src={
+            user && user?.profilePicture
+              ? user.profilePicture
+              : 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png'
+          }
           sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
           width={40}
           height={40}

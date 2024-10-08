@@ -8,6 +8,7 @@ import SectionHeading from '@/components/ui/SectionHeading';
 import passwordValidationSchema from '@/schemas/passwordChange.schema';
 import { useChangePasswordMutation } from '@/hooks/auth.hook';
 import LoadingWithOverlay from '@/components/ui/LoadingWithOverlay';
+import { useRouter } from 'next/navigation';
 
 interface IPasswordChangeFormValues {
   currentPassword: string;
@@ -24,6 +25,7 @@ const ChangePassword = () => {
     resolver: zodResolver(passwordValidationSchema),
   });
 
+  const router = useRouter();
   const { mutate: changePasswordMutate, isPending } =
     useChangePasswordMutation();
   const [showPassword, setShowPassword] = useState({
@@ -41,6 +43,7 @@ const ChangePassword = () => {
   const onSubmit = async (data: IPasswordChangeFormValues) => {
     changePasswordMutate(data);
     reset();
+    router.replace('/');
   };
 
   return (

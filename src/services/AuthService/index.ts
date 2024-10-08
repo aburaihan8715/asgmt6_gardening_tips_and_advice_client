@@ -6,9 +6,12 @@ import { jwtDecode } from 'jwt-decode';
 import axiosInstance from '@/lib/AxiosInstance';
 
 // register
-export const registerUser = async (userData: FieldValues) => {
+export const registerUser = async (registerData: FieldValues) => {
   try {
-    const { data } = await axiosInstance.post('/auth/register', userData);
+    const { data } = await axiosInstance.post(
+      '/auth/register',
+      registerData,
+    );
 
     // if (data.success) {
     //   cookies().set('accessToken', data?.data?.accessToken);
@@ -22,9 +25,9 @@ export const registerUser = async (userData: FieldValues) => {
 };
 
 // login
-export const loginUser = async (userData: FieldValues) => {
+export const loginUser = async (loginData: FieldValues) => {
   try {
-    const { data } = await axiosInstance.post('/auth/login', userData);
+    const { data } = await axiosInstance.post('/auth/login', loginData);
 
     if (data.success) {
       cookies().set('accessToken', data?.data?.accessToken);
@@ -92,8 +95,25 @@ export const resetPassword = async (passwordResetData: FieldValues) => {
 
     return data;
   } catch (error: any) {
-    console.error('Error details:', error);
-    console.error('Response data:', error.response?.data);
+    throw new Error(error.response?.data?.message || error.message);
+  }
+};
+
+// settings profile
+export const settingsProfile = async (profileData: FieldValues) => {
+  try {
+    const { data } = await axiosInstance.patch(
+      '/auth/settings-profile',
+      profileData,
+    );
+
+    if (data.success) {
+      cookies().set('accessToken', data?.data?.accessToken);
+      cookies().set('refreshToken', data?.data?.refreshToken);
+    }
+
+    return data;
+  } catch (error: any) {
     throw new Error(error.response?.data?.message || error.message);
   }
 };
