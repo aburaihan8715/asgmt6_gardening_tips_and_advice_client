@@ -2,9 +2,9 @@
 
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import forgetPasswordValidationSchema from '@/schemas/forgetPassword.schema';
 import { useForgetPasswordMutation } from '@/hooks/auth.hook';
 import LoadingWithOverlay from '@/components/ui/LoadingWithOverlay';
+import { AuthSchemas } from '@/schemas/auth.schema';
 
 type TForgotPasswordFormValues = {
   email: string;
@@ -17,7 +17,7 @@ const ForgotPassword: React.FC = () => {
     formState: { errors },
     reset,
   } = useForm<TForgotPasswordFormValues>({
-    resolver: zodResolver(forgetPasswordValidationSchema),
+    resolver: zodResolver(AuthSchemas.forgetPasswordValidationSchema),
   });
 
   const { mutate: forgetPasswordMutate, isPending } =

@@ -6,7 +6,7 @@ import {
   registerUser,
   resetPassword,
   settingsProfile,
-} from '@/services/AuthService';
+} from '@/services/auth.service';
 import { useMutation } from '@tanstack/react-query';
 import { FieldValues } from 'react-hook-form';
 import { toast } from 'sonner';

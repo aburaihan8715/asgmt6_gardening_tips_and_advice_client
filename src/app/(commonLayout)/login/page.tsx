@@ -5,13 +5,13 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import SectionHeading from '@/components/ui/SectionHeading';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
-import loginValidationSchema from '@/schemas/login.schema';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useUser } from '@/context/user.provider';
 import { useEffect, useState } from 'react';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import LoadingWithOverlay from '@/components/ui/LoadingWithOverlay';
 import { useLoginMutation } from '@/hooks/auth.hook';
+import { AuthSchemas } from '@/schemas/auth.schema';
 
 interface LoginFormValues {
   email: string;
@@ -32,7 +32,7 @@ const Login = () => {
     handleSubmit,
     formState: { errors },
   } = useForm<LoginFormValues>({
-    resolver: zodResolver(loginValidationSchema),
+    resolver: zodResolver(AuthSchemas.loginValidationSchema),
   });
 
   const [showPassword, setShowPassword] = useState(false);

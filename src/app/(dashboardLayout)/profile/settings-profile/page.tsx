@@ -3,24 +3,16 @@
 import Image from 'next/image';
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import SectionHeading from '@/components/ui/SectionHeading';
 import { FaPlusSquare } from 'react-icons/fa';
 import { useUser } from '@/context/user.provider';
 import { useSettingsProfileMutation } from '@/hooks/auth.hook';
 import LoadingWithOverlay from '@/components/ui/LoadingWithOverlay';
-
-// Define the Zod schema for validation
-const userSettingsSchema = z.object({
-  username: z
-    .string()
-    .min(2, 'Username must be at least 2 characters long'),
-  email: z.string().email('Invalid email address'),
-});
+import { AuthSchemas } from '@/schemas/auth.schema';
 
 // Interface for the form data
-interface UserSettingsFormData {
+interface IUserSettingsFormData {
   username: string;
   email: string;
 }
@@ -36,8 +28,8 @@ export default function SettingsProfile() {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<UserSettingsFormData>({
-    resolver: zodResolver(userSettingsSchema),
+  } = useForm<IUserSettingsFormData>({
+    resolver: zodResolver(AuthSchemas.userSettingsSchema),
     defaultValues: {
       username: user?.username,
       email: user?.email,
@@ -47,7 +39,7 @@ export default function SettingsProfile() {
   const [file, setFile] = useState<File | null>(null);
   const [preview, setPreview] = useState<string | null>(null);
 
-  const onSubmit = (data: UserSettingsFormData) => {
+  const onSubmit = (data: IUserSettingsFormData) => {
     const formData = new FormData();
     formData.append('data', JSON.stringify(data));
     if (file) {

@@ -5,9 +5,9 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useResetPasswordMutation } from '@/hooks/auth.hook';
-import resetPasswordValidationSchema from '@/schemas/resetPassword.schema';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import LoadingWithOverlay from '@/components/ui/LoadingWithOverlay';
+import { AuthSchemas } from '@/schemas/auth.schema';
 
 type TResetPasswordFormValues = {
   newPassword: string;
@@ -22,7 +22,7 @@ const ResetPassword: React.FC = () => {
     formState: { errors },
     reset,
   } = useForm<TResetPasswordFormValues>({
-    resolver: zodResolver(resetPasswordValidationSchema),
+    resolver: zodResolver(AuthSchemas.resetPasswordValidationSchema),
   });
 
   const searchParams = useSearchParams();

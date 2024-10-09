@@ -14,7 +14,7 @@ import BrandLogo from './BrandLogo';
 import { MdClose, MdMenu } from 'react-icons/md';
 import ActiveLink from './ActiveLink';
 import { useUser } from '@/context/user.provider';
-import { logout } from '@/services/AuthService';
+import { logout } from '@/services/auth.service';
 import { protectedRoutes } from '@/constant';
 import { usePathname, useRouter } from 'next/navigation';
 import Link from 'next/link';

@@ -6,11 +6,11 @@ import Link from 'next/link';
 import { motion } from 'framer-motion';
 
 import SectionHeading from '@/components/ui/SectionHeading';
-import registerValidationSchema from '@/schemas/register.schema';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import { useRegisterMutation } from '@/hooks/auth.hook';
 import LoadingWithOverlay from '@/components/ui/LoadingWithOverlay';
 import { useRouter } from 'next/navigation';
+import { AuthSchemas } from '@/schemas/auth.schema';
 
 type TRegisterFormData = {
   username: string;
@@ -24,7 +24,7 @@ const Register = () => {
     handleSubmit,
     formState: { errors },
   } = useForm<TRegisterFormData>({
-    resolver: zodResolver(registerValidationSchema),
+    resolver: zodResolver(AuthSchemas.registerValidationSchema),
   });
 
   const [showPassword, setShowPassword] = useState(false);

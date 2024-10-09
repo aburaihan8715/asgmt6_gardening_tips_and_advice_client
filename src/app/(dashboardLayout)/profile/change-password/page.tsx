@@ -5,10 +5,10 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useState } from 'react';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import SectionHeading from '@/components/ui/SectionHeading';
-import passwordValidationSchema from '@/schemas/passwordChange.schema';
 import { useChangePasswordMutation } from '@/hooks/auth.hook';
 import LoadingWithOverlay from '@/components/ui/LoadingWithOverlay';
 import { useRouter } from 'next/navigation';
+import { AuthSchemas } from '@/schemas/auth.schema';
 
 interface IPasswordChangeFormValues {
   currentPassword: string;
@@ -22,7 +22,7 @@ const ChangePassword = () => {
     formState: { errors },
     reset,
   } = useForm<IPasswordChangeFormValues>({
-    resolver: zodResolver(passwordValidationSchema),
+    resolver: zodResolver(AuthSchemas.passwordChangeValidationSchema),
   });
 
   const router = useRouter();

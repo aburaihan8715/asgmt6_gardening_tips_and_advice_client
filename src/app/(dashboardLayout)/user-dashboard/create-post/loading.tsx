@@ -1,7 +1,7 @@
 import LoadingSpinner from '@/components/ui/LoadingSpinner';
 import React from 'react';
 
-const PostListLoading = () => {
+const CreatePostLoading = () => {
   return (
     <div className="mt-[80px]">
       <LoadingSpinner />
@@ -9,4 +9,4 @@ const PostListLoading = () => {
   );
 };
 
-export default PostListLoading;
+export default CreatePostLoading;

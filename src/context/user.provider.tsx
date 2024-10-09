@@ -8,7 +8,7 @@ import {
   useState,
 } from 'react';
 
-import { getCurrentUser } from '../services/AuthService';
+import { getCurrentUser } from '../services/auth.service';
 import { IUser } from '@/types';
 
 const UserContext = createContext<IUserProviderValues | undefined>(
