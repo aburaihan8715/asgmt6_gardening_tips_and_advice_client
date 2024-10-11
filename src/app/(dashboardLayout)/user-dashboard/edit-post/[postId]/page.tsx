@@ -1,5 +1,5 @@
 'use client';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import Image from 'next/image';
@@ -7,10 +7,11 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { FaPlusSquare } from 'react-icons/fa';
 import { PostSchemas } from '@/schemas/post.schema';
-import { useCreatePostMutation } from '@/hooks/post.hook';
+import { useGetPost, useUpdatePostMutation } from '@/hooks/post.hook';
 import LoadingWithOverlay from '@/components/ui/LoadingWithOverlay';
 import { useUser } from '@/context/user.provider';
 import LoadingSpinner from '@/components/ui/LoadingSpinner';
+import { useParams } from 'next/navigation';
 
 type TPostFormValues = {
   title: string;
@@ -53,8 +54,14 @@ const formats = [
   'code-block',
 ];
 
-const CreatePost = () => {
+const EditMyPost = () => {
   const [imagePreview, setImagePreview] = useState<string | null>(null);
+  const { mutate: updatePostMutation, isPending } =
+    useUpdatePostMutation();
+  const { user } = useUser();
+  const { postId } = useParams();
+  const { data: postData, isLoading } = useGetPost(postId as string);
+
   const {
     register,
     handleSubmit,
@@ -62,15 +69,22 @@ const CreatePost = () => {
     watch,
     formState: { errors },
   } = useForm<TPostFormValues>({
-    resolver: zodResolver(PostSchemas.postValidationSchema),
+    resolver: zodResolver(PostSchemas.postUpdateValidationSchema),
   });
 
-  const { mutate: createPostMutate, isPending } = useCreatePostMutation();
-  const { user } = useUser();
+  // Update form values when postData is loaded
+  useEffect(() => {
+    if (postData?.data) {
+      const { title, description, category, content } = postData.data;
+      setValue('title', title);
+      setValue('description', description);
+      setValue('category', category);
+      setValue('content', content);
+    }
+  }, [postData, setValue]);
 
   const onSubmit = (data: TPostFormValues) => {
-    const postData = {
-      user: user?._id,
+    const updatedPostData = {
       title: data.title,
       description: data.description,
       category: data.category,
@@ -78,13 +92,17 @@ const CreatePost = () => {
     };
 
     const formData = new FormData();
-    formData.append('data', JSON.stringify(postData));
+    formData.append('data', JSON.stringify(updatedPostData));
     if (data.image) {
       formData.append('file', data.image);
     }
-
     // console.log('Form Data🔥', Object.fromEntries(formData));
-    createPostMutate(formData);
+    const updatedData = {
+      postId,
+      formData,
+    };
+
+    updatePostMutation(updatedData);
   };
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -99,7 +117,7 @@ const CreatePost = () => {
     }
   };
 
-  if (!user) {
+  if (!user || isLoading) {
     return <LoadingSpinner />;
   }
 
@@ -108,7 +126,7 @@ const CreatePost = () => {
       {isPending && <LoadingWithOverlay />}
       <div className="container mx-auto p-5">
         <h1 className="mb-5 text-2xl font-bold text-green-700">
-          Create a New Post
+          Edit Post
         </h1>
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
           {/* Title Input */}
@@ -266,4 +284,4 @@ const CreatePost = () => {
   );
 };
 
-export default CreatePost;
+export default EditMyPost;

@@ -1,9 +1,9 @@
-import Post from '@/components/modules/home/Post';
+import PostList from '@/components/modules/allPosts/PostList';
 import Gallery from '@/components/ui/Gallery';
 import SectionHeading from '@/components/ui/SectionHeading';
 import React from 'react';
 
-const PostList = () => {
+const Posts = () => {
   return (
     <div className="mt-[80px] flex h-[calc(100vh-80px)]">
       {/* Left Sidebar */}
@@ -20,14 +20,7 @@ const PostList = () => {
         <div className="mt-10 flex justify-center">
           <SectionHeading heading="All Tips and Advice" />
         </div>
-        <ul className="space-y-10 md:p-5">
-          <Post />
-          <Post />
-          <Post />
-          <Post />
-          <Post />
-          <Post />
-        </ul>
+        <PostList />
       </div>
 
       {/* Right Sidebar */}
@@ -42,4 +35,4 @@ const PostList = () => {
   );
 };
 
-export default PostList;
+export default Posts;

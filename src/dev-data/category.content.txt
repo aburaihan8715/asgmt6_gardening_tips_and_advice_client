@@ -1,0 +1,3 @@
+
+// category
+'Vegetables' | 'Flowers' | 'Landscaping' | 'Others';

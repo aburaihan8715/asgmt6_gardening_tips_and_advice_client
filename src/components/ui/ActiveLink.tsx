@@ -16,7 +16,6 @@ const ActiveLink: React.FC<ActiveLinkProps> = ({
   className = '',
 }) => {
   const pathname = usePathname();
-
   const isActive = pathname === href;
 
   return (

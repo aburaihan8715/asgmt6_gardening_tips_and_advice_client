@@ -1,7 +1,15 @@
 'use client';
 import ActiveLink from '@/components/ui/ActiveLink';
 import { useUser } from '@/context/user.provider';
-import { FaArrowLeft, FaCog, FaHome, FaLock } from 'react-icons/fa';
+import {
+  FaArrowLeft,
+  FaCog,
+  // FaEdit,
+  FaFileAlt,
+  FaHome,
+  FaLock,
+  FaPlus,
+} from 'react-icons/fa';
 
 const Sidebar = () => {
   const { user } = useUser();
@@ -85,6 +93,36 @@ const Sidebar = () => {
               <span className="hidden md:block">Settings Profile</span>
             </ActiveLink>
           </li>
+
+          <li className="flex">
+            <ActiveLink
+              className="flex items-center gap-2"
+              href="/user-dashboard/create-post"
+            >
+              <FaPlus className="text-2xl md:text-base" />
+              <span className="hidden md:block">Create Post</span>
+            </ActiveLink>
+          </li>
+
+          <li className="flex">
+            <ActiveLink
+              className="flex items-center gap-2"
+              href="/user-dashboard/my-posts"
+            >
+              <FaFileAlt className="text-2xl md:text-base" />
+              <span className="hidden md:block">My Posts</span>
+            </ActiveLink>
+          </li>
+
+          {/* <li className="flex">
+            <ActiveLink
+              className="flex items-center gap-2"
+              href="/user-dashboard/edit-post/123"
+            >
+              <FaEdit className="text-2xl md:text-base" />
+              <span className="hidden md:block">Edit My Post</span>
+            </ActiveLink>
+          </li> */}
         </ul>
       )}
     </nav>

@@ -1,7 +1,6 @@
-import Post from '@/components/modules/home/Post';
+import PostInHome from '@/components/modules/home/PostInHome';
 import Gallery from '@/components/ui/Gallery';
 import SectionHeading from '@/components/ui/SectionHeading';
-import React from 'react';
 
 const Home = () => {
   return (
@@ -18,13 +17,9 @@ const Home = () => {
         <div className="mt-10 flex justify-center">
           <SectionHeading heading="Tips and Advice" />
         </div>
+
         <ul className="space-y-10 md:p-5">
-          <Post />
-          <Post />
-          <Post />
-          <Post />
-          <Post />
-          <Post />
+          <PostInHome />
         </ul>
       </div>
 
@@ -41,23 +36,3 @@ const Home = () => {
 };
 
 export default Home;
-
-/* 
-import Feed from "@/components/modules/home/Feed";
-import RightBar from "@/components/modules/home/RightBar";
-import SideBar from "@/components/modules/home/SideBar";
-import TopBar from "@/components/modules/home/TopBar";
-
-export default function Home() {
-  return (
-    <>
-      <TopBar />
-      <div className="flex w-full">
-        <SideBar />
-        <Feed />
-        <RightBar />
-      </div>
-    </>
-  );
-}
-*/

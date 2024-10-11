@@ -27,7 +27,7 @@ const Header = () => {
   const router = useRouter();
   const pathname = usePathname();
 
-  console.log(user);
+  // console.log(user);
 
   const menuItems = (
     <>
@@ -35,7 +35,7 @@ const Header = () => {
         <ActiveLink href="/">Home</ActiveLink>
       </li>
       <li>
-        <ActiveLink href="/post-list">All Posts</ActiveLink>
+        <ActiveLink href="/posts">All Posts</ActiveLink>
       </li>
       <li>
         <ActiveLink href="/about">About Us</ActiveLink>

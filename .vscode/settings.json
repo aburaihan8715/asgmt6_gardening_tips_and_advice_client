@@ -32,9 +32,14 @@
     "statusBar.foreground": "#edeaf0",
   },
   "cSpell.words": [
+    "dompurify",
+    "downvotes",
     "favourites",
     "hookform",
     "sonner",
-    "tanstack"
+    "Swal",
+    "sweetalert",
+    "tanstack",
+    "upvotes"
   ],
 }
