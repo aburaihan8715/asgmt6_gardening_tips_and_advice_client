@@ -123,7 +123,12 @@ export const getNewFivePosts = async () => {
     return data;
   } catch (error: any) {
     // console.error('==🔥Full error response:==', error.response?.data);
-    throw new Error(error.response?.data?.message || error.message);
+    // throw new Error(error.response?.data?.message || error.message)
+    return {
+      success: false,
+      //* you can return error message from here
+      message: error.response?.data?.message,
+    };
   }
 };
 
@@ -144,7 +149,7 @@ export const updatePost = async (
 ) => {
   try {
     const { data } = await axiosInstance.patch(
-      `/posts/${postId}`,
+      `/api/v1/posts/${postId}`,
       updatedPostData,
     );
     return data;

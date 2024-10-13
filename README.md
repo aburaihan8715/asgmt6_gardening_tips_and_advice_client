@@ -1,37 +1,56 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Project : asgmt6_gardening_tips_and_advice_client
 
-## Getting Started
+## Features
 
-First, run the development server:
+- Responsive Full Stack Next App, Implementation of Dashboard Management Page.
+- Implemented Redux and Payment with Stripe
+- Implemented Tanstack Query for Data Fetching
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+## Live link:
+
+https://asgmt6-gardening-tips-and-advice-client.vercel.app/
+
+## Github link:
+
+https://github.com/aburaihan8715/asgmt6_gardening_tips_and_advice_client
+
+## Overview video link:
+
+https://drive.google.com/file/d/1A5n_xxlednlUpT23j9LRVMOmHfEJ5lMQ/view?usp=sharing
+
+## Admin
+
+- email: admin@gmail.com
+- password: test1234
+
+## User
+
+- email: user@gmail.com
+- password: test1234
+
+## Technologies used:
+
+1. Next js
+2. React
+3. Tailwind css
+
+## Packages used:
+
+1. framer-motion
+2. react-hook-form
+3. zod
+4. Tanstack query
+5. stripe
+6. react-icons
+7. sonner
+
+## Scripts
+
+```js
+  "dev": "next dev",
+  "build": "next build",
+  "start": "next start",
+  "lint": "next lint"
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
-# asgmt6_gardening_tips_and_advice_client
+<p>======end=======</p>
