@@ -136,6 +136,8 @@ export const getCurrentUser = async () => {
       isDeleted: decodedToken.isDeleted,
       followers: decodedToken.followers,
       followings: decodedToken.followings,
+      followersCount: decodedToken.followersCount,
+      followingsCount: decodedToken.followingsCount,
       favourites: decodedToken.favourites,
     };
   }

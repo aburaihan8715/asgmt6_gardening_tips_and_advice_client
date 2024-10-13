@@ -8,7 +8,7 @@ export interface IUser {
   followers: string[];
   followersCount: number;
   followings: string[];
-  followingCount: number;
+  followingsCount: number;
   isVerified: boolean;
   isDeleted: boolean;
   role: 'USER' | 'ADMIN';
