@@ -1,51 +1,47 @@
-/*
-
 'use client';
-import { useGetAllPosts } from '@/hooks/post.hook';
-import React from 'react';
+import React, { useState } from 'react';
+import InfiniteScroll from 'react-infinite-scroll-component';
+
+const style = {
+  height: 30,
+  border: '1px solid green',
+  margin: 6,
+  padding: 8,
+};
 
 const Test = () => {
-  const { data } = useGetAllPosts();
-  console.log(data);
-  const postData = data?.data[0];
-  console.log(postData);
+  const [items, setItems] = useState(Array.from({ length: 20 }));
+
+  const fetchMoreData = () => {
+    // Simulating an API call with a timeout
+    setTimeout(() => {
+      setItems((prevItems) =>
+        prevItems.concat(Array.from({ length: 20 })),
+      );
+    }, 1500);
+  };
+
   return (
     <div className="mt-[80px]">
-      {postData ? (
-        <div dangerouslySetInnerHTML={{ __html: postData.content }}></div> //
-      ) : (
-        <p>Loading...</p>
-      )}
+      <h1>demo: react-infinite-scroll-component</h1>
+      <hr />
+      <div id="scrollableDiv" className="h-[70vh] overflow-auto">
+        <InfiniteScroll
+          dataLength={items.length}
+          next={fetchMoreData}
+          hasMore={true}
+          loader={<h4>Loading...</h4>}
+          scrollableTarget="scrollableDiv"
+        >
+          {items.map((_, index) => (
+            <div style={style} key={index}>
+              div - #{index}
+            </div>
+          ))}
+        </InfiniteScroll>
+      </div>
     </div>
   );
 };
 
 export default Test;
-*/
-
-'use client';
-import Post from '@/components/modules/allPosts/Post';
-import { useGetAllPosts } from '@/hooks/post.hook';
-import { IPost } from '@/types/postData.type';
-import React from 'react';
-
-const PostList = () => {
-  const { data: postData, isLoading, isError, error } = useGetAllPosts();
-  const posts = postData?.data;
-
-  console.log(posts);
-
-  if (isLoading) return <div>Loading...</div>;
-
-  if (isError) {
-    console.error('Error fetching posts:', error);
-    return <div>Error fetching posts.</div>;
-  }
-  return (
-    <ul className="space-y-10 md:p-5">
-      {posts?.map((post: IPost) => <Post key={post._id} post={post} />)}
-    </ul>
-  );
-};
-
-export default PostList;

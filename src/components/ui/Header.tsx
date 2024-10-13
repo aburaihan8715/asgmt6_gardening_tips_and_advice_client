@@ -1,4 +1,5 @@
 'use client';
+
 import { useState } from 'react';
 
 import { Button } from '../ui/button';
@@ -175,6 +176,7 @@ const ProfilePopover = () => {
     <Popover>
       <PopoverTrigger>
         <Image
+          title={user?.role}
           className="h-10 w-10 rounded-full object-cover"
           src={
             user && user?.profilePicture

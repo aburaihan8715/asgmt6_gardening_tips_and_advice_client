@@ -1,14 +1,19 @@
 import {
+  commentOnPost,
   createPost,
   deletePost,
+  downvotePost,
   getAllPosts,
+  getInfinitePosts,
   getMyPosts,
   getNewFivePosts,
   getPost,
   makePostPremium,
   updatePost,
+  upvotePost,
 } from '@/services/post.service';
 import {
+  useInfiniteQuery,
   useMutation,
   useQuery,
   useQueryClient,
@@ -39,14 +44,48 @@ export const useGetAllPosts = ({
   page,
   limit,
   searchTerm,
+  category,
+  voteFilter,
 }: {
   page?: number;
   limit?: number;
   searchTerm?: string;
+  category?: string;
+  voteFilter?: string;
 }) => {
   return useQuery({
-    queryKey: ['GET_POSTS', page, limit, searchTerm],
-    queryFn: async () => await getAllPosts({ page, limit, searchTerm }),
+    queryKey: [
+      'GET_POSTS',
+      { page, limit, searchTerm, category, voteFilter },
+    ],
+    queryFn: async () =>
+      await getAllPosts({ page, limit, searchTerm, category, voteFilter }),
+  });
+};
+
+// GET INFINITE POSTS
+// NOTE: It doesn't work
+export const useGetInfinitePosts = ({
+  searchTerm,
+  limit,
+}: {
+  searchTerm?: string;
+  limit?: number;
+}) => {
+  return useInfiniteQuery({
+    queryKey: ['GET_INFINITE_POSTS', { searchTerm, limit }],
+    queryFn: async ({ pageParam = 3 }) => {
+      return await getInfinitePosts({
+        page: pageParam,
+        searchTerm,
+        limit,
+      });
+    },
+    initialPageParam: 1,
+    getNextPageParam: (lastPage, allPages) => {
+      const nextPage = lastPage.length ? allPages.length + 1 : undefined;
+      return nextPage;
+    },
   });
 };
 
@@ -61,7 +100,7 @@ export const useGetMyPosts = ({
   searchTerm?: string;
 }) => {
   return useQuery({
-    queryKey: ['GET_MY_POSTS', page, limit, searchTerm],
+    queryKey: ['GET_MY_POSTS', { page, limit, searchTerm }],
     queryFn: async () => await getMyPosts({ page, limit, searchTerm }),
   });
 };
@@ -98,6 +137,9 @@ export const useUpdatePostMutation = () => {
       queryClient.invalidateQueries({
         queryKey: ['GET_POSTS'],
       });
+      queryClient.invalidateQueries({
+        queryKey: ['GET_NEW_5_POSTS'],
+      });
       toast.success('Post updated successfully.');
       router.push('/user-dashboard/my-posts');
     },
@@ -121,6 +163,9 @@ export const useDeletePostMutation = () => {
       queryClient.invalidateQueries({
         queryKey: ['GET_POSTS'],
       });
+      queryClient.invalidateQueries({
+        queryKey: ['GET_NEW_5_POSTS'],
+      });
       toast.success('Post deleted successfully.');
     },
     onError: (error) => {
@@ -143,11 +188,86 @@ export const useMakePostPremiumMutation = () => {
       queryClient.invalidateQueries({
         queryKey: ['GET_POSTS'],
       });
+      queryClient.invalidateQueries({
+        queryKey: ['GET_NEW_5_POSTS'],
+      });
       toast.success('Post has been premium successfully.');
     },
     onError: (error) => {
       console.error(error);
       toast.error('Failed to make premium post: ' + error.message);
+    },
+  });
+};
+
+// Upvote hook
+export const useUpvotePostMutation = () => {
+  const queryClient = useQueryClient();
+  return useMutation<unknown, Error, string>({
+    mutationFn: async (id) => await upvotePost(id),
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ['GET_MY_POSTS'],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ['GET_POSTS'],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ['GET_NEW_5_POSTS'],
+      });
+      toast.success('Post upvoted successfully.');
+    },
+    onError: (error: any) => {
+      toast.error(error.message);
+    },
+  });
+};
+
+// Downvote hook
+export const useDownvotePostMutation = () => {
+  const queryClient = useQueryClient();
+  return useMutation<unknown, Error, string>({
+    mutationFn: async (id) => await downvotePost(id),
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ['GET_MY_POSTS'],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ['GET_POSTS'],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ['GET_NEW_5_POSTS'],
+      });
+      toast.success('Post downvoted successfully.');
+    },
+    onError: (error: any) => {
+      toast.error(error.message);
+    },
+  });
+};
+
+// Comment hook
+export const useCommentOnPostMutation = () => {
+  const queryClient = useQueryClient();
+  return useMutation<unknown, Error, FieldValues>({
+    mutationFn: async (options) => {
+      return await commentOnPost(options.id, options.comment);
+    },
+
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ['GET_MY_POSTS'],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ['GET_POSTS'],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ['GET_NEW_5_POSTS'],
+      });
+      toast.success('Comment posted successfully.');
+    },
+    onError: (error: any) => {
+      toast.error(error.message);
     },
   });
 };

@@ -12,6 +12,8 @@ export interface IPost {
   isDeleted: boolean;
   numberOfComments: number;
   upvotes: string[];
+  upvotesCount: number;
   downvotes: string[];
+  downvotesCount: number;
   createdAt: Date;
 }

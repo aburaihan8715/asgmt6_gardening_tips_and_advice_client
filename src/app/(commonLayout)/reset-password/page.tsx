@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useSearchParams } from 'next/navigation';
 import { useResetPasswordMutation } from '@/hooks/auth.hook';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import LoadingWithOverlay from '@/components/ui/LoadingWithOverlay';
@@ -32,7 +32,6 @@ const ResetPassword: React.FC = () => {
   const { mutate: passwordResetMutate, isPending } =
     useResetPasswordMutation();
 
-  const router = useRouter();
   const onSubmit = (data: TResetPasswordFormValues) => {
     const passwordData = {
       id,
@@ -41,7 +40,6 @@ const ResetPassword: React.FC = () => {
     };
     passwordResetMutate(passwordData);
     reset();
-    router.push('/login');
   };
 
   const togglePasswordVisibility = () => {

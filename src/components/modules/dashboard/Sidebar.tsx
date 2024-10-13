@@ -44,6 +44,7 @@ const Sidebar = () => {
               <span className="hidden md:block">Change Password</span>
             </ActiveLink>
           </li>
+
           <li className="flex">
             <ActiveLink
               className="flex items-center gap-2"
@@ -51,6 +52,16 @@ const Sidebar = () => {
             >
               <FaCog className="text-2xl md:text-base" />
               <span className="hidden md:block">Settings Profile</span>
+            </ActiveLink>
+          </li>
+
+          <li className="flex">
+            <ActiveLink
+              className="flex items-center gap-2"
+              href="/admin-dashboard/all-posts"
+            >
+              <FaFileAlt className="text-2xl md:text-base" />
+              <span className="hidden md:block">All Posts</span>
             </ActiveLink>
           </li>
         </ul>

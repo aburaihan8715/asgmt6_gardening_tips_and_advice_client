@@ -9,7 +9,7 @@ import SectionHeading from '@/components/ui/SectionHeading';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import { useRegisterMutation } from '@/hooks/auth.hook';
 import LoadingWithOverlay from '@/components/ui/LoadingWithOverlay';
-import { useRouter } from 'next/navigation';
+
 import { AuthSchemas } from '@/schemas/auth.schema';
 
 type TRegisterFormData = {
@@ -29,7 +29,6 @@ const Register = () => {
 
   const [showPassword, setShowPassword] = useState(false);
   const { mutate: registerMutate, isPending } = useRegisterMutation();
-  const router = useRouter();
 
   const togglePasswordVisibility = () => {
     setShowPassword((prev) => !prev);
@@ -37,7 +36,6 @@ const Register = () => {
 
   const onSubmit = (data: TRegisterFormData) => {
     registerMutate(data);
-    router.push('/login');
   };
 
   return (

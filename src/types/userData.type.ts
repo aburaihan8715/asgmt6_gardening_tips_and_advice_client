@@ -6,7 +6,9 @@ export interface IUser {
   passwordChangedAt?: Date;
   profilePicture?: string;
   followers: string[];
+  followersCount: number;
   followings: string[];
+  followingCount: number;
   isVerified: boolean;
   isDeleted: boolean;
   role: 'USER' | 'ADMIN';

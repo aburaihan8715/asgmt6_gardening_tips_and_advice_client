@@ -7,7 +7,7 @@ import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import SectionHeading from '@/components/ui/SectionHeading';
 import { useChangePasswordMutation } from '@/hooks/auth.hook';
 import LoadingWithOverlay from '@/components/ui/LoadingWithOverlay';
-import { useRouter } from 'next/navigation';
+
 import { AuthSchemas } from '@/schemas/auth.schema';
 
 interface IPasswordChangeFormValues {
@@ -25,7 +25,6 @@ const ChangePassword = () => {
     resolver: zodResolver(AuthSchemas.passwordChangeValidationSchema),
   });
 
-  const router = useRouter();
   const { mutate: changePasswordMutate, isPending } =
     useChangePasswordMutation();
   const [showPassword, setShowPassword] = useState({
@@ -43,7 +42,6 @@ const ChangePassword = () => {
   const onSubmit = async (data: IPasswordChangeFormValues) => {
     changePasswordMutate(data);
     reset();
-    router.replace('/');
   };
 
   return (
