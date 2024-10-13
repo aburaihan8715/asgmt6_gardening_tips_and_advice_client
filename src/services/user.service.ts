@@ -9,7 +9,7 @@ export const followUser = async (
 ) => {
   try {
     const { data } = await axiosInstance.patch(
-      `/users/${postUserId}/follow`,
+      `/api/v1/users/${postUserId}/follow`,
       { currentUserId },
     );
     return data;
@@ -26,7 +26,7 @@ export const unfollowUser = async (
 ) => {
   try {
     const { data } = await axiosInstance.patch(
-      `/users/${postUserId}/unfollow`,
+      `/api/v1/users/${postUserId}/unfollow`,
       { currentUserId },
     );
     return data;
@@ -40,7 +40,7 @@ export const unfollowUser = async (
 export const favoritePost = async (postId: string) => {
   try {
     const { data } = await axiosInstance.patch(
-      `/posts/${postId}/favorite`,
+      `/api/v1/posts/${postId}/favorite`,
     );
     return data;
   } catch (error: any) {

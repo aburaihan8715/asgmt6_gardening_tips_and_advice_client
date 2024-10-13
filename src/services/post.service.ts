@@ -6,7 +6,7 @@ import { FieldValues } from 'react-hook-form';
 // CREATE
 export const createPost = async (postData: FieldValues) => {
   try {
-    const { data } = await axiosInstance.post('/posts', postData);
+    const { data } = await axiosInstance.post('/api/v1/posts', postData);
     return data;
   } catch (error: any) {
     // console.error('==🔥Full error response:==', error.response?.data);
@@ -29,7 +29,7 @@ export const getAllPosts = async ({
   voteFilter?: string;
 }) => {
   try {
-    let queryString = '/posts';
+    let queryString = '/api/v1/posts';
 
     const params = new URLSearchParams();
 
@@ -67,7 +67,7 @@ export const getInfinitePosts = async ({
   limit?: number;
 }) => {
   try {
-    let queryString = '/posts';
+    let queryString = '/api/v1/posts';
 
     const params = new URLSearchParams();
 
@@ -98,7 +98,7 @@ export const getMyPosts = async ({
   searchTerm?: string;
 }) => {
   try {
-    let queryString = '/posts/my-posts';
+    let queryString = '/api/v1/posts/my-posts';
 
     const params = new URLSearchParams();
 
@@ -119,7 +119,7 @@ export const getMyPosts = async ({
 // GET NEW 5
 export const getNewFivePosts = async () => {
   try {
-    const { data } = await axiosInstance.get('/posts/new-5-posts');
+    const { data } = await axiosInstance.get('/api/v1/posts/new-5-posts');
     return data;
   } catch (error: any) {
     // console.error('==🔥Full error response:==', error.response?.data);
@@ -130,7 +130,7 @@ export const getNewFivePosts = async () => {
 // GET ONE
 export const getPost = async (postId: string) => {
   try {
-    const { data } = await axiosInstance.get(`/posts/${postId}`);
+    const { data } = await axiosInstance.get(`/api/v1/posts/${postId}`);
     return data;
   } catch (error: any) {
     throw new Error(error.response?.data?.message || error.message);
@@ -156,7 +156,7 @@ export const updatePost = async (
 // UPDATE
 export const deletePost = async (postId: string) => {
   try {
-    const { data } = await axiosInstance.delete(`/posts/${postId}`);
+    const { data } = await axiosInstance.delete(`/api/v1/posts/${postId}`);
     return data;
   } catch (error: any) {
     throw new Error(error.response?.data?.message || error.message);
@@ -167,7 +167,7 @@ export const deletePost = async (postId: string) => {
 export const makePostPremium = async (postId: string) => {
   try {
     const { data } = await axiosInstance.patch(
-      `/posts/${postId}/make-premium`,
+      `/api/v1/posts/${postId}/make-premium`,
     );
     return data;
   } catch (error: any) {
@@ -178,7 +178,9 @@ export const makePostPremium = async (postId: string) => {
 // Upvote a post
 export const upvotePost = async (postId: string) => {
   try {
-    const { data } = await axiosInstance.patch(`/posts/${postId}/upvote`);
+    const { data } = await axiosInstance.patch(
+      `/api/v1/posts/${postId}/upvote`,
+    );
     return data;
   } catch (error: any) {
     throw new Error(error.response?.data?.message || error.message);
@@ -189,7 +191,7 @@ export const upvotePost = async (postId: string) => {
 export const downvotePost = async (postId: string) => {
   try {
     const { data } = await axiosInstance.patch(
-      `/posts/${postId}/downvote`,
+      `/api/v1/posts/${postId}/downvote`,
     );
     return data;
   } catch (error: any) {
@@ -201,7 +203,7 @@ export const downvotePost = async (postId: string) => {
 export const commentOnPost = async (postId: string, comment: string) => {
   try {
     const { data } = await axiosInstance.post(
-      `/posts/${postId}/comments`,
+      `/api/v1/posts/${postId}/comments`,
       { comment },
     );
     return data;
@@ -213,7 +215,9 @@ export const commentOnPost = async (postId: string, comment: string) => {
 // Comment on a post (specific post)
 export const getCommentsOfPost = async (postId: string) => {
   try {
-    const { data } = await axiosInstance.get(`/posts/${postId}/comments`);
+    const { data } = await axiosInstance.get(
+      `/api/v1/posts/${postId}/comments`,
+    );
     return data;
   } catch (error: any) {
     throw new Error(error.response?.data?.message || error.message);

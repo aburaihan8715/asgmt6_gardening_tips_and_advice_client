@@ -9,7 +9,7 @@ import axiosInstance from '@/lib/AxiosInstance';
 export const registerUser = async (registerData: FieldValues) => {
   try {
     const { data } = await axiosInstance.post(
-      '/auth/register',
+      '/api/v1/auth/register',
       registerData,
     );
 
@@ -27,7 +27,10 @@ export const registerUser = async (registerData: FieldValues) => {
 // login
 export const loginUser = async (loginData: FieldValues) => {
   try {
-    const { data } = await axiosInstance.post('/auth/login', loginData);
+    const { data } = await axiosInstance.post(
+      '/api/v1/auth/login',
+      loginData,
+    );
 
     if (data.success) {
       cookies().set('accessToken', data?.data?.accessToken);
@@ -50,7 +53,7 @@ export const logout = () => {
 export const changePassword = async (passwordData: FieldValues) => {
   try {
     const { data } = await axiosInstance.patch(
-      '/auth/change-password',
+      '/api/v1/auth/change-password',
       passwordData,
     );
 
@@ -64,7 +67,7 @@ export const changePassword = async (passwordData: FieldValues) => {
 export const forgetPassword = async (emailData: FieldValues) => {
   try {
     const { data } = await axiosInstance.post(
-      '/auth/forget-password',
+      '/api/v1/auth/forget-password',
       emailData,
     );
 
@@ -83,7 +86,7 @@ export const resetPassword = async (passwordResetData: FieldValues) => {
 
   try {
     const { data } = await axiosInstance.patch(
-      '/auth/reset-password',
+      '/api/v1/auth/reset-password',
       bodyData,
       {
         headers: {
@@ -103,7 +106,7 @@ export const resetPassword = async (passwordResetData: FieldValues) => {
 export const settingsProfile = async (profileData: FieldValues) => {
   try {
     const { data } = await axiosInstance.patch(
-      '/auth/settings-profile',
+      '/api/v1/auth/settings-profile',
       profileData,
     );
 
