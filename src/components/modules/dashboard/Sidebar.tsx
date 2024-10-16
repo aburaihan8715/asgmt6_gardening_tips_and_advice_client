@@ -1,6 +1,6 @@
 'use client';
 import ActiveLink from '@/components/ui/ActiveLink';
-import { useUser } from '@/context/user.provider';
+import { useAuth } from '@/context/user.provider';
 import {
   FaArrowLeft,
   FaCog,
@@ -12,7 +12,7 @@ import {
 } from 'react-icons/fa';
 
 const Sidebar = () => {
-  const { user } = useUser();
+  const { user } = useAuth();
   // console.log(user);
   return (
     <nav>

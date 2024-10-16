@@ -1,31 +1,40 @@
 // import { UserServices } from '@/services/user.service';
 import {
-  favoritePost,
+  addFavoritePost,
   followUser,
+  getMe,
+  removeFavoritePost,
   unfollowUser,
 } from '@/services/user.service';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { useRouter } from 'next/navigation';
+import {
+  useMutation,
+  useQuery,
+  useQueryClient,
+} from '@tanstack/react-query';
 import { toast } from 'sonner';
 
 // Follow hook
 interface IFollowArgs {
-  currentUserId: string;
   postUserId: string;
 }
 export const useFollowUserMutation = () => {
-  const router = useRouter();
   const queryClient = useQueryClient();
   return useMutation<unknown, Error, IFollowArgs>({
     mutationFn: async (options) => {
-      return await followUser(options.currentUserId, options.postUserId);
+      return await followUser(options.postUserId);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: ['GET_POSTS'],
       });
+      queryClient.invalidateQueries({
+        queryKey: ['GET_NEW_5_POSTS'],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ['GET_ME'],
+      });
       toast.success('User followed successfully.');
-      router.refresh();
+      // router.refresh();
     },
     onError: (error: any) => {
       toast.error(error.message);
@@ -35,22 +44,27 @@ export const useFollowUserMutation = () => {
 
 // Unfollow hook
 interface IUnfollowArgs {
-  currentUserId: string;
   postUserId: string;
 }
 export const useUnfollowUserMutation = () => {
-  const router = useRouter();
+  // const router = useRouter();
   const queryClient = useQueryClient();
   return useMutation<unknown, Error, IUnfollowArgs>({
     mutationFn: async (options) => {
-      return await unfollowUser(options.currentUserId, options.postUserId);
+      return await unfollowUser(options.postUserId);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: ['GET_POSTS'],
       });
+      queryClient.invalidateQueries({
+        queryKey: ['GET_NEW_5_POSTS'],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ['GET_ME'],
+      });
       toast.success('User unfollowed successfully.');
-      router.refresh();
+      // router.refresh();
     },
     onError: (error: any) => {
       toast.error(error.message);
@@ -58,20 +72,73 @@ export const useUnfollowUserMutation = () => {
   });
 };
 
-// Favorite hook
-export const useFavoritePostMutation = () => {
+// Add Favorite hook
+interface IAddFavouritePostArgs {
+  postId: string;
+}
+export const useAddFavoritePostMutation = () => {
   const queryClient = useQueryClient();
-  return useMutation<unknown, Error, string>({
-    mutationFn: async (id) => await favoritePost(id),
+
+  return useMutation<unknown, Error, IAddFavouritePostArgs>({
+    mutationFn: async (options) => {
+      console.log({ options });
+      return await addFavoritePost(options.postId);
+    },
+
     onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: ['GET_POSTS'],
       });
-      toast.success('Post added to favorites.');
+      queryClient.invalidateQueries({
+        queryKey: ['GET_NEW_5_POSTS'],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ['GET_ME'],
+      });
+      toast.success('Added to favourite successfully!.');
     },
+
     onError: (error: any) => {
       toast.error(error.message);
     },
+  });
+};
+
+// Remove Favourite hook
+interface IRemoveFavouritePostArgs {
+  postId: string;
+}
+export const useRemoveFavoritePostMutation = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation<unknown, Error, IRemoveFavouritePostArgs>({
+    mutationFn: async (options) => {
+      return await removeFavoritePost(options.postId);
+    },
+
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ['GET_POSTS'],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ['GET_NEW_5_POSTS'],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ['GET_ME'],
+      });
+      toast.success('Remove from favourite successfully!');
+    },
+
+    onError: (error: any) => {
+      toast.error(error.message);
+    },
+  });
+};
+
+export const useGetMe = () => {
+  return useQuery({
+    queryKey: ['GET_ME'],
+    queryFn: async () => await getMe(),
   });
 };
 

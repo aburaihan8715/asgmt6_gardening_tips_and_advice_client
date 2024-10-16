@@ -1,8 +1,24 @@
 import { ReactNode } from 'react';
+import { FaExclamationCircle } from 'react-icons/fa';
 
-const ErrorMessage = ({ children }: { children: ReactNode }) => {
+interface ErrorMessageProps {
+  children?: ReactNode;
+  className?: string; // For custom styling
+  icon?: ReactNode; // For custom icon, default to error icon
+}
+
+const ErrorMessage = ({
+  children,
+  className = '',
+  icon,
+}: ErrorMessageProps) => {
   return (
-    <p className="my-4 text-center font-medium text-red-500">{children}</p>
+    <div
+      className={`my-4 flex items-center justify-center space-x-2 text-red-500 ${className}`}
+    >
+      {icon || <FaExclamationCircle className="text-4xl" />}
+      <p className="font-medium">{children || 'Something went wrong.'}</p>
+    </div>
   );
 };
 

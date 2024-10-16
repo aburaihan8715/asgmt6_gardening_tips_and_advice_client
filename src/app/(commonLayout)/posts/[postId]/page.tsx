@@ -17,21 +17,30 @@ import {
 } from '@/hooks/user.hook';
 import LoadingWithOverlay from '@/components/ui/LoadingWithOverlay';
 import LoadingSpinner from '@/components/ui/LoadingSpinner';
-import NoDataFound from '@/components/ui/NoDataFound';
-import { useUser } from '@/context/user.provider';
+import { useAuth } from '@/context/user.provider';
+import { useParams } from 'next/navigation';
+import ErrorMessage from '@/components/ui/ErrorMessage';
 
-interface IProps {
-  params: {
-    postId: string;
-  };
-}
+// interface IProps {
+//   params: {
+//     postId: string;
+//   };
+// }
 
-const PostDetails = ({ params }: IProps) => {
+const PostDetails = () => {
   const [isFavorite, setIsFavorite] = useState(false);
-  const { data, isLoading, isError } = useGetPost(params.postId);
+
+  const params = useParams();
+  console.log(params.postId);
+
+  const { data, isLoading, isError, error } = useGetPost(
+    params?.postId as string,
+  );
   const post = data?.data;
 
-  const { user } = useUser();
+  console.log(error);
+
+  const { user } = useAuth();
   const currentUserId = user?._id as string;
   const isFollowing = post?.user?.followers?.includes(currentUserId);
 
@@ -89,7 +98,7 @@ const PostDetails = ({ params }: IProps) => {
   if (isError || !post) {
     return (
       <div className="mt-[90px]">
-        <NoDataFound />
+        <ErrorMessage>{error?.message}</ErrorMessage>
       </div>
     );
   }
@@ -156,7 +165,7 @@ const PostDetails = ({ params }: IProps) => {
                   <span>by {post?.user?.username}</span>
                   <span className="mx-2">•</span>
                   <span>
-                    {new Date(post.createdAt).toLocaleDateString()}
+                    {new Date(post?.createdAt).toLocaleDateString()}
                   </span>
                 </div>
                 <div className="text-xs text-gray-400">

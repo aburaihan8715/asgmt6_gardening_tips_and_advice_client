@@ -6,7 +6,7 @@ import SectionHeading from '@/components/ui/SectionHeading';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { useUser } from '@/context/user.provider';
+import { useAuth } from '@/context/user.provider';
 import { useEffect, useState } from 'react';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import LoadingWithOverlay from '@/components/ui/LoadingWithOverlay';
@@ -21,7 +21,7 @@ interface LoginFormValues {
 const Login = () => {
   const searchParams = useSearchParams();
   const router = useRouter();
-  const { setIsLoading: setIsUserLoading } = useUser();
+  const { setIsLoading: setIsUserLoading } = useAuth();
 
   const redirect = searchParams.get('redirect');
 

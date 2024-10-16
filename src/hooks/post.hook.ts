@@ -116,7 +116,7 @@ export const useGetNewFivePosts = () => {
 // GET ONE
 export const useGetPost = (postId: string) => {
   return useQuery({
-    queryKey: ['GET_POST'],
+    queryKey: ['GET_POST', postId],
     queryFn: async () => await getPost(postId),
   });
 };

@@ -14,7 +14,7 @@ import Image from 'next/image';
 import BrandLogo from './BrandLogo';
 import { MdClose, MdMenu } from 'react-icons/md';
 import ActiveLink from './ActiveLink';
-import { useUser } from '@/context/user.provider';
+import { useAuth } from '@/context/user.provider';
 import { logout } from '@/services/auth.service';
 import { protectedRoutes } from '@/constant';
 import { usePathname, useRouter } from 'next/navigation';
@@ -23,7 +23,7 @@ import Link from 'next/link';
 // HEADER COMPONENT
 const Header = () => {
   const [open, setOpen] = useState(true);
-  const { user, setIsLoading: userLoading } = useUser();
+  const { user, setIsLoading: userLoading } = useAuth();
 
   const router = useRouter();
   const pathname = usePathname();
@@ -159,7 +159,7 @@ export default Header;
 
 // PROFILE POPOVER COMPONENT
 const ProfilePopover = () => {
-  const { user, setIsLoading: userLoading } = useUser();
+  const { user, setIsLoading: userLoading } = useAuth();
   const router = useRouter();
   const pathname = usePathname();
 

@@ -3,48 +3,60 @@
 import axiosInstance from '@/lib/AxiosInstance';
 
 // Follow a user
-export const followUser = async (
-  currentUserId: string,
-  postUserId: string,
-) => {
+export const followUser = async (postUserId: string) => {
   try {
     const { data } = await axiosInstance.patch(
       `/api/v1/users/${postUserId}/follow`,
-      { currentUserId },
     );
     return data;
   } catch (error: any) {
-    console.log('=======followUser error🔥', error);
     throw new Error(error.response?.data?.message || error.message);
   }
 };
 
 // Unfollow a user
-export const unfollowUser = async (
-  currentUserId: string,
-  postUserId: string,
-) => {
+export const unfollowUser = async (postUserId: string) => {
   try {
     const { data } = await axiosInstance.patch(
       `/api/v1/users/${postUserId}/unfollow`,
-      { currentUserId },
     );
     return data;
   } catch (error: any) {
-    console.log('=======unFollowUser error🔥', error);
     throw new Error(error.response?.data?.message || error.message);
   }
 };
 
-// Favorite a post
-export const favoritePost = async (postId: string) => {
+// Add Favorite a post
+export const addFavoritePost = async (postId: string) => {
   try {
     const { data } = await axiosInstance.patch(
-      `/api/v1/posts/${postId}/favorite`,
+      `/api/v1/users/${postId}/add-favourites`,
     );
     return data;
   } catch (error: any) {
     throw new Error(error.response?.data?.message || error.message);
   }
 };
+
+// Remove Favorite a post
+export const removeFavoritePost = async (postId: string) => {
+  try {
+    const { data } = await axiosInstance.patch(
+      `/api/v1/users/${postId}/remove-favourites`,
+    );
+    return data;
+  } catch (error: any) {
+    throw new Error(error.response?.data?.message || error.message);
+  }
+};
+
+export const getMe = async () => {
+  try {
+    const { data } = await axiosInstance.get(`/api/v1/users/me`);
+    return data;
+  } catch (error: any) {
+    throw new Error(error.response?.data?.message || error.message);
+  }
+};
+
 // export const UserServices = { followUser, unfollowUser, favoritePost };

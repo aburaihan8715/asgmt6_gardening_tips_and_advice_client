@@ -6,7 +6,7 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import SectionHeading from '@/components/ui/SectionHeading';
 import { FaPlusSquare } from 'react-icons/fa';
-import { useUser } from '@/context/user.provider';
+import { useAuth } from '@/context/user.provider';
 import { useSettingsProfileMutation } from '@/hooks/auth.hook';
 import LoadingWithOverlay from '@/components/ui/LoadingWithOverlay';
 import { AuthSchemas } from '@/schemas/auth.schema';
@@ -18,7 +18,7 @@ interface IUserSettingsFormData {
 }
 
 export default function SettingsProfile() {
-  const { user } = useUser();
+  const { user } = useAuth();
   const { mutate: profileMutate, isPending } =
     useSettingsProfileMutation();
 

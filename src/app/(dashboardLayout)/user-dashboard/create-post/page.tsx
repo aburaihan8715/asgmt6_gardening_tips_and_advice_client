@@ -9,7 +9,7 @@
 // import { PostSchemas } from '@/schemas/post.schema';
 // import { useCreatePostMutation } from '@/hooks/post.hook';
 // import LoadingWithOverlay from '@/components/ui/LoadingWithOverlay';
-// import { useUser } from '@/context/user.provider';
+// import { useAuth } from '@/context/user.provider';
 // import LoadingSpinner from '@/components/ui/LoadingSpinner';
 
 // type TPostFormValues = {
@@ -66,7 +66,7 @@
 //   });
 
 //   const { mutate: createPostMutate, isPending } = useCreatePostMutation();
-//   const { user } = useUser();
+//   const { user } = useAuth();
 
 //   const onSubmit = (data: TPostFormValues) => {
 //     const postData = {
@@ -279,7 +279,7 @@ import { FaPlusSquare } from 'react-icons/fa';
 import { PostSchemas } from '@/schemas/post.schema';
 import { useCreatePostMutation } from '@/hooks/post.hook';
 import LoadingWithOverlay from '@/components/ui/LoadingWithOverlay';
-import { useUser } from '@/context/user.provider';
+import { useAuth } from '@/context/user.provider';
 import LoadingSpinner from '@/components/ui/LoadingSpinner';
 
 // Dynamically import ReactQuill to disable SSR
@@ -339,7 +339,7 @@ const CreatePost = () => {
   });
 
   const { mutate: createPostMutate, isPending } = useCreatePostMutation();
-  const { user } = useUser();
+  const { user } = useAuth();
 
   const onSubmit = (data: TPostFormValues) => {
     const postData = {

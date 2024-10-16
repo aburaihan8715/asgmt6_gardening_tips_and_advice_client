@@ -9,7 +9,7 @@ import { FaPlusSquare } from 'react-icons/fa';
 import { PostSchemas } from '@/schemas/post.schema';
 import { useGetPost, useUpdatePostMutation } from '@/hooks/post.hook';
 import LoadingWithOverlay from '@/components/ui/LoadingWithOverlay';
-import { useUser } from '@/context/user.provider';
+import { useAuth } from '@/context/user.provider';
 import LoadingSpinner from '@/components/ui/LoadingSpinner';
 import { useParams } from 'next/navigation';
 
@@ -58,7 +58,7 @@ const EditMyPost = () => {
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const { mutate: updatePostMutation, isPending } =
     useUpdatePostMutation();
-  const { user } = useUser();
+  const { user } = useAuth();
   const { postId } = useParams();
   const { data: postData, isLoading } = useGetPost(postId as string);
 

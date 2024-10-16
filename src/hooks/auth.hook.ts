@@ -1,4 +1,4 @@
-import { useUser } from '@/context/user.provider';
+import { useAuth } from '@/context/user.provider';
 import {
   changePassword,
   forgetPassword,
@@ -83,7 +83,7 @@ export const useResetPasswordMutation = () => {
 };
 
 export const useSettingsProfileMutation = () => {
-  const { setIsLoading } = useUser();
+  const { setIsLoading } = useAuth();
   return useMutation<any, Error, FieldValues>({
     mutationKey: ['SETTINGS_PROFILE'],
     mutationFn: async (profileData) => await settingsProfile(profileData),

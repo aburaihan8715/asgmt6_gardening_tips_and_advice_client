@@ -1,5 +1,5 @@
 'use client';
-import React, { useEffect } from 'react';
+import React from 'react';
 import { useGetNewFivePosts } from '@/hooks/post.hook';
 import LoadingSpinner from '@/components/ui/LoadingSpinner';
 import ErrorMessage from '@/components/ui/ErrorMessage';
@@ -10,7 +10,6 @@ import {
   useUnfollowUserMutation,
 } from '@/hooks/user.hook';
 import LoadingWithOverlay from '@/components/ui/LoadingWithOverlay';
-import { toast } from 'sonner';
 
 const PostInHome = () => {
   const { data, isLoading, isError, error } = useGetNewFivePosts();
@@ -18,11 +17,11 @@ const PostInHome = () => {
   const { isPending: followPending } = useFollowUserMutation();
   const { isPending: unfollowPending } = useUnfollowUserMutation();
 
-  useEffect(() => {
-    if (data && !data?.success) {
-      toast.error(data?.message as string);
-    }
-  }, [data]);
+  // useEffect(() => {
+  //   if (data && !data?.success) {
+  //     toast.error(data?.message as string);
+  //   }
+  // }, [data]);
 
   if (isLoading) {
     return <LoadingSpinner />;

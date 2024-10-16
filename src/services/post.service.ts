@@ -9,7 +9,6 @@ export const createPost = async (postData: FieldValues) => {
     const { data } = await axiosInstance.post('/api/v1/posts', postData);
     return data;
   } catch (error: any) {
-    // console.error('==🔥Full error response:==', error.response?.data);
     throw new Error(error.response?.data?.message || error.message);
   }
 };
@@ -50,7 +49,6 @@ export const getAllPosts = async ({
     const { data } = await axiosInstance.get(queryString);
     return data;
   } catch (error: any) {
-    // console.log('=======🔥🔥=======', error.response?.data);
     throw new Error(error.response?.data?.message || error.message);
   }
 };
@@ -111,7 +109,6 @@ export const getMyPosts = async ({
     const { data } = await axiosInstance.get(queryString);
     return data;
   } catch (error: any) {
-    // console.log('=======🔥🔥=======', error.response?.data);
     throw new Error(error.response?.data?.message || error.message);
   }
 };
@@ -122,13 +119,7 @@ export const getNewFivePosts = async () => {
     const { data } = await axiosInstance.get('/api/v1/posts/new-5-posts');
     return data;
   } catch (error: any) {
-    // console.error('==🔥Full error response:==', error.response?.data);
-    // throw new Error(error.response?.data?.message || error.message)
-    return {
-      success: false,
-      //* you can return error message from here
-      message: error.response?.data?.message,
-    };
+    throw new Error(error.response?.data?.message || error.message);
   }
 };
 
