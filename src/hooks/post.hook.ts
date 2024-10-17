@@ -1,14 +1,17 @@
 import {
-  commentOnPost,
+  createCommentOnPost,
   createPost,
   deletePost,
   downvotePost,
   getAllPosts,
+  getCommentsOfPost,
   getInfinitePosts,
   getMyPosts,
   getNewFivePosts,
   getPost,
   makePostPremium,
+  removeDownvotePost,
+  removeUpvotePost,
   updatePost,
   upvotePost,
 } from '@/services/post.service';
@@ -201,16 +204,22 @@ export const useMakePostPremiumMutation = () => {
 };
 
 // Upvote hook
-export const useUpvotePostMutation = () => {
+interface IUpvoteArgs {
+  postId: string;
+}
+
+export const useUpvotePostMutation = (postId?: string) => {
   const queryClient = useQueryClient();
-  return useMutation<unknown, Error, string>({
-    mutationFn: async (id) => await upvotePost(id),
+  return useMutation<unknown, Error, IUpvoteArgs>({
+    mutationFn: async (options) => {
+      return await upvotePost(options.postId);
+    },
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: ['GET_MY_POSTS'],
+        queryKey: ['GET_POSTS'],
       });
       queryClient.invalidateQueries({
-        queryKey: ['GET_POSTS'],
+        queryKey: ['GET_POST', postId],
       });
       queryClient.invalidateQueries({
         queryKey: ['GET_NEW_5_POSTS'],
@@ -223,17 +232,52 @@ export const useUpvotePostMutation = () => {
   });
 };
 
-// Downvote hook
-export const useDownvotePostMutation = () => {
+// Upvote remove
+interface IRemoveUpvoteArgs {
+  postId: string;
+}
+
+export const useRemoveUpvotePostMutation = (postId?: string) => {
   const queryClient = useQueryClient();
-  return useMutation<unknown, Error, string>({
-    mutationFn: async (id) => await downvotePost(id),
+  return useMutation<unknown, Error, IRemoveUpvoteArgs>({
+    mutationFn: async (options) => {
+      return await removeUpvotePost(options.postId);
+    },
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: ['GET_MY_POSTS'],
+        queryKey: ['GET_POSTS'],
       });
       queryClient.invalidateQueries({
+        queryKey: ['GET_POST', postId],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ['GET_NEW_5_POSTS'],
+      });
+      toast.success('Upvote removed successfully.');
+    },
+    onError: (error: any) => {
+      toast.error(error.message);
+    },
+  });
+};
+
+// Downvote hook
+interface IDownvoteArgs {
+  postId: string;
+}
+
+export const useDownvotePostMutation = (postId?: string) => {
+  const queryClient = useQueryClient();
+  return useMutation<unknown, Error, IDownvoteArgs>({
+    mutationFn: async (options) => {
+      return await downvotePost(options.postId);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({
         queryKey: ['GET_POSTS'],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ['GET_POST', postId],
       });
       queryClient.invalidateQueries({
         queryKey: ['GET_NEW_5_POSTS'],
@@ -246,12 +290,56 @@ export const useDownvotePostMutation = () => {
   });
 };
 
-// Comment hook
-export const useCommentOnPostMutation = () => {
+// Downvote remove
+interface IRemoveDownvoteArgs {
+  postId: string;
+}
+
+export const useRemoveDownvotePostMutation = (postId?: string) => {
   const queryClient = useQueryClient();
-  return useMutation<unknown, Error, FieldValues>({
+  return useMutation<unknown, Error, IRemoveDownvoteArgs>({
     mutationFn: async (options) => {
-      return await commentOnPost(options.id, options.comment);
+      return await removeDownvotePost(options.postId);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ['GET_POSTS'],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ['GET_POST', postId],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ['GET_NEW_5_POSTS'],
+      });
+      toast.success('Downvote removed successfully.');
+    },
+    onError: (error: any) => {
+      toast.error(error.message);
+    },
+  });
+};
+
+// Make comment for a post
+interface ICreateCommentArgs {
+  postId: string;
+  content: string;
+}
+export const useCreateCommentOnPost = ({
+  page,
+  limit,
+  searchTerm,
+  postId,
+}: {
+  page?: number;
+  limit?: number;
+  searchTerm?: string;
+  postId?: string;
+}) => {
+  const queryClient = useQueryClient();
+  const router = useRouter();
+  return useMutation<unknown, Error, ICreateCommentArgs>({
+    mutationFn: async (options) => {
+      return await createCommentOnPost(options.postId, options.content);
     },
 
     onSuccess: () => {
@@ -264,10 +352,40 @@ export const useCommentOnPostMutation = () => {
       queryClient.invalidateQueries({
         queryKey: ['GET_NEW_5_POSTS'],
       });
+
+      queryClient.invalidateQueries({
+        queryKey: [
+          'GET_COMMENTS_OF_POST',
+          { page, limit, searchTerm, postId },
+        ],
+      });
       toast.success('Comment posted successfully.');
+      router.push(`/comment-list?postId=${postId}`);
     },
     onError: (error: any) => {
       toast.error(error.message);
     },
+  });
+};
+
+// GET COMMENTS OF POST
+export const useGetCommentsOfPost = ({
+  page,
+  limit,
+  searchTerm,
+  postId,
+}: {
+  page?: number;
+  limit?: number;
+  searchTerm?: string;
+  postId?: string;
+}) => {
+  return useQuery({
+    queryKey: [
+      'GET_COMMENTS_OF_POST',
+      { page, limit, searchTerm, postId },
+    ],
+    queryFn: async () =>
+      await getCommentsOfPost({ page, limit, searchTerm, postId }),
   });
 };

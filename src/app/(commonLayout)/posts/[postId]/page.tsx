@@ -1,18 +1,21 @@
 'use client';
 
-import React, { useState } from 'react';
+import React from 'react';
 import Image from 'next/image';
 import {
-  FaThumbsUp,
-  FaThumbsDown,
   FaCommentAlt,
   FaShareAlt,
   FaHeart,
+  FaArrowUp,
+  FaArrowDown,
 } from 'react-icons/fa';
 import { useGetPost } from '@/hooks/post.hook';
 import QuillContent from '@/components/ui/QuillContent';
 import {
+  useAddFavoritePostMutation,
   useFollowUserMutation,
+  useGetMe,
+  useRemoveFavoritePostMutation,
   useUnfollowUserMutation,
 } from '@/hooks/user.hook';
 import LoadingWithOverlay from '@/components/ui/LoadingWithOverlay';
@@ -20,35 +23,49 @@ import LoadingSpinner from '@/components/ui/LoadingSpinner';
 import { useAuth } from '@/context/user.provider';
 import { useParams } from 'next/navigation';
 import ErrorMessage from '@/components/ui/ErrorMessage';
-
-// interface IProps {
-//   params: {
-//     postId: string;
-//   };
-// }
+import { toast } from 'sonner';
 
 const PostDetails = () => {
-  const [isFavorite, setIsFavorite] = useState(false);
-
   const params = useParams();
-  console.log(params.postId);
 
-  const { data, isLoading, isError, error } = useGetPost(
-    params?.postId as string,
-  );
-  const post = data?.data;
-
-  console.log(error);
+  const {
+    data: postDetailsData,
+    isLoading: isPostLoading,
+    isError: isPostError,
+    error: postError,
+  } = useGetPost(params?.postId as string);
+  const post = postDetailsData?.data;
 
   const { user } = useAuth();
+
+  const {
+    data: currentUserData,
+    isLoading: currentUserLoading,
+    isError: isCurrentUserError,
+    error: currentUserError,
+  } = useGetMe();
+  const currentUser = currentUserData?.data;
   const currentUserId = user?._id as string;
   const isFollowing = post?.user?.followers?.includes(currentUserId);
+  const favourites = currentUser?.favourites || [];
+  const isFavourite = favourites.includes(post?._id);
 
   const { mutate: followMutate, isPending: followPending } =
-    useFollowUserMutation();
+    useFollowUserMutation(params?.postId as string);
   const { mutate: unFollowMutate, isPending: unfollowPending } =
-    useUnfollowUserMutation();
+    useUnfollowUserMutation(params?.postId as string);
 
+  const {
+    mutate: addFavouritePostMutate,
+    isPending: addFavouritePostPending,
+  } = useAddFavoritePostMutation();
+
+  const {
+    mutate: removeFavouritePostMutate,
+    isPending: removeFavouritePostPending,
+  } = useRemoveFavoritePostMutation();
+
+  // HANDLE SHARE
   const handleShare = async () => {
     try {
       if (navigator.share) {
@@ -65,9 +82,38 @@ const PostDetails = () => {
     }
   };
 
+  // HANDLE ADD FAVOURITE
+  const handleAddFavourite = (postId: string) => {
+    if (!user) {
+      return toast.success('You need to login firs!!');
+    }
+
+    const mutateData = { postId };
+    // console.log(mutateData);
+    addFavouritePostMutate(mutateData, {
+      onSuccess: () => {},
+      onError: () => {},
+    });
+  };
+
+  // HANDLE REMOVE FAVOURITE
+  const handleRemoveFavourite = (postId: string) => {
+    if (!user) {
+      return toast.success('You need to login firs!!');
+    }
+    const mutateData = { postId };
+    removeFavouritePostMutate(mutateData, {
+      onSuccess: () => {},
+      onError: () => {},
+    });
+  };
+
   // HANDLE FOLLOW
   const handleFollow = (postUserId: string) => {
-    const mutateData = { currentUserId, postUserId };
+    if (!user) {
+      return toast.success('You need to login firs!!');
+    }
+    const mutateData = { postUserId };
     followMutate(mutateData, {
       onSuccess: () => {},
       onError: () => {},
@@ -76,18 +122,23 @@ const PostDetails = () => {
 
   // HANDLE UNFOLLOW
   const handleUnfollow = (postUserId: string) => {
-    const mutateData = { currentUserId, postUserId };
+    if (!user) {
+      return toast.success('You need to login firs!!');
+    }
+    const mutateData = { postUserId };
     unFollowMutate(mutateData, {
       onSuccess: () => {},
       onError: () => {},
     });
   };
 
-  const handleFavorite = () => {
-    setIsFavorite(!isFavorite); // Toggle the favorite state
-  };
-
-  if (isLoading) {
+  if (
+    !post ||
+    !user ||
+    currentUserLoading ||
+    !currentUser ||
+    isPostLoading
+  ) {
     return (
       <div className="mt-[90px]">
         <LoadingSpinner />
@@ -95,17 +146,28 @@ const PostDetails = () => {
     );
   }
 
-  if (isError || !post) {
+  if (isCurrentUserError) {
     return (
       <div className="mt-[90px]">
-        <ErrorMessage>{error?.message}</ErrorMessage>
+        <ErrorMessage>{currentUserError?.message}</ErrorMessage>
+      </div>
+    );
+  }
+
+  if (isPostError) {
+    return (
+      <div className="mt-[90px]">
+        <ErrorMessage>{postError?.message}</ErrorMessage>
       </div>
     );
   }
 
   return (
     <>
-      {(followPending || unfollowPending) && <LoadingWithOverlay />}
+      {(followPending ||
+        unfollowPending ||
+        addFavouritePostPending ||
+        removeFavouritePostPending) && <LoadingWithOverlay />}
       <section className="mt-[80px]">
         <div className="mx-auto max-w-5xl p-6">
           {/* Header */}
@@ -126,7 +188,7 @@ const PostDetails = () => {
               {post?.title}
             </h1>
             {/* Category and Premium Badge */}
-            <div className="mt-2 flex items-center justify-between">
+            <div className="mt-4 flex items-center justify-between">
               <span
                 className={`rounded-full px-3 py-1 text-sm font-medium ${
                   post?.isPremium
@@ -134,7 +196,7 @@ const PostDetails = () => {
                     : 'bg-gray-200 text-gray-800'
                 }`}
               >
-                {post?.category}
+                {post.category}
               </span>
               {post?.isPremium && (
                 <span className="text-xs font-bold uppercase text-yellow-500">
@@ -165,13 +227,11 @@ const PostDetails = () => {
                   <span>by {post?.user?.username}</span>
                   <span className="mx-2">•</span>
                   <span>
-                    {new Date(post?.createdAt).toLocaleDateString()}
+                    {new Date(post.createdAt).toLocaleDateString()}
                   </span>
                 </div>
                 <div className="text-xs text-gray-400">
-                  {post?.user?.followers.length > 0
-                    ? post?.user?.followers.length
-                    : '0'}{' '}
+                  {post?.user?.followersCount || 0}
                   Followers
                   {post.user.isVerified && (
                     <span className="ml-2 rounded-full bg-yellow-400 px-2 py-1 text-xs font-semibold text-yellow-900">
@@ -183,27 +243,25 @@ const PostDetails = () => {
             </div>
 
             {/* Follow Button */}
-            {user && (
-              <div>
-                {isFollowing && (
-                  <button
-                    onClick={() => handleUnfollow(post?.user?._id)}
-                    className={`rounded-full bg-gray-300 px-4 py-1 text-xs font-semibold text-gray-800`}
-                  >
-                    following
-                  </button>
-                )}
+            <div>
+              {isFollowing && (
+                <button
+                  onClick={() => handleUnfollow(post?.user?._id)}
+                  className={`rounded-full bg-gray-300 px-4 py-1 text-xs font-semibold text-gray-800`}
+                >
+                  following
+                </button>
+              )}
 
-                {!isFollowing && (
-                  <button
-                    onClick={() => handleFollow(post?.user?._id)}
-                    className={`rounded-full bg-green-500 px-4 py-1 text-xs font-semibold text-white hover:bg-green-600`}
-                  >
-                    follow
-                  </button>
-                )}
-              </div>
-            )}
+              {!isFollowing && (
+                <button
+                  onClick={() => handleFollow(post?.user?._id)}
+                  className={`rounded-full bg-green-500 px-4 py-1 text-xs font-semibold text-white hover:bg-green-600`}
+                >
+                  follow
+                </button>
+              )}
+            </div>
           </div>
 
           {/* Main Content */}
@@ -212,48 +270,58 @@ const PostDetails = () => {
           {/* Actions */}
           <div className="mt-6 flex items-center justify-between">
             <div className="flex items-center space-x-4">
+              {/* Upvote Button */}
               <button className="flex items-center space-x-1 text-green-500">
-                <FaThumbsUp />
-                <span>
-                  {post?.upvotes.length > 0 ? post?.upvotes.length : '0'}
-                </span>
+                <FaArrowUp />
+                <span>{post.upvotesCount || 0}</span>
               </button>
+
+              {/* Downvote Button */}
               <button className="flex items-center space-x-1 text-red-500">
-                <FaThumbsDown />
-                <span>
-                  {post?.downvotes.length > 0
-                    ? post?.downvotes.length
-                    : '0'}
-                </span>
+                <FaArrowDown />
+                <span>{post.downvotesCount || 0}</span>
               </button>
             </div>
 
             <div className="flex items-center space-x-2">
               <FaCommentAlt className="text-gray-400" />
               <span className="text-gray-500">
-                {post?.numberOfComments ? post?.numberOfComments : 0}{' '}
+                {post?.numberOfComments || 0} {''}
                 Comments
               </span>
             </div>
 
             <div className="flex items-center space-x-2">
-              {/* Favorite Button Icon */}
-              <button
-                onClick={handleFavorite}
-                className={`text-lg ${
-                  isFavorite ? 'text-red-500' : 'text-gray-400'
-                }`}
-              >
-                <FaHeart />
-              </button>
+              {/* Favourite Button Icon */}
+              <div className="flex items-center">
+                {!isFavourite && (
+                  <button
+                    onClick={() => handleAddFavourite(post?._id)}
+                    className={`text-lg text-gray-500`}
+                  >
+                    <FaHeart />
+                  </button>
+                )}
+
+                {isFavourite && (
+                  <button
+                    onClick={() => handleRemoveFavourite(post?._id)}
+                    className={`text-lg text-red-500`}
+                  >
+                    <FaHeart />
+                  </button>
+                )}
+              </div>
 
               {/* Share Button Icon */}
-              <button
-                onClick={handleShare}
-                className="flex items-center space-x-1 text-green-500 hover:text-green-600"
-              >
-                <FaShareAlt />
-              </button>
+              <div className="">
+                <button
+                  onClick={handleShare}
+                  className="flex items-center space-x-1 text-green-500 hover:text-green-600"
+                >
+                  <FaShareAlt />
+                </button>
+              </div>
             </div>
           </div>
         </div>

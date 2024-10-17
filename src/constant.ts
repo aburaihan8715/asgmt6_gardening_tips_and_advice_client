@@ -6,4 +6,6 @@ export const protectedRoutes = [
   '/login',
   '/register',
   '/forget-password',
+  '/create-comment',
+  '/comment-list',
 ];

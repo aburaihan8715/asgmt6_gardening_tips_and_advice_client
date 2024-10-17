@@ -141,10 +141,10 @@ export default function SettingsProfile() {
           />
           <label
             htmlFor="photo"
-            className="ml-4 flex w-fit cursor-pointer items-center gap-2 text-xl text-gray-700"
+            className="ml-2 flex w-fit cursor-pointer items-center gap-2 text-xl text-gray-700"
           >
             <FaPlusSquare />
-            <span>Add</span>
+            <span>Image</span>
           </label>
         </div>
 

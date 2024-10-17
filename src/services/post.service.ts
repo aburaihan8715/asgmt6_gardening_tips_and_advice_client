@@ -36,10 +36,10 @@ export const getAllPosts = async ({
     if (limit) params.append('limit', limit.toString());
     if (searchTerm) params.append('searchTerm', searchTerm);
     if (category) params.append('category', category);
-    if (voteFilter && voteFilter === 'upvotesCount') {
-      params.append('upvotesCount', '-1');
-    } else if (voteFilter && voteFilter === 'downvotesCount') {
-      params.append('upvotesCount', '-1');
+    if (voteFilter && voteFilter === 'upvoteCount') {
+      params.append('upvoteCount', '-1');
+    } else if (voteFilter && voteFilter === 'downvoteCount') {
+      params.append('upvoteCount', '-1');
     }
 
     if (params.toString()) queryString += `?${params.toString()}`;
@@ -183,6 +183,17 @@ export const upvotePost = async (postId: string) => {
   }
 };
 
+export const removeUpvotePost = async (postId: string) => {
+  try {
+    const { data } = await axiosInstance.patch(
+      `/api/v1/posts/${postId}/upvote-remove`,
+    );
+    return data;
+  } catch (error: any) {
+    throw new Error(error.response?.data?.message || error.message);
+  }
+};
+
 // Downvote a post
 export const downvotePost = async (postId: string) => {
   try {
@@ -195,12 +206,26 @@ export const downvotePost = async (postId: string) => {
   }
 };
 
+export const removeDownvotePost = async (postId: string) => {
+  try {
+    const { data } = await axiosInstance.patch(
+      `/api/v1/posts/${postId}/downvote-remove`,
+    );
+    return data;
+  } catch (error: any) {
+    throw new Error(error.response?.data?.message || error.message);
+  }
+};
+
 // Comment on a post
-export const commentOnPost = async (postId: string, comment: string) => {
+export const createCommentOnPost = async (
+  postId: string,
+  content: string,
+) => {
   try {
     const { data } = await axiosInstance.post(
       `/api/v1/posts/${postId}/comments`,
-      { comment },
+      { content },
     );
     return data;
   } catch (error: any) {
@@ -209,29 +234,31 @@ export const commentOnPost = async (postId: string, comment: string) => {
 };
 
 // Comment on a post (specific post)
-export const getCommentsOfPost = async (postId: string) => {
+export const getCommentsOfPost = async ({
+  page,
+  limit,
+  searchTerm,
+  postId,
+}: {
+  page?: number;
+  limit?: number;
+  searchTerm?: string;
+  postId?: string;
+}) => {
   try {
-    const { data } = await axiosInstance.get(
-      `/api/v1/posts/${postId}/comments`,
-    );
+    let queryString = `/api/v1/posts/${postId}/comments`;
+
+    const params = new URLSearchParams();
+
+    if (page) params.append('page', page.toString());
+    if (limit) params.append('limit', limit.toString());
+    if (searchTerm) params.append('searchTerm', searchTerm);
+
+    if (params.toString()) queryString += `?${params.toString()}`;
+
+    const { data } = await axiosInstance.get(queryString);
     return data;
   } catch (error: any) {
     throw new Error(error.response?.data?.message || error.message);
   }
 };
-
-// export const PostServices = {
-//   createPost,
-//   getAllPosts,
-//   getInfinitePosts,
-//   getMyPosts,
-//   getNewFivePosts,
-//   getPost,
-//   updatePost,
-//   deletePost,
-//   makePostPremium,
-//   upvotePost,
-//   downvotePost,
-//   favoritePost,
-//   commentOnPost,
-// };

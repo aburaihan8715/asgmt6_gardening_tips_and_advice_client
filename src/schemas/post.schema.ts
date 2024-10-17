@@ -14,7 +14,13 @@ const postUpdateValidationSchema = z.object({
   content: z.string().min(1, 'Content is required').optional(),
   image: z.any().optional(),
 });
+
+// Define the Zod schema for form validation
+const createCommentValidationSchema = z.object({
+  commentText: z.string().min(1, 'Comment is required'),
+});
 export const PostSchemas = {
   postValidationSchema,
   postUpdateValidationSchema,
+  createCommentValidationSchema,
 };

@@ -17,7 +17,7 @@ import { toast } from 'sonner';
 interface IFollowArgs {
   postUserId: string;
 }
-export const useFollowUserMutation = () => {
+export const useFollowUserMutation = (postId?: string) => {
   const queryClient = useQueryClient();
   return useMutation<unknown, Error, IFollowArgs>({
     mutationFn: async (options) => {
@@ -26,6 +26,9 @@ export const useFollowUserMutation = () => {
     onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: ['GET_POSTS'],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ['GET_POST', postId],
       });
       queryClient.invalidateQueries({
         queryKey: ['GET_NEW_5_POSTS'],
@@ -46,7 +49,7 @@ export const useFollowUserMutation = () => {
 interface IUnfollowArgs {
   postUserId: string;
 }
-export const useUnfollowUserMutation = () => {
+export const useUnfollowUserMutation = (postId?: string) => {
   // const router = useRouter();
   const queryClient = useQueryClient();
   return useMutation<unknown, Error, IUnfollowArgs>({
@@ -56,6 +59,9 @@ export const useUnfollowUserMutation = () => {
     onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: ['GET_POSTS'],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ['GET_POST', postId],
       });
       queryClient.invalidateQueries({
         queryKey: ['GET_NEW_5_POSTS'],
@@ -81,7 +87,6 @@ export const useAddFavoritePostMutation = () => {
 
   return useMutation<unknown, Error, IAddFavouritePostArgs>({
     mutationFn: async (options) => {
-      console.log({ options });
       return await addFavoritePost(options.postId);
     },
 
@@ -139,11 +144,6 @@ export const useGetMe = () => {
   return useQuery({
     queryKey: ['GET_ME'],
     queryFn: async () => await getMe(),
+    enabled: false,
   });
 };
-
-// export const UserHooks = {
-//   useFollowUserMutation,
-//   useUnfollowUserMutation,
-//   useFavoritePostMutation,
-// };

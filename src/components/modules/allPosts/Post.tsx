@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import Image from 'next/image';
 import {
   FaCommentAlt,
@@ -22,7 +22,12 @@ import {
 import LoadingWithOverlay from '@/components/ui/LoadingWithOverlay';
 import { toast } from 'sonner';
 import LoadingSpinner from '@/components/ui/LoadingSpinner';
-import ErrorMessage from '@/components/ui/ErrorMessage';
+import {
+  useDownvotePostMutation,
+  useRemoveDownvotePostMutation,
+  useRemoveUpvotePostMutation,
+  useUpvotePostMutation,
+} from '@/hooks/post.hook';
 
 interface IProps {
   post: IPost;
@@ -32,15 +37,18 @@ const Post = ({ post }: IProps) => {
   const { user } = useAuth();
   const {
     data: currentUserData,
-    isLoading: currentUserLoading,
-    isError: isCurrentUserError,
-    error: currentUserError,
+    refetch,
+    isLoading: isCurrentUserLoading,
   } = useGetMe();
+
+  const postUserId = post?.user?._id as string;
   const currentUser = currentUserData?.data;
-  const currentUserId = currentUser?._id as string;
-  const isFollowing = post?.user?.followers?.includes(currentUserId);
+  const currentUserId = currentUser?._id;
+  const followings = currentUser?.followings || [];
+  const isFollowing = followings?.includes(postUserId);
+
   const favourites = currentUser?.favourites || [];
-  const isFavourite = favourites.includes(post._id);
+  const isFavourite = favourites.includes(post?._id);
 
   const { mutate: followMutate, isPending: followPending } =
     useFollowUserMutation();
@@ -57,6 +65,20 @@ const Post = ({ post }: IProps) => {
     mutate: removeFavouritePostMutate,
     isPending: removeFavouritePostPending,
   } = useRemoveFavoritePostMutation();
+
+  const { mutate: upvoteMutate, isPending: isUpvotePending } =
+    useUpvotePostMutation();
+
+  const { mutate: upvoteRemoveMutate, isPending: isUpvoteRemovePending } =
+    useRemoveUpvotePostMutation();
+
+  const { mutate: downvoteMutate, isPending: isDownvotePending } =
+    useDownvotePostMutation();
+
+  const {
+    mutate: downvoteRemoveMutate,
+    isPending: isDownvoteRemovePending,
+  } = useRemoveDownvotePostMutation();
 
   // HANDLE SHARE
   const handleShare = async () => {
@@ -77,60 +99,104 @@ const Post = ({ post }: IProps) => {
 
   // HANDLE ADD FAVOURITE
   const handleAddFavourite = (postId: string) => {
-    if (!user) {
-      return toast.success('You need to login firs!!');
-    }
-
     const mutateData = { postId };
-    // console.log(mutateData);
     addFavouritePostMutate(mutateData, {
-      onSuccess: () => {},
+      onSuccess: () => {
+        refetch();
+      },
       onError: () => {},
     });
   };
 
   // HANDLE REMOVE FAVOURITE
   const handleRemoveFavourite = (postId: string) => {
-    if (!user) {
-      return toast.success('You need to login firs!!');
-    }
     const mutateData = { postId };
     removeFavouritePostMutate(mutateData, {
-      onSuccess: () => {},
+      onSuccess: () => {
+        refetch();
+      },
       onError: () => {},
     });
   };
 
   // HANDLE FOLLOW
   const handleFollow = (postUserId: string) => {
-    if (!user) {
-      return toast.success('You need to login firs!!');
-    }
     const mutateData = { postUserId };
     followMutate(mutateData, {
-      onSuccess: () => {},
+      onSuccess: () => {
+        refetch();
+      },
       onError: () => {},
     });
   };
 
   // HANDLE UNFOLLOW
   const handleUnfollow = (postUserId: string) => {
-    if (!user) {
-      return toast.success('You need to login firs!!');
-    }
     const mutateData = { postUserId };
     unFollowMutate(mutateData, {
-      onSuccess: () => {},
+      onSuccess: () => {
+        refetch();
+      },
       onError: () => {},
     });
   };
 
-  // HANDLE UPVOTES
-  const handleUpvotes = (postId: string) => {
-    console.log(postId);
+  // Handle upvote
+  const handleUpvote = (postId: string) => {
+    const upvotes = post?.upvotes || [];
+    const hasUpvotes = upvotes?.includes(currentUserId);
+
+    if (!user) {
+      return toast.success('You need to login firs!!');
+    }
+
+    if (!hasUpvotes) {
+      const mutateData = { postId };
+      upvoteMutate(mutateData, {
+        onSuccess: () => {},
+        onError: () => {},
+      });
+    } else {
+      const mutateData = { postId };
+      upvoteRemoveMutate(mutateData, {
+        onSuccess: () => {},
+        onError: () => {},
+      });
+    }
   };
 
-  if (!post || !user || currentUserLoading || !currentUser) {
+  // Handle downvote
+  const handleDownvote = (postId: string) => {
+    const downvotes = post?.downvotes || [];
+    const hasDownvotes = downvotes?.includes(currentUserId);
+
+    if (!user) {
+      return toast.success('You need to login firs!!');
+    }
+
+    if (!hasDownvotes) {
+      const mutateData = { postId };
+      downvoteMutate(mutateData, {
+        onSuccess: () => {},
+        onError: () => {},
+      });
+    } else {
+      const mutateData = { postId };
+      downvoteRemoveMutate(mutateData, {
+        onSuccess: () => {},
+        onError: () => {},
+      });
+    }
+  };
+
+  useEffect(() => {
+    if (user) {
+      refetch();
+    }
+  }, [user, refetch]);
+
+  // NOTE: This not for all only for current user
+  if (isCurrentUserLoading) {
     return (
       <div className="mt-[90px]">
         <LoadingSpinner />
@@ -138,20 +204,24 @@ const Post = ({ post }: IProps) => {
     );
   }
 
-  if (isCurrentUserError) {
-    return (
-      <div className="mt-[90px]">
-        <ErrorMessage>{currentUserError?.message}</ErrorMessage>
-      </div>
-    );
-  }
+  // if (isCurrentUserError) {
+  //   return (
+  //     <div className="mt-[90px]">
+  //       <ErrorMessage>{currentUserError?.message}</ErrorMessage>
+  //     </div>
+  //   );
+  // }
 
   return (
     <>
       {(followPending ||
         unfollowPending ||
         addFavouritePostPending ||
-        removeFavouritePostPending) && <LoadingWithOverlay />}
+        removeFavouritePostPending ||
+        isUpvotePending ||
+        isUpvoteRemovePending ||
+        isDownvotePending ||
+        isDownvoteRemovePending) && <LoadingWithOverlay />}
       <li className="group relative mx-auto mb-6 max-w-4xl rounded-lg border bg-white p-6 shadow-md">
         {/* Post Image with Hover Overlay */}
         <div className="group relative aspect-[16/9] w-full overflow-hidden rounded-lg">
@@ -169,7 +239,7 @@ const Post = ({ post }: IProps) => {
           {/* Overlay with Details Button */}
           <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
             <Link
-              href={`/posts/${post._id}`}
+              href={`/posts/${post?._id}`}
               className="rounded-md bg-white px-4 py-2 font-semibold text-gray-900 shadow-md hover:bg-gray-100"
             >
               View Details
@@ -186,7 +256,7 @@ const Post = ({ post }: IProps) => {
                 : 'bg-gray-200 text-gray-800'
             }`}
           >
-            {post.category}
+            {post?.category}
           </span>
           {post?.isPremium && (
             <span className="text-xs font-bold uppercase text-yellow-500">
@@ -221,7 +291,7 @@ const Post = ({ post }: IProps) => {
                 <span>by {post?.user?.username}</span>
                 <span className="mx-2">•</span>
                 <span>
-                  {new Date(post.createdAt).toLocaleDateString()}
+                  {new Date(post?.createdAt).toLocaleDateString()}
                 </span>
               </div>
               <div className="text-xs text-gray-400">
@@ -237,25 +307,27 @@ const Post = ({ post }: IProps) => {
           </div>
 
           {/* Follow Button */}
-          <div>
-            {isFollowing && (
-              <button
-                onClick={() => handleUnfollow(post?.user?._id)}
-                className={`rounded-full bg-gray-300 px-4 py-1 text-xs font-semibold text-gray-800`}
-              >
-                following
-              </button>
-            )}
+          {user && (
+            <div>
+              {isFollowing && (
+                <button
+                  onClick={() => handleUnfollow(post?.user?._id)}
+                  className={`rounded-full bg-gray-300 px-4 py-1 text-xs font-semibold text-gray-800`}
+                >
+                  following
+                </button>
+              )}
 
-            {!isFollowing && (
-              <button
-                onClick={() => handleFollow(post?.user?._id)}
-                className={`rounded-full bg-green-500 px-4 py-1 text-xs font-semibold text-white hover:bg-green-600`}
-              >
-                follow
-              </button>
-            )}
-          </div>
+              {!isFollowing && (
+                <button
+                  onClick={() => handleFollow(post?.user?._id)}
+                  className={`rounded-full bg-green-500 px-4 py-1 text-xs font-semibold text-white hover:bg-green-600`}
+                >
+                  follow
+                </button>
+              )}
+            </div>
+          )}
         </div>
 
         {/* Content Preview */}
@@ -265,52 +337,81 @@ const Post = ({ post }: IProps) => {
 
         {/* Actions */}
         <div className="mt-6 flex items-center justify-between">
-          {/* upvotes ann downvotes */}
+          {/* upvote ann downvote */}
           <div className="flex items-center space-x-4">
+            {/* Upvote Button */}
             <button
-              onClick={() => handleUpvotes(post._id)}
+              onClick={() => handleUpvote(post?._id)}
               className="flex items-center space-x-1 text-green-500"
             >
               <FaArrowUp />
               <span>{post.upvotesCount || 0}</span>
             </button>
 
-            <button className="flex items-center space-x-1 text-red-500">
+            {/* Downvote Button */}
+            <button
+              onClick={() => handleDownvote(post?._id)}
+              className="flex items-center space-x-1 text-red-500"
+            >
               <FaArrowDown />
               <span>{post.downvotesCount || 0}</span>
             </button>
           </div>
 
           {/* comments */}
-          <div className="flex items-center space-x-2">
-            <FaCommentAlt className="text-gray-400" />
-            <span className="text-gray-500">
-              {post?.numberOfComments || 0}
-              Comments
-            </span>
-          </div>
+          {user && (
+            <div>
+              {post?.numberOfComments > 0 && (
+                <Link
+                  href={`/comment-list?postId=${post?._id}`}
+                  className="flex items-center space-x-2"
+                >
+                  <FaCommentAlt className="text-gray-400" />
+                  <span className="text-gray-500">
+                    {post?.numberOfComments || 0} {''}
+                    Comments
+                  </span>
+                </Link>
+              )}
+
+              {post?.numberOfComments < 1 && (
+                <Link
+                  href={`/create-comment?postId=${post?._id}`}
+                  className="flex items-center space-x-2"
+                >
+                  <FaCommentAlt className="text-gray-400" />
+                  <span className="text-gray-500">
+                    {0} {''}
+                    Comments
+                  </span>
+                </Link>
+              )}
+            </div>
+          )}
 
           <div className="flex items-center space-x-2">
             {/* Favourite Button Icon */}
-            <div className="flex items-center">
-              {!isFavourite && (
-                <button
-                  onClick={() => handleAddFavourite(post._id)}
-                  className={`text-lg text-gray-500`}
-                >
-                  <FaHeart />
-                </button>
-              )}
+            {user && (
+              <div className="flex items-center">
+                {!isFavourite && (
+                  <button
+                    onClick={() => handleAddFavourite(post?._id)}
+                    className={`text-lg text-gray-500`}
+                  >
+                    <FaHeart />
+                  </button>
+                )}
 
-              {isFavourite && (
-                <button
-                  onClick={() => handleRemoveFavourite(post._id)}
-                  className={`text-lg text-red-500`}
-                >
-                  <FaHeart />
-                </button>
-              )}
-            </div>
+                {isFavourite && (
+                  <button
+                    onClick={() => handleRemoveFavourite(post?._id)}
+                    className={`text-lg text-red-500`}
+                  >
+                    <FaHeart />
+                  </button>
+                )}
+              </div>
+            )}
 
             {/* Share Button Icon */}
             <div className="">

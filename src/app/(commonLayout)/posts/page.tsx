@@ -61,16 +61,16 @@ const Posts = () => {
               <div className="flex-1">
                 <Select value={voteFilter} onValueChange={setVoteFilter}>
                   <SelectTrigger className="w-full">
-                    <SelectValue placeholder="Filter by votes" />
+                    <SelectValue placeholder="Filter by vote" />
                   </SelectTrigger>
                   <SelectContent>
                     <SelectGroup>
-                      <SelectLabel>Votes</SelectLabel>
-                      <SelectItem value="upvotesCount">
-                        Upvotes high
+                      <SelectLabel>vote</SelectLabel>
+                      <SelectItem value="upvoteCount">
+                        Upvote high
                       </SelectItem>
-                      <SelectItem value="downvotesCount">
-                        Downvotes high
+                      <SelectItem value="downvoteCount">
+                        Downvote high
                       </SelectItem>
                     </SelectGroup>
                   </SelectContent>

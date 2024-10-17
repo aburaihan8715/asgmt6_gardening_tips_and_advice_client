@@ -50,6 +50,7 @@ export const removeFavoritePost = async (postId: string) => {
   }
 };
 
+// Get me
 export const getMe = async () => {
   try {
     const { data } = await axiosInstance.get(`/api/v1/users/me`);
@@ -58,5 +59,3 @@ export const getMe = async () => {
     throw new Error(error.response?.data?.message || error.message);
   }
 };
-
-// export const UserServices = { followUser, unfollowUser, favoritePost };

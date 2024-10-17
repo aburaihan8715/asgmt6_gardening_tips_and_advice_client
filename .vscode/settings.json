@@ -34,15 +34,19 @@
   "cSpell.words": [
     "asgmt",
     "dompurify",
+    "downvote",
     "downvotes",
     "Favourite",
     "favourites",
     "hookform",
+    "persistor",
+    "reduxjs",
     "sonner",
     "Swal",
     "sweetalert",
     "tanstack",
     "Unfollow",
+    "upvote",
     "upvotes"
   ],
 }
