@@ -36,10 +36,10 @@ export const getAllPosts = async ({
     if (limit) params.append('limit', limit.toString());
     if (searchTerm) params.append('searchTerm', searchTerm);
     if (category) params.append('category', category);
-    if (voteFilter && voteFilter === 'upvoteCount') {
-      params.append('upvoteCount', '-1');
-    } else if (voteFilter && voteFilter === 'downvoteCount') {
-      params.append('upvoteCount', '-1');
+    if (voteFilter && voteFilter === 'upvotesCount') {
+      params.append('sort', '-upvotesCount');
+    } else if (voteFilter && voteFilter === 'downvotesCount') {
+      params.append('sort', '-downvotesCount');
     }
 
     if (params.toString()) queryString += `?${params.toString()}`;

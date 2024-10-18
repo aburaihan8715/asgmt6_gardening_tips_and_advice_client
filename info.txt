@@ -20,3 +20,9 @@ https://via.placeholder.com/400x200
 
 // pending
 function are should be optimized
+
+
+// problems
+1. delete comment
+2. infinite scrolling
+3. edit comment not implemented

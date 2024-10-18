@@ -27,11 +27,15 @@ import { toast } from 'sonner';
 
 // CREATE
 export const useCreatePostMutation = () => {
+  const queryClient = useQueryClient();
   const router = useRouter();
   return useMutation<any, Error, FieldValues>({
     mutationKey: ['CREATE_POST'],
     mutationFn: async (postData) => await createPost(postData),
     onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ['GET_NEW_5_POSTS'],
+      });
       toast.success('Post created successfully.');
       router.push('/user-dashboard/my-posts');
     },
@@ -336,7 +340,7 @@ export const useCreateCommentOnPost = ({
   postId?: string;
 }) => {
   const queryClient = useQueryClient();
-  const router = useRouter();
+
   return useMutation<unknown, Error, ICreateCommentArgs>({
     mutationFn: async (options) => {
       return await createCommentOnPost(options.postId, options.content);
@@ -360,7 +364,6 @@ export const useCreateCommentOnPost = ({
         ],
       });
       toast.success('Comment posted successfully.');
-      router.push(`/comment-list?postId=${postId}`);
     },
     onError: (error: any) => {
       toast.error(error.message);
