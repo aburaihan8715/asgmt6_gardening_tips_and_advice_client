@@ -361,23 +361,10 @@ const Post = ({ post }: IProps) => {
           {/* comments */}
 
           {user && (
-            <Link
-              href={`/comment/${post?._id}`}
-              className="flex items-center space-x-2"
-            >
-              <FaCommentAlt className="text-gray-400" />
-              <span className="text-gray-500">
-                {post?.numberOfComments || 0} {''}
-                Comments
-              </span>
-            </Link>
-          )}
-
-          {/* {user && (
             <div>
               {post?.numberOfComments > 0 && (
                 <Link
-                  href={`/comment-list?postId=${post?._id}`}
+                  href={`/comments?postId=${post?._id}`}
                   className="flex items-center space-x-2"
                 >
                   <FaCommentAlt className="text-gray-400" />
@@ -401,7 +388,7 @@ const Post = ({ post }: IProps) => {
                 </Link>
               )}
             </div>
-          )} */}
+          )}
 
           <div className="flex items-center space-x-2">
             {/* Favourite Button Icon */}

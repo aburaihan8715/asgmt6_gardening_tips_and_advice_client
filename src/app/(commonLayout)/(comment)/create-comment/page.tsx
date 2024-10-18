@@ -4,34 +4,17 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import React from 'react';
 import { PostSchemas } from '@/schemas/post.schema';
-import { useParams } from 'next/navigation';
-import LoadingSpinner from '@/components/ui/LoadingSpinner';
-import {
-  useCreateCommentOnPost,
-  useGetCommentsOfPost,
-} from '@/hooks/post.hook';
-import { IComment } from '@/types/comment.type';
+
+import { useCreateCommentOnPost } from '@/hooks/post.hook';
+
 import LoadingWithOverlay from '@/components/ui/LoadingWithOverlay';
-import { useDeleteCommentMutation } from '@/hooks/comment.hooks';
-import CommentItem from '../../_components/CommentItem';
 
 interface IFormValues {
   commentText: string;
 }
 
-const CommentDetails: React.FC = () => {
-  const params = useParams();
-  const postId = params?.postId as string;
-  const { data: commentsData, isLoading: isCommentLoading } =
-    useGetCommentsOfPost({ postId });
-  const comments: IComment[] = commentsData?.data?.result || [];
-  console.log(comments);
-
-  const {
-    mutate: deleteCommentMutate,
-    isPending: isDeleteCommentPending,
-    error: commentDeleteError,
-  } = useDeleteCommentMutation({ postId });
+const CreateComment: React.FC = () => {
+  const postId = '';
 
   const {
     register,
@@ -61,20 +44,13 @@ const CommentDetails: React.FC = () => {
     });
   };
 
-  const handleDelete = (commentId: string) => {
-    deleteCommentMutate(commentId, {
-      onSuccess: () => {},
-      onError: () => {},
-    });
-  };
-
-  if (isCommentLoading) {
-    return (
-      <div className="mt-[90px]">
-        <LoadingSpinner />
-      </div>
-    );
-  }
+  // if (isCommentLoading) {
+  //   return (
+  //     <div className="mt-[90px]">
+  //       <LoadingSpinner />
+  //     </div>
+  //   );
+  // }
 
   return (
     <>
@@ -106,23 +82,9 @@ const CommentDetails: React.FC = () => {
         </div>
 
         {/* Comment list */}
-        {comments && comments.length > 0 ? (
-          <CommentItem
-            comments={comments}
-            handleDelete={handleDelete}
-            isDeleteCommentPending={isDeleteCommentPending}
-            commentDeleteError={commentDeleteError}
-          />
-        ) : (
-          <div className="space-y-4">
-            <div className="flex justify-center rounded-lg border border-gray-200 p-4">
-              <p>No comment added yet!!</p>
-            </div>
-          </div>
-        )}
       </div>
     </>
   );
 };
 
-export default CommentDetails;
+export default CreateComment;
