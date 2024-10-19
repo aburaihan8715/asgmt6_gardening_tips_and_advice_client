@@ -17,7 +17,7 @@ const Sidebar = () => {
   return (
     <nav>
       {/* ADMIN ROUTES */}
-      {user && user?.role === 'ADMIN' && (
+      {user && user?.role === 'admin' && (
         <ul className="flex flex-col gap-4">
           <li className="flex">
             <ActiveLink className="flex items-center gap-2" href="/">
@@ -68,7 +68,7 @@ const Sidebar = () => {
       )}
 
       {/* USER ROUTES */}
-      {user && user.role === 'USER' && (
+      {user && user.role === 'user' && (
         <ul className="flex flex-col gap-4">
           <li className="flex">
             <ActiveLink className="flex items-center gap-2" href="/">

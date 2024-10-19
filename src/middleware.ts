@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import { NextRequest } from 'next/server';
-import { getCurrentUser } from './services/auth.service';
+import { getCurrentUser } from './actions/auth.action';
 
 const AuthRoutes = [
   '/login',
@@ -29,18 +29,18 @@ export async function middleware(request: NextRequest) {
   }
 
   // 02 check authorization
-  if (user.role === 'ADMIN' && pathname.match(/^\/admin-dashboard/)) {
+  if (user.role === 'admin' && pathname.match(/^\/admin-dashboard/)) {
     return NextResponse.next();
   }
 
-  if (user.role === 'USER' && pathname.match(/^\/user-dashboard/)) {
+  if (user.role === 'user' && pathname.match(/^\/user-dashboard/)) {
     return NextResponse.next();
   }
 
-  if (user.role === 'USER' && pathname.match(/^\/profile/)) {
+  if (user.role === 'user' && pathname.match(/^\/profile/)) {
     return NextResponse.next();
   }
-  if (user.role === 'ADMIN' && pathname.match(/^\/profile/)) {
+  if (user.role === 'admin' && pathname.match(/^\/profile/)) {
     return NextResponse.next();
   }
 

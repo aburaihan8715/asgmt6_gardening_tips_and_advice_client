@@ -5,10 +5,11 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useState } from 'react';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import SectionHeading from '@/components/ui/SectionHeading';
-import { useChangePasswordMutation } from '@/hooks/auth.hook';
+// import { useChangePasswordMutation } from '@/hooks/auth.hook';
 import LoadingWithOverlay from '@/components/ui/LoadingWithOverlay';
 
 import { AuthSchemas } from '@/schemas/auth.schema';
+import { AuthHooks } from '@/hooks/auth.hook';
 
 interface IPasswordChangeFormValues {
   currentPassword: string;
@@ -26,7 +27,7 @@ const ChangePassword = () => {
   });
 
   const { mutate: changePasswordMutate, isPending } =
-    useChangePasswordMutation();
+    AuthHooks.useChangePasswordMutation();
   const [showPassword, setShowPassword] = useState({
     currentPassword: false,
     newPassword: false,

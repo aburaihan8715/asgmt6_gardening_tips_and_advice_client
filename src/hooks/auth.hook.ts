@@ -1,22 +1,17 @@
+import { AuthActions } from '@/actions/auth.action';
 import { useAuth } from '@/context/user.provider';
-import {
-  changePassword,
-  forgetPassword,
-  loginUser,
-  registerUser,
-  resetPassword,
-  settingsProfile,
-} from '@/services/auth.service';
+
 import { useMutation } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
 import { FieldValues } from 'react-hook-form';
 import { toast } from 'sonner';
 
-export const useRegisterMutation = () => {
+const useRegisterMutation = () => {
   const router = useRouter();
   return useMutation<any, Error, FieldValues>({
     mutationKey: ['USER_REGISTRATION'],
-    mutationFn: async (registerData) => await registerUser(registerData),
+    mutationFn: async (registerData) =>
+      await AuthActions.registerUser(registerData),
     onSuccess: () => {
       toast.success('User registration successful.');
       router.push('/login');
@@ -27,10 +22,11 @@ export const useRegisterMutation = () => {
   });
 };
 
-export const useLoginMutation = () => {
+const useLoginMutation = () => {
   return useMutation<any, Error, FieldValues>({
     mutationKey: ['USER_LOGIN'],
-    mutationFn: async (loginData) => await loginUser(loginData),
+    mutationFn: async (loginData) =>
+      await AuthActions.loginUser(loginData),
     onSuccess: () => {
       toast.success('User login successful.');
     },
@@ -40,10 +36,11 @@ export const useLoginMutation = () => {
   });
 };
 
-export const useChangePasswordMutation = () => {
+const useChangePasswordMutation = () => {
   return useMutation<any, Error, FieldValues>({
     mutationKey: ['CHANGE_PASSWORD'],
-    mutationFn: async (passwordData) => await changePassword(passwordData),
+    mutationFn: async (passwordData) =>
+      await AuthActions.changePassword(passwordData),
     onSuccess: () => {
       toast.success('Password changed successful.');
     },
@@ -53,10 +50,11 @@ export const useChangePasswordMutation = () => {
   });
 };
 
-export const useForgetPasswordMutation = () => {
+const useForgetPasswordMutation = () => {
   return useMutation<any, Error, FieldValues>({
     mutationKey: ['FORGET_PASSWORD'],
-    mutationFn: async (emailData) => await forgetPassword(emailData),
+    mutationFn: async (emailData) =>
+      await AuthActions.forgetPassword(emailData),
     onSuccess: async () => {
       toast.success('Please check your email!');
     },
@@ -66,12 +64,12 @@ export const useForgetPasswordMutation = () => {
   });
 };
 
-export const useResetPasswordMutation = () => {
+const useResetPasswordMutation = () => {
   const router = useRouter();
   return useMutation<any, Error, FieldValues>({
     mutationKey: ['RESET_PASSWORD'],
     mutationFn: async (passwordResetData) =>
-      await resetPassword(passwordResetData),
+      await AuthActions.resetPassword(passwordResetData),
     onSuccess: async () => {
       toast.success('Password reset successfully');
       router.push('/login');
@@ -82,11 +80,12 @@ export const useResetPasswordMutation = () => {
   });
 };
 
-export const useSettingsProfileMutation = () => {
+const useSettingsProfileMutation = () => {
   const { setIsLoading } = useAuth();
   return useMutation<any, Error, FieldValues>({
     mutationKey: ['SETTINGS_PROFILE'],
-    mutationFn: async (profileData) => await settingsProfile(profileData),
+    mutationFn: async (profileData) =>
+      await AuthActions.settingsProfile(profileData),
     onSuccess: async () => {
       toast.success('Profile updated successfully');
       setIsLoading(true);
@@ -95,4 +94,13 @@ export const useSettingsProfileMutation = () => {
       toast.error(error.message);
     },
   });
+};
+
+export const AuthHooks = {
+  useRegisterMutation,
+  useLoginMutation,
+  useChangePasswordMutation,
+  useForgetPasswordMutation,
+  useResetPasswordMutation,
+  useSettingsProfileMutation,
 };

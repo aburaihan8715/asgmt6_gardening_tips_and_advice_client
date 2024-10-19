@@ -11,6 +11,6 @@ export interface IUser {
   followingsCount: number;
   isVerified: boolean;
   isDeleted: boolean;
-  role: 'USER' | 'ADMIN';
+  role: 'user' | 'admin' | 'superAdmin';
   favourites: string[];
 }

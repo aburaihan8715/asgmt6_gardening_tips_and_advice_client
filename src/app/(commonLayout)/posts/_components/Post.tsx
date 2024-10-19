@@ -46,6 +46,7 @@ const Post = ({ post }: IProps) => {
   const currentUserId = currentUser?._id;
   const followings = currentUser?.followings || [];
   const isFollowing = followings?.includes(postUserId);
+  const isOwnPost = user?._id === post?.user?._id;
 
   const favourites = currentUser?.favourites || [];
   const isFavourite = favourites.includes(post?._id);
@@ -307,7 +308,7 @@ const Post = ({ post }: IProps) => {
           </div>
 
           {/* Follow Button */}
-          {user && (
+          {user && !isOwnPost && (
             <div>
               {isFollowing && (
                 <button

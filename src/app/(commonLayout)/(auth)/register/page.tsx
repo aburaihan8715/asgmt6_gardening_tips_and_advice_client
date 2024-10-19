@@ -7,10 +7,11 @@ import { motion } from 'framer-motion';
 
 import SectionHeading from '@/components/ui/SectionHeading';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
-import { useRegisterMutation } from '@/hooks/auth.hook';
+// import { useRegisterMutation } from '@/hooks/auth.hook';
 import LoadingWithOverlay from '@/components/ui/LoadingWithOverlay';
 
 import { AuthSchemas } from '@/schemas/auth.schema';
+import { AuthHooks } from '@/hooks/auth.hook';
 
 type TRegisterFormData = {
   username: string;
@@ -28,7 +29,8 @@ const Register = () => {
   });
 
   const [showPassword, setShowPassword] = useState(false);
-  const { mutate: registerMutate, isPending } = useRegisterMutation();
+  const { mutate: registerMutate, isPending } =
+    AuthHooks.useRegisterMutation();
 
   const togglePasswordVisibility = () => {
     setShowPassword((prev) => !prev);

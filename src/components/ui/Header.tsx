@@ -15,10 +15,11 @@ import BrandLogo from './BrandLogo';
 import { MdClose, MdMenu } from 'react-icons/md';
 import ActiveLink from './ActiveLink';
 import { useAuth } from '@/context/user.provider';
-import { logout } from '@/services/auth.service';
+// import { logout } from '@/actions/auth.action';
 import { protectedRoutes } from '@/constant';
 import { usePathname, useRouter } from 'next/navigation';
 import Link from 'next/link';
+import { AuthActions } from '@/actions/auth.action';
 
 // HEADER COMPONENT
 const Header = () => {
@@ -27,9 +28,6 @@ const Header = () => {
 
   const router = useRouter();
   const pathname = usePathname();
-
-  // console.log(user);
-
   const menuItems = (
     <>
       <li>
@@ -46,10 +44,10 @@ const Header = () => {
       </li>
 
       <li>
-        {user && user.role === 'USER' && (
+        {user && user.role === 'user' && (
           <ActiveLink href={`/user-dashboard`}>Dashboard</ActiveLink>
         )}
-        {user && user.role === 'ADMIN' && (
+        {user && user.role === 'admin' && (
           <ActiveLink href={`/admin-dashboard`}>Dashboard</ActiveLink>
         )}
       </li>
@@ -57,7 +55,7 @@ const Header = () => {
   );
 
   const handleLogout = () => {
-    logout();
+    AuthActions.logout();
     userLoading(true);
 
     if (protectedRoutes.some((route) => pathname.match(route))) {
@@ -164,7 +162,7 @@ const ProfilePopover = () => {
   const pathname = usePathname();
 
   const handleLogout = () => {
-    logout();
+    AuthActions.logout();
     userLoading(true);
 
     if (protectedRoutes.some((route) => pathname.match(route))) {
@@ -176,7 +174,7 @@ const ProfilePopover = () => {
     <Popover>
       <PopoverTrigger>
         <Image
-          title={user?.role}
+          title={user?.username?.split(' ')[0]}
           className="h-10 w-10 rounded-full object-cover"
           src={
             user && user?.profilePicture
@@ -193,7 +191,7 @@ const ProfilePopover = () => {
         <h4 className="text-lg font-semibold">My account</h4>
         <hr className="my-2 border-gray-300" />
 
-        {user && user.role === 'ADMIN' && (
+        {user && user.role === 'admin' && (
           <div className="flex flex-col gap-2">
             <Link
               href="/admin-dashboard"
@@ -224,7 +222,7 @@ const ProfilePopover = () => {
           </div>
         )}
 
-        {user && user.role === 'USER' && (
+        {user && user.role === 'user' && (
           <div className="flex flex-col gap-2">
             <Link
               href="/user-dashboard"

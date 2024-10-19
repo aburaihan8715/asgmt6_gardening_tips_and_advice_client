@@ -1,6 +1,6 @@
-import PostInHome from '@/components/modules/home/PostInHome';
 import Gallery from '@/components/ui/Gallery';
 import SectionHeading from '@/components/ui/SectionHeading';
+import PostOfHome from './_home-components/PostOfHome';
 
 const Home = () => {
   return (
@@ -19,7 +19,7 @@ const Home = () => {
         </div>
 
         <ul className="space-y-10 md:p-5">
-          <PostInHome />
+          <PostOfHome />
         </ul>
       </div>
 

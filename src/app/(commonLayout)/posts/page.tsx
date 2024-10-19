@@ -1,5 +1,4 @@
 'use client';
-import Post from '@/components/modules/allPosts/Post';
 import Gallery from '@/components/ui/Gallery';
 import LoadingSpinner from '@/components/ui/LoadingSpinner';
 import SectionHeading from '@/components/ui/SectionHeading';
@@ -20,6 +19,7 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { useState } from 'react';
 import NoDataFound from '@/components/ui/NoDataFound';
+import Post from './_components/Post';
 const Posts = () => {
   const [voteFilter, setVoteFilter] = useState('');
   const [category, setCategory] = useState('');

@@ -1,4 +1,4 @@
-import { deleteComment, updateComment } from '@/services/comment.service';
+import { deleteComment, updateComment } from '@/actions/comment.action';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 import { FieldValues } from 'react-hook-form';

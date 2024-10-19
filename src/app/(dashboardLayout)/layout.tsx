@@ -1,6 +1,6 @@
-import Sidebar from '@/components/modules/dashboard/Sidebar';
 import BrandLogo from '@/components/ui/BrandLogo';
 import Link from 'next/link';
+import Sidebar from './_dashboard-components/Sidebar';
 
 export default function DashboardLayout({
   children,

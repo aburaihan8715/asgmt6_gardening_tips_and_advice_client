@@ -8,8 +8,9 @@ import {
   useState,
 } from 'react';
 
-import { getCurrentUser } from '../services/auth.service';
+// import { getCurrentUser } from '../actions/auth.action';
 import { IUser } from '@/types';
+import { AuthActions } from '@/actions/auth.action';
 
 const UserContext = createContext<IUserProviderValues | undefined>(
   undefined,
@@ -27,7 +28,7 @@ const UserProvider = ({ children }: { children: ReactNode }) => {
   const [isLoading, setIsLoading] = useState(true);
 
   const handleUser = async () => {
-    const user = await getCurrentUser();
+    const user = await AuthActions.getCurrentUser();
 
     setUser(user);
     setIsLoading(false);

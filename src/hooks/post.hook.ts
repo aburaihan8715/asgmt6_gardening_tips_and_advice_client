@@ -14,7 +14,7 @@ import {
   removeUpvotePost,
   updatePost,
   upvotePost,
-} from '@/services/post.service';
+} from '@/actions/post.action';
 import {
   useInfiniteQuery,
   useMutation,

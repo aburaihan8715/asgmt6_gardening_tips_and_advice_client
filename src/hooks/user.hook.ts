@@ -5,7 +5,7 @@ import {
   getMe,
   removeFavoritePost,
   unfollowUser,
-} from '@/services/user.service';
+} from '@/actions/user.action';
 import {
   useMutation,
   useQuery,

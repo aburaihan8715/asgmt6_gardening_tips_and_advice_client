@@ -10,8 +10,9 @@ import { useAuth } from '@/context/user.provider';
 import { useEffect, useState } from 'react';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import LoadingWithOverlay from '@/components/ui/LoadingWithOverlay';
-import { useLoginMutation } from '@/hooks/auth.hook';
+// import { useLoginMutation } from '@/hooks/auth.hook';
 import { AuthSchemas } from '@/schemas/auth.schema';
+import { AuthHooks } from '@/hooks/auth.hook';
 
 interface LoginFormValues {
   email: string;
@@ -25,7 +26,11 @@ const Login = () => {
 
   const redirect = searchParams.get('redirect');
 
-  const { mutate: loginMutate, isPending, isSuccess } = useLoginMutation();
+  const {
+    mutate: loginMutate,
+    isPending,
+    isSuccess,
+  } = AuthHooks.useLoginMutation();
 
   const {
     register,

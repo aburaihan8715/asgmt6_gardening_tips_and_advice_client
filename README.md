@@ -18,6 +18,11 @@ https://github.com/aburaihan8715/asgmt6_gardening_tips_and_advice_client
 
 https://drive.google.com/file/d/1A5n_xxlednlUpT23j9LRVMOmHfEJ5lMQ/view?usp=sharing
 
+## Super Admin
+
+- email: superadmin@gmail.com
+- password: test1234
+
 ## Admin
 
 - email: admin@gmail.com

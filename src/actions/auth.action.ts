@@ -6,7 +6,7 @@ import { jwtDecode } from 'jwt-decode';
 import axiosInstance from '@/lib/AxiosInstance';
 
 // register
-export const registerUser = async (registerData: FieldValues) => {
+const registerUser = async (registerData: FieldValues) => {
   try {
     const { data } = await axiosInstance.post(
       '/api/v1/auth/register',
@@ -25,7 +25,7 @@ export const registerUser = async (registerData: FieldValues) => {
 };
 
 // login
-export const loginUser = async (loginData: FieldValues) => {
+const loginUser = async (loginData: FieldValues) => {
   try {
     const { data } = await axiosInstance.post(
       '/api/v1/auth/login',
@@ -44,13 +44,13 @@ export const loginUser = async (loginData: FieldValues) => {
 };
 
 // logout
-export const logout = () => {
+const logout = () => {
   cookies().delete('accessToken');
   cookies().delete('refreshToken');
 };
 
 // change password
-export const changePassword = async (passwordData: FieldValues) => {
+const changePassword = async (passwordData: FieldValues) => {
   try {
     const { data } = await axiosInstance.patch(
       '/api/v1/auth/change-password',
@@ -64,7 +64,7 @@ export const changePassword = async (passwordData: FieldValues) => {
 };
 
 // forget password
-export const forgetPassword = async (emailData: FieldValues) => {
+const forgetPassword = async (emailData: FieldValues) => {
   try {
     const { data } = await axiosInstance.post(
       '/api/v1/auth/forget-password',
@@ -78,7 +78,7 @@ export const forgetPassword = async (emailData: FieldValues) => {
 };
 
 // reset password
-export const resetPassword = async (passwordResetData: FieldValues) => {
+const resetPassword = async (passwordResetData: FieldValues) => {
   const bodyData = {
     id: passwordResetData.id,
     newPassword: passwordResetData.newPassword,
@@ -103,7 +103,7 @@ export const resetPassword = async (passwordResetData: FieldValues) => {
 };
 
 // settings profile
-export const settingsProfile = async (profileData: FieldValues) => {
+const settingsProfile = async (profileData: FieldValues) => {
   try {
     const { data } = await axiosInstance.patch(
       '/api/v1/auth/settings-profile',
@@ -122,7 +122,7 @@ export const settingsProfile = async (profileData: FieldValues) => {
 };
 
 // get current user
-export const getCurrentUser = async () => {
+const getCurrentUser = async () => {
   const accessToken = cookies().get('accessToken')?.value;
 
   let decodedToken = null;
@@ -146,4 +146,15 @@ export const getCurrentUser = async () => {
   }
 
   return decodedToken;
+};
+
+export const AuthActions = {
+  registerUser,
+  loginUser,
+  logout,
+  changePassword,
+  forgetPassword,
+  resetPassword,
+  settingsProfile,
+  getCurrentUser,
 };

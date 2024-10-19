@@ -4,10 +4,11 @@ import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useSearchParams } from 'next/navigation';
-import { useResetPasswordMutation } from '@/hooks/auth.hook';
+// import { useResetPasswordMutation } from '@/hooks/auth.hook';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import LoadingWithOverlay from '@/components/ui/LoadingWithOverlay';
 import { AuthSchemas } from '@/schemas/auth.schema';
+import { AuthHooks } from '@/hooks/auth.hook';
 
 type TResetPasswordFormValues = {
   newPassword: string;
@@ -30,7 +31,7 @@ const ResetPassword: React.FC = () => {
   const passwordResetToken = searchParams.get('passwordResetToken');
 
   const { mutate: passwordResetMutate, isPending } =
-    useResetPasswordMutation();
+    AuthHooks.useResetPasswordMutation();
 
   const onSubmit = (data: TResetPasswordFormValues) => {
     const passwordData = {

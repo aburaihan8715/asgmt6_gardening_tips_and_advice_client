@@ -4,14 +4,14 @@ import { useGetNewFivePosts } from '@/hooks/post.hook';
 import LoadingSpinner from '@/components/ui/LoadingSpinner';
 import ErrorMessage from '@/components/ui/ErrorMessage';
 import { IPost } from '@/types/postData.type';
-import Post from '../allPosts/Post';
 import {
   useFollowUserMutation,
   useUnfollowUserMutation,
 } from '@/hooks/user.hook';
 import LoadingWithOverlay from '@/components/ui/LoadingWithOverlay';
+import Post from '../posts/_components/Post';
 
-const PostInHome = () => {
+const PostOfHome = () => {
   const { data, isLoading, isError, error } = useGetNewFivePosts();
   const posts = data?.data;
   const { isPending: followPending } = useFollowUserMutation();
@@ -39,4 +39,4 @@ const PostInHome = () => {
   );
 };
 
-export default PostInHome;
+export default PostOfHome;
