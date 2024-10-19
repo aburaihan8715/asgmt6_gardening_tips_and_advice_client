@@ -3,9 +3,9 @@
 import { cookies } from 'next/headers';
 import { FieldValues } from 'react-hook-form';
 import axiosInstance from '@/lib/AxiosInstance';
-
+import { jwtDecode } from 'jwt-decode';
 // register
-const registerUser = async (registerData: FieldValues) => {
+export const registerUser = async (registerData: FieldValues) => {
   try {
     const { data } = await axiosInstance.post(
       '/api/v1/auth/register',
@@ -24,7 +24,7 @@ const registerUser = async (registerData: FieldValues) => {
 };
 
 // login
-const loginUser = async (loginData: FieldValues) => {
+export const loginUser = async (loginData: FieldValues) => {
   try {
     const { data } = await axiosInstance.post(
       '/api/v1/auth/login',
@@ -43,13 +43,13 @@ const loginUser = async (loginData: FieldValues) => {
 };
 
 // logout
-const logout = () => {
+export const logout = () => {
   cookies().delete('accessToken');
   cookies().delete('refreshToken');
 };
 
 // change password
-const changePassword = async (passwordData: FieldValues) => {
+export const changePassword = async (passwordData: FieldValues) => {
   try {
     const { data } = await axiosInstance.patch(
       '/api/v1/auth/change-password',
@@ -63,7 +63,7 @@ const changePassword = async (passwordData: FieldValues) => {
 };
 
 // forget password
-const forgetPassword = async (emailData: FieldValues) => {
+export const forgetPassword = async (emailData: FieldValues) => {
   try {
     const { data } = await axiosInstance.post(
       '/api/v1/auth/forget-password',
@@ -77,7 +77,7 @@ const forgetPassword = async (emailData: FieldValues) => {
 };
 
 // reset password
-const resetPassword = async (passwordResetData: FieldValues) => {
+export const resetPassword = async (passwordResetData: FieldValues) => {
   const bodyData = {
     id: passwordResetData.id,
     newPassword: passwordResetData.newPassword,
@@ -102,7 +102,7 @@ const resetPassword = async (passwordResetData: FieldValues) => {
 };
 
 // settings profile
-const settingsProfile = async (profileData: FieldValues) => {
+export const settingsProfile = async (profileData: FieldValues) => {
   try {
     const { data } = await axiosInstance.patch(
       '/api/v1/auth/settings-profile',
@@ -120,12 +120,28 @@ const settingsProfile = async (profileData: FieldValues) => {
   }
 };
 
-export const AuthActions = {
-  registerUser,
-  loginUser,
-  logout,
-  changePassword,
-  forgetPassword,
-  resetPassword,
-  settingsProfile,
+export const getCurrentUser = async () => {
+  const accessToken = cookies().get('accessToken')?.value;
+
+  let decodedToken = null;
+
+  if (accessToken) {
+    decodedToken = await jwtDecode(accessToken);
+    return {
+      _id: decodedToken._id,
+      username: decodedToken.username,
+      email: decodedToken.email,
+      role: decodedToken.role,
+      profilePicture: decodedToken.profilePicture,
+      isVerified: decodedToken.isVerified,
+      isDeleted: decodedToken.isDeleted,
+      followers: decodedToken.followers,
+      followings: decodedToken.followings,
+      followersCount: decodedToken.followersCount,
+      followingsCount: decodedToken.followingsCount,
+      favourites: decodedToken.favourites,
+    };
+  }
+
+  return decodedToken;
 };

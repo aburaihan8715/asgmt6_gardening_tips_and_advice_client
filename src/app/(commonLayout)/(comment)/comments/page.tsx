@@ -2,7 +2,7 @@
 
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import React, { useState } from 'react';
+import React from 'react';
 import { PostSchemas } from '@/schemas/post.schema';
 import { useSearchParams } from 'next/navigation';
 import LoadingSpinner from '@/components/ui/LoadingSpinner';
@@ -20,21 +20,33 @@ interface IFormValues {
 }
 
 const CommentList: React.FC = () => {
-  const [commentId, setCommentId] = useState('');
   const searchParams = useSearchParams();
   const postId = searchParams.get('postId') as string;
-  const { data: commentsData, isLoading: isCommentLoading } =
-    useGetCommentsOfPost({ postId });
-  const comments: IComment[] = commentsData?.data?.result || [];
-  const hasComment = comments.length > 0;
 
-  // console.log(hasComment);
+  const {
+    data: commentsData,
+    isLoading: isCommentLoading,
+    refetch: refetchComments,
+  } = useGetCommentsOfPost({ postId });
+
+  const [localCommentsData, setLocalCommentsData] = React.useState(() =>
+    commentsData ? commentsData : null,
+  );
+
+  React.useEffect(() => {
+    if (commentsData) {
+      setLocalCommentsData(commentsData);
+    }
+  }, [commentsData]);
+
+  const comments: IComment[] = localCommentsData?.data?.result || [];
+  const hasComment = comments.length > 0;
 
   const {
     mutate: deleteCommentMutate,
     isPending: isDeleteCommentPending,
     error: commentDeleteError,
-  } = useDeleteCommentMutation({ commentId });
+  } = useDeleteCommentMutation({ postId });
 
   const {
     register,
@@ -59,15 +71,26 @@ const CommentList: React.FC = () => {
     createCommentMutate(commentData, {
       onSuccess: () => {
         reset();
+        refetchComments();
       },
       onError: () => {},
     });
   };
 
   const handleDelete = (commentId: string) => {
-    setCommentId(commentId);
     deleteCommentMutate(commentId, {
-      onSuccess: () => {},
+      onSuccess: () => {
+        const updatedComments = comments.filter(
+          (comment) => comment._id !== commentId,
+        );
+        setLocalCommentsData((prev: any) => ({
+          ...prev,
+          data: {
+            ...prev?.data,
+            result: updatedComments,
+          },
+        }));
+      },
       onError: () => {},
     });
   };
@@ -114,6 +137,7 @@ const CommentList: React.FC = () => {
         {hasComment && (
           <CommentItem
             comments={comments}
+            postId={postId}
             handleDelete={handleDelete}
             isDeleteCommentPending={isDeleteCommentPending}
             commentDeleteError={commentDeleteError}

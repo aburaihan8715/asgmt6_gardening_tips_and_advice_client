@@ -7,10 +7,9 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import SectionHeading from '@/components/ui/SectionHeading';
 import { FaPlusSquare } from 'react-icons/fa';
 import { useAuth } from '@/context/user.provider';
-// import { useSettingsProfileMutation } from '@/hooks/auth.hook';
 import LoadingWithOverlay from '@/components/ui/LoadingWithOverlay';
 import { AuthSchemas } from '@/schemas/auth.schema';
-import { AuthHooks } from '@/hooks/auth.hook';
+import { useSettingsProfileMutation } from '@/hooks/auth.hook';
 
 // Interface for the form data
 interface IUserSettingsFormData {
@@ -21,7 +20,7 @@ interface IUserSettingsFormData {
 export default function SettingsProfile() {
   const { user } = useAuth();
   const { mutate: profileMutate, isPending } =
-    AuthHooks.useSettingsProfileMutation();
+    useSettingsProfileMutation();
 
   // console.log(user);
 

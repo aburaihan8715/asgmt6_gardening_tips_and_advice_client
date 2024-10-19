@@ -15,11 +15,10 @@ import BrandLogo from './BrandLogo';
 import { MdClose, MdMenu } from 'react-icons/md';
 import ActiveLink from './ActiveLink';
 import { useAuth } from '@/context/user.provider';
-// import { logout } from '@/actions/auth.action';
 import { protectedRoutes } from '@/constant';
 import { usePathname, useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { AuthActions } from '@/actions/auth.action';
+import { logout } from '@/actions/auth.action';
 
 // HEADER COMPONENT
 const Header = () => {
@@ -55,7 +54,7 @@ const Header = () => {
   );
 
   const handleLogout = () => {
-    AuthActions.logout();
+    logout();
     userLoading(true);
 
     if (protectedRoutes.some((route) => pathname.match(route))) {
@@ -162,7 +161,7 @@ const ProfilePopover = () => {
   const pathname = usePathname();
 
   const handleLogout = () => {
-    AuthActions.logout();
+    logout();
     userLoading(true);
 
     if (protectedRoutes.some((route) => pathname.match(route))) {

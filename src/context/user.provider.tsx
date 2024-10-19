@@ -10,7 +10,7 @@ import {
 
 // import { getCurrentUser } from '../actions/auth.action';
 import { IUser } from '@/types';
-import { getCurrentUser } from '@/utils/getCurrentUser';
+import { getCurrentUser } from '@/actions/auth.action';
 
 const UserContext = createContext<IUserProviderValues | undefined>(
   undefined,

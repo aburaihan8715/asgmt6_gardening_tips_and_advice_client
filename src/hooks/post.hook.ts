@@ -67,6 +67,7 @@ export const useGetAllPosts = ({
     ],
     queryFn: async () =>
       await getAllPosts({ page, limit, searchTerm, category, voteFilter }),
+    gcTime: 0,
   });
 };
 

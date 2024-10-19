@@ -9,6 +9,7 @@ import { FaEdit, FaTrash } from 'react-icons/fa';
 
 interface IProps {
   comments: IComment[];
+  postId: string;
   handleDelete: (commentId: string) => void;
   isDeleteCommentPending: boolean;
   commentDeleteError: any;
@@ -16,13 +17,14 @@ interface IProps {
 
 const CommentItem = ({
   comments,
+  postId,
   isDeleteCommentPending,
   handleDelete,
   commentDeleteError,
 }: IProps) => {
   const { user } = useAuth();
 
-  console.log(comments);
+  // console.log(comments);
 
   if (commentDeleteError) {
     return (
@@ -75,7 +77,7 @@ const CommentItem = ({
                   {commentUser?._id === user?._id && (
                     <div className="flex items-center space-x-2">
                       <Link
-                        href={`/edit-comment?commentId=${item?._id}`}
+                        href={`/edit-comment?commentId=${item?._id}&postId=${postId}`}
                         className="text-blue-500 hover:text-blue-700"
                       >
                         <FaEdit />

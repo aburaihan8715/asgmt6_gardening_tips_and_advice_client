@@ -2,7 +2,7 @@
 
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import React from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { PostSchemas } from '@/schemas/post.schema';
 
 import LoadingWithOverlay from '@/components/ui/LoadingWithOverlay';
@@ -20,39 +20,45 @@ interface IFormValues {
 const EditComment: React.FC = () => {
   const searchParams = useSearchParams();
   const commentId = searchParams.get('commentId') as string;
+  const postId = searchParams.get('postId') as string;
   const { data: commentData, isLoading: isCommentLoading } =
     useGetComment(commentId);
-  const comment = commentData.data || {};
-  console.log(comment);
+  const comment = useMemo(() => commentData?.data || {}, [commentData]);
+
   const {
     register,
     handleSubmit,
     formState: { errors },
+    reset,
   } = useForm<IFormValues>({
     resolver: zodResolver(PostSchemas.createCommentValidationSchema),
-    defaultValues: {
-      commentText: comment?.content || '',
-    },
   });
+
+  useEffect(() => {
+    if (comment?.content) {
+      reset({ commentText: comment.content });
+    }
+  }, [comment, reset]);
 
   const {
     mutate: updateCommentMutate,
     isPending: isCommentUpdatePending,
-  } = useUpdateCommentMutation({ commentId });
+  } = useUpdateCommentMutation({ postId });
 
   // Handle comment submit
   const handleCommentSubmit = (data: IFormValues) => {
     const updatedComment = {
       commentId,
-      content: data?.commentText,
+      content: data.commentText,
     };
+
     updateCommentMutate(updatedComment, {
       onSuccess: () => {},
       onError: () => {},
     });
   };
 
-  if (isCommentLoading) {
+  if (isCommentLoading || !comment) {
     return (
       <div className="mt-[90px]">
         <LoadingSpinner />

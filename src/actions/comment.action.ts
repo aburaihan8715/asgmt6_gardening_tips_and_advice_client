@@ -4,7 +4,7 @@ import axiosInstance from '@/lib/AxiosInstance';
 // UPDATE
 export const updateComment = async (
   commentId: string,
-  updatedCommentData: string,
+  updatedCommentData: { content: string },
 ) => {
   try {
     const { data } = await axiosInstance.patch(

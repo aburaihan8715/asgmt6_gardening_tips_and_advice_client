@@ -1,7 +1,6 @@
 import { NextResponse } from 'next/server';
 import { NextRequest } from 'next/server';
-import { getCurrentUser } from './utils/getCurrentUser';
-// import { getCurrentUser } from './actions/auth.action';
+import { getCurrentUser } from './actions/auth.action';
 
 const AuthRoutes = [
   '/login',

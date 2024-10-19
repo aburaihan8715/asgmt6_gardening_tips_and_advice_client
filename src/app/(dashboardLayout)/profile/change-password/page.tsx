@@ -9,7 +9,7 @@ import SectionHeading from '@/components/ui/SectionHeading';
 import LoadingWithOverlay from '@/components/ui/LoadingWithOverlay';
 
 import { AuthSchemas } from '@/schemas/auth.schema';
-import { AuthHooks } from '@/hooks/auth.hook';
+import { useChangePasswordMutation } from '@/hooks/auth.hook';
 
 interface IPasswordChangeFormValues {
   currentPassword: string;
@@ -27,7 +27,7 @@ const ChangePassword = () => {
   });
 
   const { mutate: changePasswordMutate, isPending } =
-    AuthHooks.useChangePasswordMutation();
+    useChangePasswordMutation();
   const [showPassword, setShowPassword] = useState({
     currentPassword: false,
     newPassword: false,

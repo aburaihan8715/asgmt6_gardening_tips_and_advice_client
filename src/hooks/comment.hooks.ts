@@ -21,12 +21,12 @@ export const useUpdateCommentMutation = ({
   page,
   limit,
   searchTerm,
-  commentId,
+  postId,
 }: {
   page?: number;
   limit?: number;
   searchTerm?: string;
-  commentId?: string;
+  postId?: string;
 }) => {
   const queryClient = useQueryClient();
   const router = useRouter();
@@ -34,7 +34,7 @@ export const useUpdateCommentMutation = ({
   return useMutation<unknown, Error, updateCommentArgs>({
     mutationKey: ['UPDATE_COMMENT'],
     mutationFn: async (options) =>
-      await updateComment(options.commentId, options.content),
+      await updateComment(options.commentId, { content: options.content }),
     onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: ['GET_POSTS'],
@@ -45,7 +45,7 @@ export const useUpdateCommentMutation = ({
       queryClient.invalidateQueries({
         queryKey: [
           'GET_COMMENTS_OF_POST',
-          { page, limit, searchTerm, commentId },
+          { page, limit, searchTerm, postId },
         ],
       });
       toast.success('Comment updated successfully.');
@@ -63,12 +63,12 @@ export const useDeleteCommentMutation = ({
   page,
   limit,
   searchTerm,
-  commentId,
+  postId,
 }: {
   page?: number;
   limit?: number;
   searchTerm?: string;
-  commentId?: string;
+  postId?: string;
 }) => {
   const queryClient = useQueryClient();
 
@@ -82,7 +82,7 @@ export const useDeleteCommentMutation = ({
       queryClient.invalidateQueries({
         queryKey: [
           'GET_COMMENTS_OF_POST',
-          { page, limit, searchTerm, commentId },
+          { page, limit, searchTerm, postId },
         ],
       });
       queryClient.invalidateQueries({
