@@ -33,3 +33,6 @@ https://via.placeholder.com/400x200
 
 // category
 'Vegetables' | 'Flowers' | 'Landscaping' | 'Others';
+
+
+// NOTE: action implemented only one place it need to be implemented more 2 components

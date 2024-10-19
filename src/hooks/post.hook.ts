@@ -7,8 +7,8 @@ import {
   getCommentsOfPost,
   getInfinitePosts,
   getMyPosts,
-  getNewFivePosts,
   getPost,
+  getTopFivePosts,
   makePostPremium,
   removeDownvotePost,
   removeUpvotePost,
@@ -34,7 +34,7 @@ export const useCreatePostMutation = () => {
     mutationFn: async (postData) => await createPost(postData),
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: ['GET_NEW_5_POSTS'],
+        queryKey: ['GET_TOP_5_POSTS'],
       });
       toast.success('Post created successfully.');
       router.push('/user-dashboard/my-posts');
@@ -67,7 +67,7 @@ export const useGetAllPosts = ({
     ],
     queryFn: async () =>
       await getAllPosts({ page, limit, searchTerm, category, voteFilter }),
-    gcTime: 0,
+    // gcTime: 0,
   });
 };
 
@@ -116,8 +116,8 @@ export const useGetMyPosts = ({
 // GET NEW 5
 export const useGetNewFivePosts = () => {
   return useQuery({
-    queryKey: ['GET_NEW_5_POSTS'],
-    queryFn: async () => await getNewFivePosts(),
+    queryKey: ['GET_TOP_5_POSTS'],
+    queryFn: async () => await getTopFivePosts(),
   });
 };
 
@@ -146,7 +146,7 @@ export const useUpdatePostMutation = () => {
         queryKey: ['GET_POSTS'],
       });
       queryClient.invalidateQueries({
-        queryKey: ['GET_NEW_5_POSTS'],
+        queryKey: ['GET_TOP_5_POSTS'],
       });
       toast.success('Post updated successfully.');
       router.push('/user-dashboard/my-posts');
@@ -172,7 +172,7 @@ export const useDeletePostMutation = () => {
         queryKey: ['GET_POSTS'],
       });
       queryClient.invalidateQueries({
-        queryKey: ['GET_NEW_5_POSTS'],
+        queryKey: ['GET_TOP_5_POSTS'],
       });
       toast.success('Post deleted successfully.');
     },
@@ -197,7 +197,7 @@ export const useMakePostPremiumMutation = () => {
         queryKey: ['GET_POSTS'],
       });
       queryClient.invalidateQueries({
-        queryKey: ['GET_NEW_5_POSTS'],
+        queryKey: ['GET_TOP_5_POSTS'],
       });
       toast.success('Post has been premium successfully.');
     },
@@ -227,7 +227,7 @@ export const useUpvotePostMutation = (postId?: string) => {
         queryKey: ['GET_POST', postId],
       });
       queryClient.invalidateQueries({
-        queryKey: ['GET_NEW_5_POSTS'],
+        queryKey: ['GET_TOP_5_POSTS'],
       });
       toast.success('Post upvoted successfully.');
     },
@@ -256,7 +256,7 @@ export const useRemoveUpvotePostMutation = (postId?: string) => {
         queryKey: ['GET_POST', postId],
       });
       queryClient.invalidateQueries({
-        queryKey: ['GET_NEW_5_POSTS'],
+        queryKey: ['GET_TOP_5_POSTS'],
       });
       toast.success('Upvote removed successfully.');
     },
@@ -285,7 +285,7 @@ export const useDownvotePostMutation = (postId?: string) => {
         queryKey: ['GET_POST', postId],
       });
       queryClient.invalidateQueries({
-        queryKey: ['GET_NEW_5_POSTS'],
+        queryKey: ['GET_TOP_5_POSTS'],
       });
       toast.success('Post downvoted successfully.');
     },
@@ -314,7 +314,7 @@ export const useRemoveDownvotePostMutation = (postId?: string) => {
         queryKey: ['GET_POST', postId],
       });
       queryClient.invalidateQueries({
-        queryKey: ['GET_NEW_5_POSTS'],
+        queryKey: ['GET_TOP_5_POSTS'],
       });
       toast.success('Downvote removed successfully.');
     },
@@ -356,7 +356,7 @@ export const useCreateCommentOnPost = ({
         queryKey: ['GET_POSTS'],
       });
       queryClient.invalidateQueries({
-        queryKey: ['GET_NEW_5_POSTS'],
+        queryKey: ['GET_TOP_5_POSTS'],
       });
 
       queryClient.invalidateQueries({

@@ -40,7 +40,7 @@ export const useUpdateCommentMutation = ({
         queryKey: ['GET_POSTS'],
       });
       queryClient.invalidateQueries({
-        queryKey: ['GET_NEW_5_POSTS'],
+        queryKey: ['GET_TOP_5_POSTS'],
       });
       queryClient.invalidateQueries({
         queryKey: [
@@ -86,7 +86,7 @@ export const useDeleteCommentMutation = ({
         ],
       });
       queryClient.invalidateQueries({
-        queryKey: ['GET_NEW_5_POSTS'],
+        queryKey: ['GET_TOP_5_POSTS'],
       });
       toast.success('Comment deleted successfully.');
     },

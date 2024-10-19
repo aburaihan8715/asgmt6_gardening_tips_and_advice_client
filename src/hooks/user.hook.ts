@@ -31,7 +31,7 @@ export const useFollowUserMutation = (postId?: string) => {
         queryKey: ['GET_POST', postId],
       });
       queryClient.invalidateQueries({
-        queryKey: ['GET_NEW_5_POSTS'],
+        queryKey: ['GET_TOP_5_POSTS'],
       });
       queryClient.invalidateQueries({
         queryKey: ['GET_ME'],
@@ -64,7 +64,7 @@ export const useUnfollowUserMutation = (postId?: string) => {
         queryKey: ['GET_POST', postId],
       });
       queryClient.invalidateQueries({
-        queryKey: ['GET_NEW_5_POSTS'],
+        queryKey: ['GET_TOP_5_POSTS'],
       });
       queryClient.invalidateQueries({
         queryKey: ['GET_ME'],
@@ -95,7 +95,7 @@ export const useAddFavoritePostMutation = () => {
         queryKey: ['GET_POSTS'],
       });
       queryClient.invalidateQueries({
-        queryKey: ['GET_NEW_5_POSTS'],
+        queryKey: ['GET_TOP_5_POSTS'],
       });
       queryClient.invalidateQueries({
         queryKey: ['GET_ME'],
@@ -126,7 +126,7 @@ export const useRemoveFavoritePostMutation = () => {
         queryKey: ['GET_POSTS'],
       });
       queryClient.invalidateQueries({
-        queryKey: ['GET_NEW_5_POSTS'],
+        queryKey: ['GET_TOP_5_POSTS'],
       });
       queryClient.invalidateQueries({
         queryKey: ['GET_ME'],

@@ -114,9 +114,9 @@ export const getMyPosts = async ({
 };
 
 // GET NEW 5
-export const getNewFivePosts = async () => {
+export const getTopFivePosts = async () => {
   try {
-    const { data } = await axiosInstance.get('/api/v1/posts/new-5-posts');
+    const { data } = await axiosInstance.get('/api/v1/posts/top-5-posts');
     return data;
   } catch (error: any) {
     throw new Error(error.response?.data?.message || error.message);
