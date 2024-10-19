@@ -340,6 +340,7 @@ export const useCreateCommentOnPost = ({
   postId?: string;
 }) => {
   const queryClient = useQueryClient();
+  const router = useRouter();
 
   return useMutation<unknown, Error, ICreateCommentArgs>({
     mutationFn: async (options) => {
@@ -364,6 +365,7 @@ export const useCreateCommentOnPost = ({
         ],
       });
       toast.success('Comment posted successfully.');
+      router.push(`/comments?postId=${postId}`);
     },
     onError: (error: any) => {
       toast.error(error.message);

@@ -2,7 +2,7 @@
 
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import React from 'react';
+import React, { useState } from 'react';
 import { PostSchemas } from '@/schemas/post.schema';
 import { useSearchParams } from 'next/navigation';
 import LoadingSpinner from '@/components/ui/LoadingSpinner';
@@ -19,20 +19,22 @@ interface IFormValues {
   commentText: string;
 }
 
-const CommentDetails: React.FC = () => {
+const CommentList: React.FC = () => {
+  const [commentId, setCommentId] = useState('');
   const searchParams = useSearchParams();
   const postId = searchParams.get('postId') as string;
   const { data: commentsData, isLoading: isCommentLoading } =
     useGetCommentsOfPost({ postId });
   const comments: IComment[] = commentsData?.data?.result || [];
+  const hasComment = comments.length > 0;
 
-  console.log(comments);
+  // console.log(hasComment);
 
   const {
     mutate: deleteCommentMutate,
     isPending: isDeleteCommentPending,
     error: commentDeleteError,
-  } = useDeleteCommentMutation({ postId });
+  } = useDeleteCommentMutation({ commentId });
 
   const {
     register,
@@ -63,6 +65,7 @@ const CommentDetails: React.FC = () => {
   };
 
   const handleDelete = (commentId: string) => {
+    setCommentId(commentId);
     deleteCommentMutate(commentId, {
       onSuccess: () => {},
       onError: () => {},
@@ -107,14 +110,17 @@ const CommentDetails: React.FC = () => {
         </div>
 
         {/* Comment list */}
-        {comments && comments.length > 0 ? (
+
+        {hasComment && (
           <CommentItem
             comments={comments}
             handleDelete={handleDelete}
             isDeleteCommentPending={isDeleteCommentPending}
             commentDeleteError={commentDeleteError}
           />
-        ) : (
+        )}
+
+        {!hasComment && (
           <div className="space-y-4">
             <div className="flex justify-center rounded-lg border border-gray-200 p-4">
               <p>No comment added yet!!</p>
@@ -126,4 +132,4 @@ const CommentDetails: React.FC = () => {
   );
 };
 
-export default CommentDetails;
+export default CommentList;

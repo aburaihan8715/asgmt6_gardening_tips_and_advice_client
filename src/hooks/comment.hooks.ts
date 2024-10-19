@@ -1,27 +1,40 @@
-import { deleteComment, updateComment } from '@/actions/comment.action';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
+import {
+  deleteComment,
+  getComment,
+  updateComment,
+} from '@/actions/comment.action';
+import {
+  useMutation,
+  useQuery,
+  useQueryClient,
+} from '@tanstack/react-query';
+import { useRouter } from 'next/navigation';
 
-import { FieldValues } from 'react-hook-form';
 import { toast } from 'sonner';
 
 // UPDATE
+interface updateCommentArgs {
+  commentId: string;
+  content: string;
+}
 export const useUpdateCommentMutation = ({
   page,
   limit,
   searchTerm,
-  postId,
+  commentId,
 }: {
   page?: number;
   limit?: number;
   searchTerm?: string;
-  postId?: string;
+  commentId?: string;
 }) => {
   const queryClient = useQueryClient();
+  const router = useRouter();
 
-  return useMutation<unknown, Error, FieldValues>({
+  return useMutation<unknown, Error, updateCommentArgs>({
     mutationKey: ['UPDATE_COMMENT'],
     mutationFn: async (options) =>
-      await updateComment(options.commentId, options.formData),
+      await updateComment(options.commentId, options.content),
     onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: ['GET_POSTS'],
@@ -32,10 +45,11 @@ export const useUpdateCommentMutation = ({
       queryClient.invalidateQueries({
         queryKey: [
           'GET_COMMENTS_OF_POST',
-          { page, limit, searchTerm, postId },
+          { page, limit, searchTerm, commentId },
         ],
       });
       toast.success('Comment updated successfully.');
+      router.back();
     },
     onError: (error) => {
       console.error(error);
@@ -49,12 +63,12 @@ export const useDeleteCommentMutation = ({
   page,
   limit,
   searchTerm,
-  postId,
+  commentId,
 }: {
   page?: number;
   limit?: number;
   searchTerm?: string;
-  postId?: string;
+  commentId?: string;
 }) => {
   const queryClient = useQueryClient();
 
@@ -68,7 +82,7 @@ export const useDeleteCommentMutation = ({
       queryClient.invalidateQueries({
         queryKey: [
           'GET_COMMENTS_OF_POST',
-          { page, limit, searchTerm, postId },
+          { page, limit, searchTerm, commentId },
         ],
       });
       queryClient.invalidateQueries({
@@ -80,5 +94,13 @@ export const useDeleteCommentMutation = ({
       console.error(error);
       toast.error('Failed to delete the Comment: ' + error.message);
     },
+  });
+};
+
+// GET ONE
+export const useGetComment = (commentId: string) => {
+  return useQuery({
+    queryKey: ['GET_COMMENT', commentId],
+    queryFn: async () => await getComment(commentId),
   });
 };

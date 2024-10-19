@@ -22,6 +22,8 @@ const CommentItem = ({
 }: IProps) => {
   const { user } = useAuth();
 
+  console.log(comments);
+
   if (commentDeleteError) {
     return (
       <div className="mt-[90px]">
@@ -73,7 +75,7 @@ const CommentItem = ({
                   {commentUser?._id === user?._id && (
                     <div className="flex items-center space-x-2">
                       <Link
-                        href={`/comment/edit`}
+                        href={`/edit-comment?commentId=${item?._id}`}
                         className="text-blue-500 hover:text-blue-700"
                       >
                         <FaEdit />

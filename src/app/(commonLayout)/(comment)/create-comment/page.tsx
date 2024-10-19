@@ -8,13 +8,15 @@ import { PostSchemas } from '@/schemas/post.schema';
 import { useCreateCommentOnPost } from '@/hooks/post.hook';
 
 import LoadingWithOverlay from '@/components/ui/LoadingWithOverlay';
+import { useSearchParams } from 'next/navigation';
 
 interface IFormValues {
   commentText: string;
 }
 
 const CreateComment: React.FC = () => {
-  const postId = '';
+  const searchParams = useSearchParams();
+  const postId = searchParams.get('postId') as string;
 
   const {
     register,

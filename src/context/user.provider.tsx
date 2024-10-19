@@ -10,7 +10,7 @@ import {
 
 // import { getCurrentUser } from '../actions/auth.action';
 import { IUser } from '@/types';
-import { AuthActions } from '@/actions/auth.action';
+import { getCurrentUser } from '@/utils/getCurrentUser';
 
 const UserContext = createContext<IUserProviderValues | undefined>(
   undefined,
@@ -28,7 +28,7 @@ const UserProvider = ({ children }: { children: ReactNode }) => {
   const [isLoading, setIsLoading] = useState(true);
 
   const handleUser = async () => {
-    const user = await AuthActions.getCurrentUser();
+    const user = await getCurrentUser();
 
     setUser(user);
     setIsLoading(false);

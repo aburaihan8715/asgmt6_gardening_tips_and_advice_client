@@ -2,7 +2,6 @@
 
 import { cookies } from 'next/headers';
 import { FieldValues } from 'react-hook-form';
-import { jwtDecode } from 'jwt-decode';
 import axiosInstance from '@/lib/AxiosInstance';
 
 // register
@@ -121,33 +120,6 @@ const settingsProfile = async (profileData: FieldValues) => {
   }
 };
 
-// get current user
-const getCurrentUser = async () => {
-  const accessToken = cookies().get('accessToken')?.value;
-
-  let decodedToken = null;
-
-  if (accessToken) {
-    decodedToken = await jwtDecode(accessToken);
-    return {
-      _id: decodedToken._id,
-      username: decodedToken.username,
-      email: decodedToken.email,
-      role: decodedToken.role,
-      profilePicture: decodedToken.profilePicture,
-      isVerified: decodedToken.isVerified,
-      isDeleted: decodedToken.isDeleted,
-      followers: decodedToken.followers,
-      followings: decodedToken.followings,
-      followersCount: decodedToken.followersCount,
-      followingsCount: decodedToken.followingsCount,
-      favourites: decodedToken.favourites,
-    };
-  }
-
-  return decodedToken;
-};
-
 export const AuthActions = {
   registerUser,
   loginUser,
@@ -156,5 +128,4 @@ export const AuthActions = {
   forgetPassword,
   resetPassword,
   settingsProfile,
-  getCurrentUser,
 };
