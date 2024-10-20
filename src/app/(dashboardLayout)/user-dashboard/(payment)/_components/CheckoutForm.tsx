@@ -1,105 +1,138 @@
 'use client';
 import { Button } from '@/components/ui/button';
-import { useStripe, CardElement } from '@stripe/react-stripe-js';
+import LoadingWithOverlay from '@/components/ui/LoadingWithOverlay';
+import envConfig from '@/config/envConfig';
+import { useAuth } from '@/context/user.provider';
+import {
+  useCreatePaymentIntentMutation,
+  useCreatePaymentMutation,
+} from '@/hooks/payment.hook';
+import {
+  useStripe,
+  CardElement,
+  useElements,
+} from '@stripe/react-stripe-js';
+import { FormEvent, useEffect, useState } from 'react';
 
 const CheckoutForm = () => {
   const stripe = useStripe();
-  //   const elements = useElements();
-  //   // const [clientSecret, setClientSecret] = useState<string | null>(null);
-  //   const [transactionId, setTransactionId] = useState('');
-  //   const [cardError, setCardError] = useState('');
-  //   const [isLoading, setIsLoading] = useState(false);
-  //   const [isCardComplete, setIsCardComplete] = useState(false);
-  // const price=10
+  const elements = useElements();
+  const [transactionId, setTransactionId] = useState('');
+  const [clientSecrets, setClientSecrets] = useState('');
+  const [cardError, setCardError] = useState('');
+  const [isCardComplete, setIsCardComplete] = useState(false);
+  const { user } = useAuth();
+  const {
+    mutate: paymentIntentMutate,
+    data: intentData,
+    isPending: paymentIntentPending,
+  } = useCreatePaymentIntentMutation();
 
-  // useEffect(() => {
-  //   if (price && price > 0) {
-  //     const getClientSecret = async () => {
-  //       try {
-  //         const res = await createPaymentIntent({ price }).unwrap();
-  //         setClientSecret(res?.data?.clientSecret || null);
-  //       } catch (error) {
-  //         console.error('Error getting client secret:', error);
-  //       }
-  //     };
-  //     getClientSecret();
-  //   }
-  // }, [createPaymentIntent, price]);
+  const {
+    mutate: createPaymentMutate,
+    isPending: isCreatePaymentPending,
+  } = useCreatePaymentMutation();
 
-  // const handleSubmit = async (event: FormEvent) => {
-  //   event.preventDefault();
-  //   setIsLoading(true);
+  const price = Number(envConfig.subscription_price);
 
-  //   if (!stripe || !elements || !price) {
-  //     console.error(
-  //       'May be not getting stripe, elements and clientSecret!'
-  //     );
-  //     setIsLoading(false);
-  //     return;
-  //   }
+  const handleSubmit = async (event: FormEvent) => {
+    event.preventDefault();
 
-  //   const card = elements.getElement(CardElement);
-  //   if (!card) {
-  //     console.error('Card Element is not found.');
-  //     setIsLoading(false);
-  //     return;
-  //   }
+    if (!stripe || !elements) {
+      console.error('Stripe or elements not available.');
+      return;
+    }
 
-  //   try {
-  //     const { error, paymentMethod } = await stripe.createPaymentMethod({
-  //       type: 'card',
-  //       card,
-  //       // billing_details: {
-  //       //   email: user?.email || 'unknown',
-  //       //   name: user?.name || 'anonymous',
-  //       // },
-  //     });
+    // Create Payment Intent
+    if (price) {
+      paymentIntentMutate({ price });
+    }
 
-  //     if (error) {
-  //       console.error('[Payment Method Error]', error);
-  //       setCardError(error?.message as string);
-  //       setTransactionId('');
-  //       setIsLoading(false);
-  //       return;
-  //     } else {
-  //       setCardError('');
-  //     }
+    const client_secret = intentData?.data?.clientSecret;
 
-  //     const { paymentIntent, error: intentError } =
-  //       await stripe.confirmCardPayment(clientSecret, {
-  //         payment_method: paymentMethod.id,
-  //       });
+    if (!client_secret) {
+      console.error('Client secret not available.');
+      return;
+    }
 
-  //     if (intentError) {
-  //       console.error('[Payment Intent Error]', intentError);
-  //       setIsLoading(false);
-  //       return;
-  //     }
+    const card = elements.getElement(CardElement);
+    if (!card) {
+      console.error('Card Element is not found.');
+      return;
+    }
 
-  //     if (paymentIntent?.status === 'succeeded') {
-  //       setTransactionId(paymentIntent.id);
-  //       console.log('Payment succeeded:', paymentIntent);
+    // Payment Process
+    try {
+      const { error, paymentMethod } = await stripe.createPaymentMethod({
+        type: 'card',
+        card,
+        billing_details: {
+          email: user?.email || 'unknown',
+          name: user?.username || 'anonymous',
+        },
+      });
 
-  //     }
-  //   } catch (error) {
-  //     console.error('Payment Error:', error);
-  //   } finally {
-  //     setIsLoading(false);
-  //   }
-  // };
+      if (error) {
+        setCardError(error.message as string);
+        setTransactionId('');
+        return;
+      }
 
-  // const handleCardChange = (event: any) => {
-  //   setIsCardComplete(event.complete);
-  //   if (event.error) {
-  //     setCardError(event.error.message);
-  //   } else {
-  //     setCardError('');
-  //   }
-  // };
+      const { paymentIntent, error: intentError } =
+        await stripe.confirmCardPayment(client_secret, {
+          payment_method: paymentMethod.id,
+        });
+
+      if (intentError) {
+        setCardError(intentError.message as string);
+        console.log('Payment intent error:', intentError);
+        return;
+      }
+
+      if (paymentIntent?.status === 'succeeded') {
+        setTransactionId(paymentIntent.id);
+        console.log('Payment succeeded:', paymentIntent);
+        const paymentInfo = {
+          email: user?.email,
+          transactionId: paymentIntent.id,
+          price: price,
+        };
+        // create payment in database
+        createPaymentMutate(paymentInfo);
+      }
+    } catch (error) {
+      console.log(error);
+      setCardError('Payment Error');
+    }
+  };
+
+  const handleCardChange = (event: any) => {
+    setIsCardComplete(event.complete);
+    if (event.error) {
+      setCardError(event.error.message);
+    } else {
+      setCardError('');
+    }
+  };
+
+  useEffect(() => {
+    if (price) {
+      paymentIntentMutate({ price });
+    }
+  }, [price, paymentIntentMutate]);
+
+  useEffect(() => {
+    if (intentData?.data?.clientSecret) {
+      setClientSecrets(intentData.data.clientSecret);
+    }
+  }, [intentData]);
 
   return (
     <>
-      <form>
+      {(paymentIntentPending || isCreatePaymentPending) && (
+        <LoadingWithOverlay />
+      )}
+      <form onSubmit={handleSubmit}>
         <div className="overflow-hidden rounded-md border px-1 shadow">
           <CardElement
             options={{
@@ -118,26 +151,26 @@ const CheckoutForm = () => {
                 },
               },
             }}
+            onChange={handleCardChange}
           />
         </div>
         <div className="mt-5">
           <Button
             className="w-full text-lg"
             type="submit"
-            disabled={!stripe}
+            disabled={!stripe || !clientSecrets || !isCardComplete}
           >
             confirm
-            {/* {isLoading ? 'Processing...' : 'Confirm'} */}
           </Button>
         </div>
       </form>
 
-      {/* {cardError && <p className="text-warning">{cardError}</p>}
+      {cardError && <p className="text-warning">{cardError}</p>}
       {transactionId && (
         <p className="text-green-600">
           Transaction complete with transaction ID: {transactionId}
         </p>
-      )} */}
+      )}
     </>
   );
 };

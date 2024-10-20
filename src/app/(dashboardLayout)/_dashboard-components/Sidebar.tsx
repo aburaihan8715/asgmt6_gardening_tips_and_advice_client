@@ -4,7 +4,7 @@ import { useAuth } from '@/context/user.provider';
 import {
   FaArrowLeft,
   FaCog,
-  // FaEdit,
+  FaDollarSign,
   FaFileAlt,
   FaHome,
   FaLock,
@@ -125,15 +125,15 @@ const Sidebar = () => {
             </ActiveLink>
           </li>
 
-          {/* <li className="flex">
+          <li className="flex">
             <ActiveLink
               className="flex items-center gap-2"
-              href="/user-dashboard/edit-post/123"
+              href="/user-dashboard/payment"
             >
-              <FaEdit className="text-2xl md:text-base" />
-              <span className="hidden md:block">Edit My Post</span>
+              <FaDollarSign className="text-2xl md:text-base" />
+              <span className="hidden md:block">Be premium</span>
             </ActiveLink>
-          </li> */}
+          </li>
         </ul>
       )}
     </nav>
