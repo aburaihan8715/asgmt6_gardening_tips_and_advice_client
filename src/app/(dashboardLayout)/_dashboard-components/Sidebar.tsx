@@ -1,11 +1,13 @@
 'use client';
 import ActiveLink from '@/components/ui/ActiveLink';
 import { useAuth } from '@/context/user.provider';
+import { useCheckPremiumStatus } from '@/hooks/user.hook';
 import {
   FaArrowLeft,
   FaCog,
   FaDollarSign,
   FaFileAlt,
+  FaHeart,
   FaHome,
   FaLock,
   FaPlus,
@@ -13,7 +15,11 @@ import {
 
 const Sidebar = () => {
   const { user } = useAuth();
-  // console.log(user);
+  const { data: premiumStatusData } = useCheckPremiumStatus();
+  const isAbleForPremium = premiumStatusData?.data;
+  const favourite = user?.favourites || [];
+  const hasFavourite = favourite.length > 0;
+
   return (
     <nav>
       {/* ADMIN ROUTES */}
@@ -125,15 +131,29 @@ const Sidebar = () => {
             </ActiveLink>
           </li>
 
-          <li className="flex">
-            <ActiveLink
-              className="flex items-center gap-2"
-              href="/user-dashboard/payment"
-            >
-              <FaDollarSign className="text-2xl md:text-base" />
-              <span className="hidden md:block">Be premium</span>
-            </ActiveLink>
-          </li>
+          {hasFavourite && (
+            <li className="flex">
+              <ActiveLink
+                className="flex items-center gap-2"
+                href="/user-dashboard/favourite-posts"
+              >
+                <FaHeart className="text-2xl text-red-600 md:text-base" />
+                <span className="hidden md:block">Favourite Posts</span>
+              </ActiveLink>
+            </li>
+          )}
+
+          {isAbleForPremium && (
+            <li className="flex">
+              <ActiveLink
+                className="flex items-center gap-2"
+                href="/user-dashboard/payment"
+              >
+                <FaDollarSign className="text-2xl md:text-base" />
+                <span className="hidden md:block">Be premium</span>
+              </ActiveLink>
+            </li>
+          )}
         </ul>
       )}
     </nav>

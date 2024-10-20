@@ -1,7 +1,9 @@
 // import { UserServices } from '@/services/user.service';
 import {
   addFavoritePost,
+  checkPremiumStatus,
   followUser,
+  getFavouritePosts,
   getMe,
   removeFavoritePost,
   unfollowUser,
@@ -13,6 +15,31 @@ import {
 } from '@tanstack/react-query';
 import { toast } from 'sonner';
 
+//=========== INFO: Query===========
+export const useGetMe = () => {
+  return useQuery({
+    queryKey: ['GET_ME'],
+    queryFn: async () => await getMe(),
+    enabled: false,
+  });
+};
+
+// Check premium status
+export const useCheckPremiumStatus = () => {
+  return useQuery({
+    queryKey: ['GET_PREMIUM_STATUS'],
+    queryFn: async () => await checkPremiumStatus(),
+  });
+};
+
+export const useGetFavouritePosts = () => {
+  return useQuery({
+    queryKey: ['GET_FAVOURITE_POSTS'],
+    queryFn: async () => await getFavouritePosts(),
+  });
+};
+
+//=========== INFO: Mutation===========
 // Follow hook
 interface IFollowArgs {
   postUserId: string;
@@ -137,13 +164,5 @@ export const useRemoveFavoritePostMutation = () => {
     onError: (error: any) => {
       toast.error(error.message);
     },
-  });
-};
-
-export const useGetMe = () => {
-  return useQuery({
-    queryKey: ['GET_ME'],
-    queryFn: async () => await getMe(),
-    enabled: false,
   });
 };

@@ -26,6 +26,12 @@
       "backgroundColor": "#3772ff",
       "isWholeLine": false,
     },
+    {
+      "text": "INFO:",
+      "color": "#fff",
+      "backgroundColor": "#ff006f",
+      "isWholeLine": false,
+    },
   ],
   "workbench.colorCustomizations": {
     "statusBar.background": "#7603b4",

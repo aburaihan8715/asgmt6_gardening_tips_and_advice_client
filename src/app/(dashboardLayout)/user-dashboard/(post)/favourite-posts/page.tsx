@@ -1,5 +1,5 @@
 'use client';
-import Swal from 'sweetalert2';
+
 import { ChevronDownIcon } from '@radix-ui/react-icons';
 import {
   ColumnDef,
@@ -32,19 +32,14 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import Image from 'next/image';
-import {
-  useDeletePostMutation,
-  useGetMyPosts,
-  useMakePostPremiumMutation,
-} from '@/hooks/post.hook';
+
 import LoadingSpinner from '@/components/ui/LoadingSpinner';
 import { IPost } from '@/types/postData.type';
-import Pagination from '@/components/ui/Pagination';
 import { useState } from 'react';
-import Link from 'next/link';
-import LoadingWithOverlay from '@/components/ui/LoadingWithOverlay';
 import ErrorMessage from '@/components/ui/ErrorMessage';
+import { useGetFavouritePosts } from '@/hooks/user.hook';
 import { FaArrowDown, FaArrowUp } from 'react-icons/fa';
+import Link from 'next/link';
 
 const MyPosts = () => {
   const [sorting, setSorting] = useState<SortingState>([]);
@@ -55,54 +50,8 @@ const MyPosts = () => {
     useState<VisibilityState>({});
   const [rowSelection, setRowSelection] = useState({});
 
-  const [currentPage, setCurrentPage] = useState<number>(1);
-  const itemsPerPage = 5;
-  const { mutate: postDeleteMutate, isPending: isDeletePostPending } =
-    useDeletePostMutation();
-  const { mutate: makePremiumMutate, isPending: isMakePremiumPending } =
-    useMakePostPremiumMutation();
-
-  const {
-    data: postData,
-    isError,
-    isLoading,
-  } = useGetMyPosts({
-    page: currentPage,
-    limit: itemsPerPage,
-  });
-
+  const { data: postData, isError, isLoading } = useGetFavouritePosts();
   const posts: IPost[] = postData?.data || [];
-  const meta = postData?.meta || {};
-
-  const handlePageChange = (page: number) => {
-    setCurrentPage(page);
-  };
-
-  const handleDeletePost = (id: string) => {
-    Swal.fire({
-      title: 'Are you sure?',
-      text: "You won't be able to revert this!",
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
-      confirmButtonText: 'Yes, delete!',
-    }).then((result) => {
-      if (result.isConfirmed) {
-        // call delete api
-        postDeleteMutate(id);
-        Swal.fire({
-          title: 'Deleted!',
-          text: 'Your file has been deleted.',
-          icon: 'success',
-        });
-      }
-    });
-  };
-
-  const handleMakePremium = (id: string) => {
-    makePremiumMutate(id);
-  };
 
   const columns: ColumnDef<IPost>[] = [
     // CHECK
@@ -220,21 +169,9 @@ const MyPosts = () => {
         const id = row.original._id;
         return (
           <div className="flex gap-3">
-            <Link href={`edit-post/${id}`}>
-              <Button variant={'secondary'}>edit</Button>
+            <Link href={`/posts/${id}`}>
+              <Button variant={'secondary'}>See details</Button>
             </Link>
-            <Button
-              onClick={() => handleDeletePost(id)}
-              variant={'destructive'}
-            >
-              delete
-            </Button>
-            <Button
-              onClick={() => handleMakePremium(id)}
-              variant={'default'}
-            >
-              make premium
-            </Button>
           </div>
         );
       },
@@ -274,9 +211,6 @@ const MyPosts = () => {
 
   return (
     <>
-      {(isDeletePostPending || isMakePremiumPending) && (
-        <LoadingWithOverlay />
-      )}
       <div className="w-full">
         <div className="flex items-center py-4">
           <Input
@@ -366,45 +300,10 @@ const MyPosts = () => {
                 </TableRow>
               )}
             </TableBody>
-            {/* <TableBody>
-              {table.getRowModel().rows?.length ? (
-                table.getRowModel().rows.map((row) => (
-                  <TableRow
-                    key={row.id}
-                    data-state={row.getIsSelected() && 'selected'}
-                  >
-                    {row.getVisibleCells().map((cell) => (
-                      <TableCell key={cell.id}>
-                        {flexRender(
-                          cell.column.columnDef.cell,
-                          cell.getContext(),
-                        )}
-                      </TableCell>
-                    ))}
-                  </TableRow>
-                ))
-              ) : (
-                <TableRow>
-                  <TableCell
-                    colSpan={columns.length}
-                    className="h-24 text-center"
-                  >
-                    No results.
-                  </TableCell>
-                </TableRow>
-              )}
-            </TableBody> */}
           </Table>
         </div>
 
         {/* pagination */}
-        <div className="flex justify-start">
-          <Pagination
-            currentPage={currentPage}
-            totalPages={meta?.totalPage}
-            onPageChange={handlePageChange}
-          />
-        </div>
       </div>
     </>
   );

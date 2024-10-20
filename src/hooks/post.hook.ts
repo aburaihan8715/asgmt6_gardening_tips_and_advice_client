@@ -25,27 +25,7 @@ import { useRouter } from 'next/navigation';
 import { FieldValues } from 'react-hook-form';
 import { toast } from 'sonner';
 
-// CREATE
-export const useCreatePostMutation = () => {
-  const queryClient = useQueryClient();
-  const router = useRouter();
-  return useMutation<any, Error, FieldValues>({
-    mutationKey: ['CREATE_POST'],
-    mutationFn: async (postData) => await createPost(postData),
-    onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: ['GET_TOP_5_POSTS'],
-      });
-      toast.success('Post created successfully.');
-      router.push('/user-dashboard/my-posts');
-    },
-    onError: (error) => {
-      console.log(error);
-      toast.error(error.message);
-    },
-  });
-};
-
+//=========== INFO: Query===========
 // GET ALL
 export const useGetAllPosts = ({
   page,
@@ -393,5 +373,28 @@ export const useGetCommentsOfPost = ({
     ],
     queryFn: async () =>
       await getCommentsOfPost({ page, limit, searchTerm, postId }),
+  });
+};
+
+//=========== INFO: Mutation===========
+
+// CREATE
+export const useCreatePostMutation = () => {
+  const queryClient = useQueryClient();
+  const router = useRouter();
+  return useMutation<any, Error, FieldValues>({
+    mutationKey: ['CREATE_POST'],
+    mutationFn: async (postData) => await createPost(postData),
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ['GET_TOP_5_POSTS'],
+      });
+      toast.success('Post created successfully.');
+      router.push('/user-dashboard/my-posts');
+    },
+    onError: (error) => {
+      console.log(error);
+      toast.error(error.message);
+    },
   });
 };

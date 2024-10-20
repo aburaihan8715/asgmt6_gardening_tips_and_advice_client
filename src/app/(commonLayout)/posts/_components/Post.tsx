@@ -9,7 +9,6 @@ import {
   FaArrowUp,
   FaArrowDown,
 } from 'react-icons/fa';
-import Link from 'next/link';
 import { IPost } from '@/types/postData.type';
 import { useAuth } from '@/context/user.provider';
 import {
@@ -28,6 +27,7 @@ import {
   useRemoveUpvotePostMutation,
   useUpvotePostMutation,
 } from '@/hooks/post.hook';
+import { useRouter } from 'next/navigation';
 
 interface IProps {
   post: IPost;
@@ -41,15 +41,18 @@ const Post = ({ post }: IProps) => {
     isLoading: isCurrentUserLoading,
   } = useGetMe();
 
+  const router = useRouter();
+
   const postUserId = post?.user?._id as string;
   const currentUser = currentUserData?.data;
   const currentUserId = currentUser?._id;
   const followings = currentUser?.followings || [];
   const isFollowing = followings?.includes(postUserId);
-  const isOwnPost = user?._id === post?.user?._id;
-
   const favourites = currentUser?.favourites || [];
   const isFavourite = favourites.includes(post?._id);
+  const isOwnPost = user?._id === post?.user?._id;
+  const isVerified = currentUser?.isVerified;
+  const isPremium = post?.isPremium;
 
   const { mutate: followMutate, isPending: followPending } =
     useFollowUserMutation();
@@ -101,23 +104,47 @@ const Post = ({ post }: IProps) => {
   // HANDLE ADD FAVOURITE
   const handleAddFavourite = (postId: string) => {
     const mutateData = { postId };
-    addFavouritePostMutate(mutateData, {
-      onSuccess: () => {
-        refetch();
-      },
-      onError: () => {},
-    });
+    if (isPremium) {
+      if (!isVerified) {
+        return toast.warning('You need to be verified first!!');
+      }
+      addFavouritePostMutate(mutateData, {
+        onSuccess: () => {
+          refetch();
+        },
+        onError: () => {},
+      });
+    } else {
+      addFavouritePostMutate(mutateData, {
+        onSuccess: () => {
+          refetch();
+        },
+        onError: () => {},
+      });
+    }
   };
 
   // HANDLE REMOVE FAVOURITE
   const handleRemoveFavourite = (postId: string) => {
     const mutateData = { postId };
-    removeFavouritePostMutate(mutateData, {
-      onSuccess: () => {
-        refetch();
-      },
-      onError: () => {},
-    });
+    if (isPremium) {
+      if (!isVerified) {
+        return toast.warning('You need to be verified first!!');
+      }
+      removeFavouritePostMutate(mutateData, {
+        onSuccess: () => {
+          refetch();
+        },
+        onError: () => {},
+      });
+    } else {
+      removeFavouritePostMutate(mutateData, {
+        onSuccess: () => {
+          refetch();
+        },
+        onError: () => {},
+      });
+    }
   };
 
   // HANDLE FOLLOW
@@ -146,23 +173,41 @@ const Post = ({ post }: IProps) => {
   const handleUpvote = (postId: string) => {
     const upvotes = post?.upvotes || [];
     const hasUpvotes = upvotes?.includes(currentUserId);
-
     if (!user) {
       return toast.success('You need to login firs!!');
     }
 
-    if (!hasUpvotes) {
-      const mutateData = { postId };
-      upvoteMutate(mutateData, {
-        onSuccess: () => {},
-        onError: () => {},
-      });
+    if (isPremium) {
+      if (!isVerified) {
+        return toast.success('You need to be verified first!!');
+      }
+      if (!hasUpvotes) {
+        const mutateData = { postId };
+        upvoteMutate(mutateData, {
+          onSuccess: () => {},
+          onError: () => {},
+        });
+      } else {
+        const mutateData = { postId };
+        upvoteRemoveMutate(mutateData, {
+          onSuccess: () => {},
+          onError: () => {},
+        });
+      }
     } else {
-      const mutateData = { postId };
-      upvoteRemoveMutate(mutateData, {
-        onSuccess: () => {},
-        onError: () => {},
-      });
+      if (!hasUpvotes) {
+        const mutateData = { postId };
+        upvoteMutate(mutateData, {
+          onSuccess: () => {},
+          onError: () => {},
+        });
+      } else {
+        const mutateData = { postId };
+        upvoteRemoveMutate(mutateData, {
+          onSuccess: () => {},
+          onError: () => {},
+        });
+      }
     }
   };
 
@@ -170,25 +215,93 @@ const Post = ({ post }: IProps) => {
   const handleDownvote = (postId: string) => {
     const downvotes = post?.downvotes || [];
     const hasDownvotes = downvotes?.includes(currentUserId);
-
     if (!user) {
       return toast.success('You need to login firs!!');
     }
 
-    if (!hasDownvotes) {
-      const mutateData = { postId };
-      downvoteMutate(mutateData, {
-        onSuccess: () => {},
-        onError: () => {},
-      });
+    if (isPremium) {
+      if (!isVerified) {
+        return toast.success('You need to be verified first!!');
+      }
+      if (!hasDownvotes) {
+        const mutateData = { postId };
+        downvoteMutate(mutateData, {
+          onSuccess: () => {},
+          onError: () => {},
+        });
+      } else {
+        const mutateData = { postId };
+        downvoteRemoveMutate(mutateData, {
+          onSuccess: () => {},
+          onError: () => {},
+        });
+      }
     } else {
-      const mutateData = { postId };
-      downvoteRemoveMutate(mutateData, {
-        onSuccess: () => {},
-        onError: () => {},
-      });
+      if (!hasDownvotes) {
+        const mutateData = { postId };
+        downvoteMutate(mutateData, {
+          onSuccess: () => {},
+          onError: () => {},
+        });
+      } else {
+        const mutateData = { postId };
+        downvoteRemoveMutate(mutateData, {
+          onSuccess: () => {},
+          onError: () => {},
+        });
+      }
     }
   };
+
+  const handleViewDetail = () => {
+    const path = `/posts/${post?._id}`;
+    if (isPremium) {
+      if (!isVerified) {
+        return toast.warning('You need to be verified first!!');
+      }
+      router.push(path);
+    } else {
+      router.push(path);
+    }
+  };
+
+  // handle comment
+  const handleComment = () => {
+    const postId = post?._id;
+    if (!postId) return; // Ensure postId exists
+    const pathForCreate = `/create-comment?postId=${postId}`;
+    const pathForCommentList = `/comments?postId=${postId}`;
+
+    if (isPremium && !isVerified) {
+      return toast.warning('You need to be verified first!!');
+    }
+
+    const path =
+      post?.numberOfComments > 0 ? pathForCommentList : pathForCreate;
+    router.push(path);
+  };
+
+  // const handleComment = () => {
+  //   const pathForCreate = `/create-comment?postId=${post?._id}`;
+  //   const pathForCommentList = `/comments?postId=${post?._id}`;
+  //   if (isPremium) {
+  //     if (!isVerified) {
+  //       return toast.warning('You need to be verified first!!');
+  //     } else {
+  //       if (post?.numberOfComments > 0) {
+  //         router.push(pathForCommentList);
+  //       } else if (post?.numberOfComments < 1) {
+  //         router.push(pathForCreate);
+  //       }
+  //     }
+  //   } else {
+  //     if (post?.numberOfComments > 0) {
+  //       router.push(pathForCommentList);
+  //     } else if (post?.numberOfComments < 1) {
+  //       router.push(pathForCreate);
+  //     }
+  //   }
+  // };
 
   useEffect(() => {
     if (user) {
@@ -204,14 +317,6 @@ const Post = ({ post }: IProps) => {
       </div>
     );
   }
-
-  // if (isCurrentUserError) {
-  //   return (
-  //     <div className="mt-[90px]">
-  //       <ErrorMessage>{currentUserError?.message}</ErrorMessage>
-  //     </div>
-  //   );
-  // }
 
   return (
     <>
@@ -239,12 +344,12 @@ const Post = ({ post }: IProps) => {
           />
           {/* Overlay with Details Button */}
           <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
-            <Link
-              href={`/posts/${post?._id}`}
+            <button
+              onClick={handleViewDetail}
               className="rounded-md bg-white px-4 py-2 font-semibold text-gray-900 shadow-md hover:bg-gray-100"
             >
               View Details
-            </Link>
+            </button>
           </div>
         </div>
 
@@ -360,12 +465,25 @@ const Post = ({ post }: IProps) => {
           </div>
 
           {/* comments */}
-
           {user && (
             <div>
+              <button
+                onClick={handleComment}
+                className="flex items-center space-x-2"
+              >
+                <FaCommentAlt className="text-gray-400" />
+                <span className="text-gray-500">
+                  {post?.numberOfComments || 0} {''} Comments
+                </span>
+              </button>
+            </div>
+          )}
+
+          {/* {user && (
+            <div>
               {post?.numberOfComments > 0 && (
-                <Link
-                  href={`/comments?postId=${post?._id}`}
+                <button
+                  onClick={handleComment}
                   className="flex items-center space-x-2"
                 >
                   <FaCommentAlt className="text-gray-400" />
@@ -373,12 +491,12 @@ const Post = ({ post }: IProps) => {
                     {post?.numberOfComments || 0} {''}
                     Comments
                   </span>
-                </Link>
+                </button>
               )}
 
               {post?.numberOfComments < 1 && (
-                <Link
-                  href={`/create-comment?postId=${post?._id}`}
+                <button
+                  onClick={handleComment}
                   className="flex items-center space-x-2"
                 >
                   <FaCommentAlt className="text-gray-400" />
@@ -386,10 +504,10 @@ const Post = ({ post }: IProps) => {
                     {0} {''}
                     Comments
                   </span>
-                </Link>
+                </button>
               )}
             </div>
-          )}
+          )} */}
 
           <div className="flex items-center space-x-2">
             {/* Favourite Button Icon */}
