@@ -10,8 +10,6 @@ import {
   getPost,
   getTopFivePosts,
   makePostPremium,
-  removeDownvotePost,
-  removeUpvotePost,
   updatePost,
   upvotePost,
 } from '@/actions/post.action';
@@ -93,8 +91,8 @@ export const useGetMyPosts = ({
   });
 };
 
-// GET NEW 5
-export const useGetNewFivePosts = () => {
+// GET TOP 5
+export const useGetTopFivePosts = () => {
   return useQuery({
     queryKey: ['GET_TOP_5_POSTS'],
     queryFn: async () => await getTopFivePosts(),
@@ -109,6 +107,7 @@ export const useGetPost = (postId: string) => {
   });
 };
 
+//=========== INFO: Mutation===========
 // UPDATE
 export const useUpdatePostMutation = () => {
   const router = useRouter();
@@ -188,11 +187,10 @@ export const useMakePostPremiumMutation = () => {
   });
 };
 
-// Upvote hook
+// UPVOTE
 interface IUpvoteArgs {
   postId: string;
 }
-
 export const useUpvotePostMutation = (postId?: string) => {
   const queryClient = useQueryClient();
   return useMutation<unknown, Error, IUpvoteArgs>({
@@ -212,45 +210,16 @@ export const useUpvotePostMutation = (postId?: string) => {
       toast.success('Post upvoted successfully.');
     },
     onError: (error: any) => {
+      console.log(error);
       toast.error(error.message);
     },
   });
 };
 
-// Upvote remove
-interface IRemoveUpvoteArgs {
-  postId: string;
-}
-
-export const useRemoveUpvotePostMutation = (postId?: string) => {
-  const queryClient = useQueryClient();
-  return useMutation<unknown, Error, IRemoveUpvoteArgs>({
-    mutationFn: async (options) => {
-      return await removeUpvotePost(options.postId);
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: ['GET_POSTS'],
-      });
-      queryClient.invalidateQueries({
-        queryKey: ['GET_POST', postId],
-      });
-      queryClient.invalidateQueries({
-        queryKey: ['GET_TOP_5_POSTS'],
-      });
-      toast.success('Upvote removed successfully.');
-    },
-    onError: (error: any) => {
-      toast.error(error.message);
-    },
-  });
-};
-
-// Downvote hook
+// DOWNVOTE
 interface IDownvoteArgs {
   postId: string;
 }
-
 export const useDownvotePostMutation = (postId?: string) => {
   const queryClient = useQueryClient();
   return useMutation<unknown, Error, IDownvoteArgs>({
@@ -275,36 +244,7 @@ export const useDownvotePostMutation = (postId?: string) => {
   });
 };
 
-// Downvote remove
-interface IRemoveDownvoteArgs {
-  postId: string;
-}
-
-export const useRemoveDownvotePostMutation = (postId?: string) => {
-  const queryClient = useQueryClient();
-  return useMutation<unknown, Error, IRemoveDownvoteArgs>({
-    mutationFn: async (options) => {
-      return await removeDownvotePost(options.postId);
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: ['GET_POSTS'],
-      });
-      queryClient.invalidateQueries({
-        queryKey: ['GET_POST', postId],
-      });
-      queryClient.invalidateQueries({
-        queryKey: ['GET_TOP_5_POSTS'],
-      });
-      toast.success('Downvote removed successfully.');
-    },
-    onError: (error: any) => {
-      toast.error(error.message);
-    },
-  });
-};
-
-// Make comment for a post
+// CREATE COMMENT OF A POST
 interface ICreateCommentArgs {
   postId: string;
   content: string;
@@ -375,8 +315,6 @@ export const useGetCommentsOfPost = ({
       await getCommentsOfPost({ page, limit, searchTerm, postId }),
   });
 };
-
-//=========== INFO: Mutation===========
 
 // CREATE
 export const useCreatePostMutation = () => {

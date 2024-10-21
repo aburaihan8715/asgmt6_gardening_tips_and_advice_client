@@ -113,7 +113,7 @@ export const getMyPosts = async ({
   }
 };
 
-// GET NEW 5
+// GET TOP 5
 export const getTopFivePosts = async () => {
   try {
     const { data } = await axiosInstance.get('/api/v1/posts/top-5-posts');
@@ -149,7 +149,7 @@ export const updatePost = async (
   }
 };
 
-// UPDATE
+// DELETE
 export const deletePost = async (postId: string) => {
   try {
     const { data } = await axiosInstance.delete(`/api/v1/posts/${postId}`);
@@ -171,7 +171,7 @@ export const makePostPremium = async (postId: string) => {
   }
 };
 
-// Upvote a post
+// UPVOTE
 export const upvotePost = async (postId: string) => {
   try {
     const { data } = await axiosInstance.patch(
@@ -183,18 +183,7 @@ export const upvotePost = async (postId: string) => {
   }
 };
 
-export const removeUpvotePost = async (postId: string) => {
-  try {
-    const { data } = await axiosInstance.patch(
-      `/api/v1/posts/${postId}/upvote-remove`,
-    );
-    return data;
-  } catch (error: any) {
-    throw new Error(error.response?.data?.message || error.message);
-  }
-};
-
-// Downvote a post
+// DOWNVOTE
 export const downvotePost = async (postId: string) => {
   try {
     const { data } = await axiosInstance.patch(
@@ -206,18 +195,7 @@ export const downvotePost = async (postId: string) => {
   }
 };
 
-export const removeDownvotePost = async (postId: string) => {
-  try {
-    const { data } = await axiosInstance.patch(
-      `/api/v1/posts/${postId}/downvote-remove`,
-    );
-    return data;
-  } catch (error: any) {
-    throw new Error(error.response?.data?.message || error.message);
-  }
-};
-
-// Comment on a post
+// CREATE COMMENT OT A POST
 export const createCommentOnPost = async (
   postId: string,
   content: string,
@@ -233,7 +211,7 @@ export const createCommentOnPost = async (
   }
 };
 
-// Comment on a post (specific post)
+// GET COMMENTS OF A POST
 export const getCommentsOfPost = async ({
   page,
   limit,

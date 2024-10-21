@@ -1,11 +1,15 @@
 type SectionHeadingProps = {
   heading: string;
+  className?: string; // Optional className prop
 };
 
-const SectionHeading = ({ heading }: SectionHeadingProps) => {
+const SectionHeading = ({
+  heading,
+  className = '',
+}: SectionHeadingProps) => {
   return (
-    <div className="flex justify-center mb-10 flex-col">
-      <h3 className="mb-4 text-xl font-bold text-transparent sm:text-2xl md:text-4xl bg-gradient-to-r from-green-700 via-green-500 to-green-300 bg-clip-text">
+    <div className={`mb-10 flex flex-col justify-center ${className}`}>
+      <h3 className="mb-4 bg-gradient-to-r from-green-700 via-green-500 to-green-300 bg-clip-text text-xl font-bold text-transparent sm:text-2xl md:text-4xl">
         {heading}
       </h3>
 

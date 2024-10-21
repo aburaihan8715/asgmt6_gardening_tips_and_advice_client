@@ -1,7 +1,6 @@
 'use client';
 import Gallery from '@/components/ui/Gallery';
 import LoadingSpinner from '@/components/ui/LoadingSpinner';
-import SectionHeading from '@/components/ui/SectionHeading';
 import { useGetAllPosts } from '@/hooks/post.hook';
 import { IPost } from '@/types/postData.type';
 import { useDebouncedCallback } from 'use-debounce';
@@ -110,11 +109,14 @@ const Posts = () => {
       </div>
 
       <div className="scrollbar-thumb-rounded-full scrollbar-track-rounded-full ml-[25%] mr-[25%] h-full w-[50%] overflow-y-scroll scrollbar-thin scrollbar-track-gray-200 scrollbar-thumb-gray-500">
-        <div className="mt-5 flex justify-center">
-          <SectionHeading heading="All Tips and Advice" />
-        </div>
+        {/* <div className="mt-5 flex justify-center">
+          <SectionHeading
+            className="text-xl"
+            heading="All Tips and Advice"
+          />
+        </div> */}
 
-        <ul>
+        <ul className="md:p-5">
           {isLoading && <LoadingSpinner />}
           {isError && <NoDataFound />}
           {postData?.map((post: IPost) => {

@@ -1,6 +1,5 @@
 'use client';
 import React from 'react';
-import { useGetNewFivePosts } from '@/hooks/post.hook';
 import LoadingSpinner from '@/components/ui/LoadingSpinner';
 import ErrorMessage from '@/components/ui/ErrorMessage';
 import { IPost } from '@/types/postData.type';
@@ -10,9 +9,10 @@ import {
 } from '@/hooks/user.hook';
 import LoadingWithOverlay from '@/components/ui/LoadingWithOverlay';
 import Post from '../posts/_components/Post';
+import { useGetTopFivePosts } from '@/hooks/post.hook';
 
 const PostOfHome = () => {
-  const { data, isLoading, isError, error } = useGetNewFivePosts();
+  const { data, isLoading, isError, error } = useGetTopFivePosts();
   const posts = data?.data;
   const { isPending: followPending } = useFollowUserMutation();
   const { isPending: unfollowPending } = useUnfollowUserMutation();

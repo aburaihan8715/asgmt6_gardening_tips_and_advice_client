@@ -23,8 +23,6 @@ import { toast } from 'sonner';
 import LoadingSpinner from '@/components/ui/LoadingSpinner';
 import {
   useDownvotePostMutation,
-  useRemoveDownvotePostMutation,
-  useRemoveUpvotePostMutation,
   useUpvotePostMutation,
 } from '@/hooks/post.hook';
 import { useRouter } from 'next/navigation';
@@ -73,16 +71,8 @@ const Post = ({ post }: IProps) => {
   const { mutate: upvoteMutate, isPending: isUpvotePending } =
     useUpvotePostMutation();
 
-  const { mutate: upvoteRemoveMutate, isPending: isUpvoteRemovePending } =
-    useRemoveUpvotePostMutation();
-
   const { mutate: downvoteMutate, isPending: isDownvotePending } =
     useDownvotePostMutation();
-
-  const {
-    mutate: downvoteRemoveMutate,
-    isPending: isDownvoteRemovePending,
-  } = useRemoveDownvotePostMutation();
 
   // HANDLE SHARE
   const handleShare = async () => {
@@ -173,41 +163,23 @@ const Post = ({ post }: IProps) => {
   const handleUpvote = (postId: string) => {
     const upvotes = post?.upvotes || [];
     const hasUpvotes = upvotes?.includes(currentUserId);
+
+    // Check if user is logged in
     if (!user) {
-      return toast.success('You need to login firs!!');
+      return toast.error('You need to login first!');
     }
 
-    if (isPremium) {
-      if (!isVerified) {
-        return toast.success('You need to be verified first!!');
-      }
-      if (!hasUpvotes) {
-        const mutateData = { postId };
-        upvoteMutate(mutateData, {
-          onSuccess: () => {},
-          onError: () => {},
-        });
-      } else {
-        const mutateData = { postId };
-        upvoteRemoveMutate(mutateData, {
-          onSuccess: () => {},
-          onError: () => {},
-        });
-      }
+    // For premium users, check if they are verified
+    if (isPremium && !isVerified) {
+      return toast.error('You need to be verified first!');
+    }
+
+    // Finally upvote the post
+    const mutateData = { postId };
+    if (!hasUpvotes) {
+      upvoteMutate(mutateData, {});
     } else {
-      if (!hasUpvotes) {
-        const mutateData = { postId };
-        upvoteMutate(mutateData, {
-          onSuccess: () => {},
-          onError: () => {},
-        });
-      } else {
-        const mutateData = { postId };
-        upvoteRemoveMutate(mutateData, {
-          onSuccess: () => {},
-          onError: () => {},
-        });
-      }
+      toast.error('You already upvoted!');
     }
   };
 
@@ -215,41 +187,22 @@ const Post = ({ post }: IProps) => {
   const handleDownvote = (postId: string) => {
     const downvotes = post?.downvotes || [];
     const hasDownvotes = downvotes?.includes(currentUserId);
+
+    // Check if user is logged in
     if (!user) {
       return toast.success('You need to login firs!!');
     }
 
-    if (isPremium) {
-      if (!isVerified) {
-        return toast.success('You need to be verified first!!');
-      }
-      if (!hasDownvotes) {
-        const mutateData = { postId };
-        downvoteMutate(mutateData, {
-          onSuccess: () => {},
-          onError: () => {},
-        });
-      } else {
-        const mutateData = { postId };
-        downvoteRemoveMutate(mutateData, {
-          onSuccess: () => {},
-          onError: () => {},
-        });
-      }
+    // For premium users, check if they are verified
+    if (isPremium && !isVerified) {
+      return toast.error('You need to be verified first!');
+    }
+    // Finally downvote the post
+    const mutateData = { postId };
+    if (!hasDownvotes) {
+      downvoteMutate(mutateData, {});
     } else {
-      if (!hasDownvotes) {
-        const mutateData = { postId };
-        downvoteMutate(mutateData, {
-          onSuccess: () => {},
-          onError: () => {},
-        });
-      } else {
-        const mutateData = { postId };
-        downvoteRemoveMutate(mutateData, {
-          onSuccess: () => {},
-          onError: () => {},
-        });
-      }
+      toast.error('You already downvoted!');
     }
   };
 
@@ -281,28 +234,6 @@ const Post = ({ post }: IProps) => {
     router.push(path);
   };
 
-  // const handleComment = () => {
-  //   const pathForCreate = `/create-comment?postId=${post?._id}`;
-  //   const pathForCommentList = `/comments?postId=${post?._id}`;
-  //   if (isPremium) {
-  //     if (!isVerified) {
-  //       return toast.warning('You need to be verified first!!');
-  //     } else {
-  //       if (post?.numberOfComments > 0) {
-  //         router.push(pathForCommentList);
-  //       } else if (post?.numberOfComments < 1) {
-  //         router.push(pathForCreate);
-  //       }
-  //     }
-  //   } else {
-  //     if (post?.numberOfComments > 0) {
-  //       router.push(pathForCommentList);
-  //     } else if (post?.numberOfComments < 1) {
-  //       router.push(pathForCreate);
-  //     }
-  //   }
-  // };
-
   useEffect(() => {
     if (user) {
       refetch();
@@ -325,9 +256,7 @@ const Post = ({ post }: IProps) => {
         addFavouritePostPending ||
         removeFavouritePostPending ||
         isUpvotePending ||
-        isUpvoteRemovePending ||
-        isDownvotePending ||
-        isDownvoteRemovePending) && <LoadingWithOverlay />}
+        isDownvotePending) && <LoadingWithOverlay />}
       <li className="group relative mx-auto mb-6 max-w-4xl rounded-lg border bg-white p-6 shadow-md">
         {/* Post Image with Hover Overlay */}
         <div className="group relative aspect-[16/9] w-full overflow-hidden rounded-lg">

@@ -3,7 +3,7 @@
 import axiosInstance from '@/lib/AxiosInstance';
 
 // ==========INFO: Query=============
-// Get me
+// GET ME
 export const getMe = async () => {
   try {
     const { data } = await axiosInstance.get(`/api/v1/users/me`);
@@ -38,7 +38,7 @@ export const getFavouritePosts = async () => {
 };
 
 // ==========INFO: Mutation=============
-// Follow a user
+// FOLLOW USER
 export const followUser = async (postUserId: string) => {
   try {
     const { data } = await axiosInstance.patch(
@@ -50,7 +50,7 @@ export const followUser = async (postUserId: string) => {
   }
 };
 
-// Unfollow a user
+// UNFOLLOW USER
 export const unfollowUser = async (postUserId: string) => {
   try {
     const { data } = await axiosInstance.patch(
@@ -62,7 +62,7 @@ export const unfollowUser = async (postUserId: string) => {
   }
 };
 
-// Add Favorite a post
+// ADD TO FAVOURITE
 export const addFavoritePost = async (postId: string) => {
   try {
     const { data } = await axiosInstance.patch(
@@ -74,7 +74,7 @@ export const addFavoritePost = async (postId: string) => {
   }
 };
 
-// Remove Favorite a post
+// REMOVE FROM FAVOURITE
 export const removeFavoritePost = async (postId: string) => {
   try {
     const { data } = await axiosInstance.patch(

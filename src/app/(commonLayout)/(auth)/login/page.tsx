@@ -21,7 +21,8 @@ interface LoginFormValues {
 const Login = () => {
   const searchParams = useSearchParams();
   const router = useRouter();
-  const { setIsLoading: setIsUserLoading } = useAuth();
+  const { user, setIsLoading: setIsUserLoading } = useAuth();
+  const role = user?.role;
 
   const redirect = searchParams.get('redirect');
 
@@ -51,10 +52,15 @@ const Login = () => {
       if (redirect) {
         router.push(redirect);
       } else {
-        router.push('/');
+        if (role && role === 'admin') {
+          router.push('/admin-dashboard');
+        }
+        if (role && role === 'user') {
+          router.push('/user-dashboard');
+        }
       }
     }
-  }, [isPending, isSuccess, redirect, router]);
+  }, [isPending, isSuccess, redirect, router, role]);
 
   return (
     <>
