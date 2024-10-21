@@ -12,8 +12,6 @@ import {
 import {
   useDownvotePostMutation,
   useGetPost,
-  useRemoveDownvotePostMutation,
-  useRemoveUpvotePostMutation,
   useUpvotePostMutation,
 } from '@/hooks/post.hook';
 import QuillContent from '@/components/ui/QuillContent';
@@ -77,16 +75,8 @@ const PostDetails = () => {
   const { mutate: upvoteMutate, isPending: isUpvotePending } =
     useUpvotePostMutation();
 
-  const { mutate: upvoteRemoveMutate, isPending: isUpvoteRemovePending } =
-    useRemoveUpvotePostMutation();
-
   const { mutate: downvoteMutate, isPending: isDownvotePending } =
     useDownvotePostMutation();
-
-  const {
-    mutate: downvoteRemoveMutate,
-    isPending: isDownvoteRemovePending,
-  } = useRemoveDownvotePostMutation();
 
   // HANDLE SHARE
   const handleShare = async () => {
@@ -173,91 +163,54 @@ const PostDetails = () => {
     });
   };
 
-  // Handle upvote
+  // HANDLE UPVOTE
   const handleUpvote = (postId: string) => {
     const upvotes = post?.upvotes || [];
     const hasUpvotes = upvotes?.includes(currentUserId);
+
+    // Check if user is logged in
     if (!user) {
-      return toast.success('You need to login firs!!');
+      return toast.error('You need to login first!');
     }
 
-    if (isPremium) {
-      if (!isVerified) {
-        return toast.success('You need to be verified first!!');
-      }
-      if (!hasUpvotes) {
-        const mutateData = { postId };
-        upvoteMutate(mutateData, {
-          onSuccess: () => {},
-          onError: () => {},
-        });
-      } else {
-        const mutateData = { postId };
-        upvoteRemoveMutate(mutateData, {
-          onSuccess: () => {},
-          onError: () => {},
-        });
-      }
+    // For premium users, check if they are verified
+    if (isPremium && !isVerified) {
+      return toast.error('You need to be verified first!');
+    }
+
+    // Finally upvote the post
+    const mutateData = { postId };
+    if (!hasUpvotes) {
+      upvoteMutate(mutateData, {});
     } else {
-      if (!hasUpvotes) {
-        const mutateData = { postId };
-        upvoteMutate(mutateData, {
-          onSuccess: () => {},
-          onError: () => {},
-        });
-      } else {
-        const mutateData = { postId };
-        upvoteRemoveMutate(mutateData, {
-          onSuccess: () => {},
-          onError: () => {},
-        });
-      }
+      toast.error('You already upvoted!');
     }
   };
 
-  // Handle downvote
+  // HANDLE DOWNVOTE
   const handleDownvote = (postId: string) => {
     const downvotes = post?.downvotes || [];
     const hasDownvotes = downvotes?.includes(currentUserId);
+
+    // Check if user is logged in
     if (!user) {
       return toast.success('You need to login firs!!');
     }
 
-    if (isPremium) {
-      if (!isVerified) {
-        return toast.success('You need to be verified first!!');
-      }
-      if (!hasDownvotes) {
-        const mutateData = { postId };
-        downvoteMutate(mutateData, {
-          onSuccess: () => {},
-          onError: () => {},
-        });
-      } else {
-        const mutateData = { postId };
-        downvoteRemoveMutate(mutateData, {
-          onSuccess: () => {},
-          onError: () => {},
-        });
-      }
+    // For premium users, check if they are verified
+    if (isPremium && !isVerified) {
+      return toast.error('You need to be verified first!');
+    }
+    // Finally downvote the post
+    const mutateData = { postId };
+    if (!hasDownvotes) {
+      downvoteMutate(mutateData, {});
     } else {
-      if (!hasDownvotes) {
-        const mutateData = { postId };
-        downvoteMutate(mutateData, {
-          onSuccess: () => {},
-          onError: () => {},
-        });
-      } else {
-        const mutateData = { postId };
-        downvoteRemoveMutate(mutateData, {
-          onSuccess: () => {},
-          onError: () => {},
-        });
-      }
+      toast.error('You already downvoted!');
     }
   };
 
-  // handle comment
+  // HANDLE COMMENT
   const handleComment = () => {
     const postId = post?._id;
     if (!postId) return; // Ensure postId exists
@@ -273,12 +226,14 @@ const PostDetails = () => {
     router.push(path);
   };
 
+  // HANDLE USE EFFECT
   useEffect(() => {
     if (user) {
       refetch();
     }
   }, [user, refetch]);
 
+  // LOADING SPINNER
   if (isPostLoading || isCurrentUserLoading) {
     return (
       <div className="mt-[90px]">
@@ -287,6 +242,7 @@ const PostDetails = () => {
     );
   }
 
+  // MAIN CONTENT
   return (
     <>
       {(followPending ||
@@ -294,9 +250,7 @@ const PostDetails = () => {
         addFavouritePostPending ||
         removeFavouritePostPending ||
         isUpvotePending ||
-        isUpvoteRemovePending ||
-        isDownvotePending ||
-        isDownvoteRemovePending) && <LoadingWithOverlay />}
+        isDownvotePending) && <LoadingWithOverlay />}
       <section className="mt-[80px]">
         <div className="mx-auto max-w-5xl p-6">
           {/* Header */}

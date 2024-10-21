@@ -5,6 +5,7 @@ import {
   followUser,
   getFavouritePosts,
   getMe,
+  getTopFiveUsers,
   removeFavoritePost,
   unfollowUser,
 } from '@/actions/user.action';
@@ -21,6 +22,13 @@ export const useGetMe = () => {
     queryKey: ['GET_ME'],
     queryFn: async () => await getMe(),
     enabled: false,
+  });
+};
+
+export const useGetTopFiveUsers = () => {
+  return useQuery({
+    queryKey: ['GET_TOP_USERS'],
+    queryFn: async () => await getTopFiveUsers(),
   });
 };
 

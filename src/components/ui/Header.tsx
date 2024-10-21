@@ -63,9 +63,9 @@ const Header = () => {
   };
 
   return (
-    <header>
+    <header className="sticky top-0 z-50 border">
       {/* DESKTOP NAV */}
-      <div className="fixed top-0 z-20 hidden h-[80px] w-full items-center justify-between bg-green-50 px-10 lg:flex">
+      <div className="sticky top-0 z-20 hidden h-[80px] w-full items-center justify-between bg-green-50 px-10 lg:flex">
         {/* LOGO */}
         <Link href="/">
           <BrandLogo />

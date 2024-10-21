@@ -5,7 +5,6 @@ import {
   downvotePost,
   getAllPosts,
   getCommentsOfPost,
-  getInfinitePosts,
   getMyPosts,
   getPost,
   getTopFivePosts,
@@ -14,7 +13,6 @@ import {
   upvotePost,
 } from '@/actions/post.action';
 import {
-  useInfiniteQuery,
   useMutation,
   useQuery,
   useQueryClient,
@@ -51,29 +49,29 @@ export const useGetAllPosts = ({
 
 // GET INFINITE POSTS
 // NOTE: It doesn't work
-export const useGetInfinitePosts = ({
-  searchTerm,
-  limit,
-}: {
-  searchTerm?: string;
-  limit?: number;
-}) => {
-  return useInfiniteQuery({
-    queryKey: ['GET_INFINITE_POSTS', { searchTerm, limit }],
-    queryFn: async ({ pageParam = 3 }) => {
-      return await getInfinitePosts({
-        page: pageParam,
-        searchTerm,
-        limit,
-      });
-    },
-    initialPageParam: 1,
-    getNextPageParam: (lastPage, allPages) => {
-      const nextPage = lastPage.length ? allPages.length + 1 : undefined;
-      return nextPage;
-    },
-  });
-};
+// export const useGetInfinitePosts = ({
+//   searchTerm,
+//   limit,
+// }: {
+//   searchTerm?: string;
+//   limit?: number;
+// }) => {
+//   return useInfiniteQuery({
+//     queryKey: ['GET_INFINITE_POSTS', { searchTerm, limit }],
+//     queryFn: async ({ pageParam = 3 }) => {
+//       return await getInfinitePosts({
+//         page: pageParam,
+//         searchTerm,
+//         limit,
+//       });
+//     },
+//     initialPageParam: 1,
+//     getNextPageParam: (lastPage, allPages) => {
+//       const nextPage = lastPage.length ? allPages.length + 1 : undefined;
+//       return nextPage;
+//     },
+//   });
+// };
 
 // GET MY POSTS
 export const useGetMyPosts = ({

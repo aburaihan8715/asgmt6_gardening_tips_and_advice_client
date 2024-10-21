@@ -4,7 +4,7 @@ import TopFiveUsers from '@/components/ui/TopFiveUsers';
 
 const Home = () => {
   return (
-    <div className="mt-[80px] flex h-[calc(100vh-80px)]">
+    <div className="flex">
       {/* Left Sidebar */}
       <div className="fixed h-full w-[25%] p-5">
         <div className="h-full">
@@ -13,7 +13,8 @@ const Home = () => {
       </div>
 
       {/* Center Content */}
-      <div className="scrollbar-thumb-rounded-full scrollbar-track-rounded-full scrollbar-thumb-rounded-full scrollbar-track-rounded-full ml-[25%] mr-[25%] h-full w-[50%] overflow-y-scroll scrollbar-thin scrollbar-track-gray-200 scrollbar-thumb-gray-500">
+      {/* <div className="scrollbar-thumb-rounded-full scrollbar-track-rounded-full scrollbar-thumb-rounded-full scrollbar-track-rounded-full ml-[25%] mr-[25%] h-full w-[50%] overflow-y-scroll scrollbar-thin scrollbar-track-gray-200 scrollbar-thumb-gray-500"> */}
+      <div className="ml-[25%] mr-[25%] h-full w-[50%]">
         <ul className="space-y-10 md:p-5">
           <PostOfHome />
         </ul>

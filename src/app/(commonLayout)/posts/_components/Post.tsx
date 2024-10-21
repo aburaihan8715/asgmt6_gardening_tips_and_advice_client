@@ -40,7 +40,6 @@ const Post = ({ post }: IProps) => {
   } = useGetMe();
 
   const router = useRouter();
-
   const postUserId = post?.user?._id as string;
   const currentUser = currentUserData?.data;
   const currentUserId = currentUser?._id;
@@ -159,7 +158,7 @@ const Post = ({ post }: IProps) => {
     });
   };
 
-  // Handle upvote
+  // HANDLE UPVOTE
   const handleUpvote = (postId: string) => {
     const upvotes = post?.upvotes || [];
     const hasUpvotes = upvotes?.includes(currentUserId);
@@ -183,7 +182,7 @@ const Post = ({ post }: IProps) => {
     }
   };
 
-  // Handle downvote
+  // HANDLE DOWNVOTE
   const handleDownvote = (postId: string) => {
     const downvotes = post?.downvotes || [];
     const hasDownvotes = downvotes?.includes(currentUserId);
@@ -206,6 +205,7 @@ const Post = ({ post }: IProps) => {
     }
   };
 
+  // HANDLE VIEW DETAILS
   const handleViewDetail = () => {
     const path = `/posts/${post?._id}`;
     if (isPremium) {
@@ -218,7 +218,7 @@ const Post = ({ post }: IProps) => {
     }
   };
 
-  // handle comment
+  // HANDLE COMMENT
   const handleComment = () => {
     const postId = post?._id;
     if (!postId) return; // Ensure postId exists

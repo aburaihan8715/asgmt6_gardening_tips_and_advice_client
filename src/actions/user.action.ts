@@ -4,6 +4,18 @@ import axiosInstance from '@/lib/AxiosInstance';
 
 // ==========INFO: Query=============
 // GET ME
+export const getTopFiveUsers = async () => {
+  try {
+    const { data } = await axiosInstance.get(`/api/v1/users/top-5-users`);
+    return data;
+  } catch (error: any) {
+    console.log(error);
+    // throw new Error(error.response?.data?.message || error.message);
+    return error.response?.data?.message || error.message;
+  }
+};
+
+// GET ME
 export const getMe = async () => {
   try {
     const { data } = await axiosInstance.get(`/api/v1/users/me`);

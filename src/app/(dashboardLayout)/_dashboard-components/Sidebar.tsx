@@ -16,7 +16,10 @@ import {
 const Sidebar = () => {
   const { user } = useAuth();
   const { data: premiumStatusData } = useCheckPremiumStatus();
-  const isAbleForPremium = premiumStatusData?.data;
+  const isPremiumStatus = premiumStatusData?.data;
+  const isVerified = user?.isVerified;
+  const isAbleToBePremiumRequest = isPremiumStatus && !isVerified;
+
   const favourite = user?.favourites || [];
   const hasFavourite = favourite.length > 0;
 
@@ -143,17 +146,21 @@ const Sidebar = () => {
             </li>
           )}
 
-          {isAbleForPremium && (
-            <li className="flex">
-              <ActiveLink
-                className="flex items-center gap-2"
-                href="/user-dashboard/payment"
-              >
-                <FaDollarSign className="text-2xl md:text-base" />
-                <span className="hidden md:block">Be premium</span>
-              </ActiveLink>
-            </li>
-          )}
+          <li className="flex">
+            <ActiveLink
+              href={
+                !isAbleToBePremiumRequest ? '#' : '/user-dashboard/payment'
+              }
+              className={`flex items-center gap-2 ${
+                !isAbleToBePremiumRequest
+                  ? 'cursor-not-allowed opacity-50'
+                  : ''
+              }`}
+            >
+              <FaDollarSign className="text-2xl md:text-base" />
+              <span className="hidden md:block">Be premium</span>
+            </ActiveLink>
+          </li>
         </ul>
       )}
     </nav>

@@ -1,4 +1,5 @@
-import Header from "@/components/ui/Header";
+import Header from '@/components/ui/Header';
+import Notification from '@/components/ui/Notification';
 
 export default function CommonLayout({
   children,
@@ -7,8 +8,9 @@ export default function CommonLayout({
 }>) {
   return (
     <div>
+      <Notification />
       <Header />
-      {children}
+      <div>{children}</div>
     </div>
   );
 }

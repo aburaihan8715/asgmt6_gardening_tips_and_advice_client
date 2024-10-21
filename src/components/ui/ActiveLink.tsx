@@ -8,12 +8,14 @@ interface ActiveLinkProps {
   href: string;
   children: ReactNode;
   className?: string;
+  onClick?: () => void; // Optional onClick handler
 }
 
 const ActiveLink: React.FC<ActiveLinkProps> = ({
   href,
   children,
   className = '',
+  onClick, // Destructure the onClick prop
 }) => {
   const pathname = usePathname();
   const isActive = pathname === href;
@@ -21,7 +23,10 @@ const ActiveLink: React.FC<ActiveLinkProps> = ({
   return (
     <Link href={href}>
       <span
-        className={`border-b-2 ${isActive ? 'border-b-primary' : 'border-b-transparent'} hover:border-b-2 hover:border-b-primary ${className}`}
+        onClick={onClick} // Add the onClick event to the span
+        className={`border-b-2 ${
+          isActive ? 'border-b-primary' : 'border-b-transparent'
+        } hover:border-b-2 hover:border-b-primary ${className}`}
       >
         {children}
       </span>
