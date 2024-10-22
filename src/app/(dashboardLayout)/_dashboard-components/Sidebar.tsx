@@ -73,6 +73,16 @@ const Sidebar = () => {
               <span className="hidden md:block">All Posts</span>
             </ActiveLink>
           </li>
+
+          <li className="flex">
+            <ActiveLink
+              className="flex items-center gap-2"
+              href="/profile/favourite-posts"
+            >
+              <FaHeart className="text-2xl text-red-600 md:text-base" />
+              <span className="hidden md:block">Favourite Posts</span>
+            </ActiveLink>
+          </li>
         </ul>
       )}
 
@@ -138,7 +148,7 @@ const Sidebar = () => {
             <li className="flex">
               <ActiveLink
                 className="flex items-center gap-2"
-                href="/user-dashboard/favourite-posts"
+                href="/profile/favourite-posts"
               >
                 <FaHeart className="text-2xl text-red-600 md:text-base" />
                 <span className="hidden md:block">Favourite Posts</span>

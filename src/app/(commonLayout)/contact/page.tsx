@@ -20,8 +20,8 @@ const ContactUs = () => {
     const pageHeight = 297; // Height of A4 paper in mm
     const imgHeight = (canvas.height * imgWidth) / canvas.width;
 
-    const topMargin = 80; // Top margin in mm
-    const bottomMargin = 80; // Bottom margin in mm
+    const topMargin = 40; // Top margin in mm
+    const bottomMargin = 10; // Bottom margin in mm
     const contentHeight = pageHeight - topMargin - bottomMargin; // Available height for content
 
     let heightLeft = imgHeight;
@@ -74,7 +74,7 @@ const ContactUs = () => {
               the form to get in touch.
             </p>
           </motion.div>
-          <div className="mt-12 text-center" id="pdfContent">
+          <div className="mb-5 mt-12 text-center" id="pdfContent">
             <p className="mb-4 text-lg font-semibold">
               Email:{' '}
               <a
@@ -96,6 +96,7 @@ const ContactUs = () => {
             <p className="text-lg font-semibold">
               Office Address: 123 Example St, City, State, ZIP
             </p>
+            <div>&nbsp;</div>
           </div>
         </div>
       </section>

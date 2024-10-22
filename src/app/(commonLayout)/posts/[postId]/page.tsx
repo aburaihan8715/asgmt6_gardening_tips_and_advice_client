@@ -32,6 +32,7 @@ const PostDetails = () => {
   const params = useParams();
   const postId = params?.postId as string;
   const { user } = useAuth();
+  const role = user?.role;
 
   const {
     data: currentUserData,
@@ -165,20 +166,17 @@ const PostDetails = () => {
 
   // HANDLE UPVOTE
   const handleUpvote = (postId: string) => {
-    const upvotes = post?.upvotes || [];
-    const hasUpvotes = upvotes?.includes(currentUserId);
-
-    // Check if user is logged in
     if (!user) {
       return toast.error('You need to login first!');
     }
 
-    // For premium users, check if they are verified
-    if (isPremium && !isVerified) {
-      return toast.error('You need to be verified first!');
+    const upvotes = post?.upvotes || [];
+    const hasUpvotes = upvotes?.includes(currentUserId);
+
+    if (isPremium && !isVerified && role !== 'admin') {
+      return toast.warning('You need to be verified first!!');
     }
 
-    // Finally upvote the post
     const mutateData = { postId };
     if (!hasUpvotes) {
       upvoteMutate(mutateData, {});
@@ -189,19 +187,17 @@ const PostDetails = () => {
 
   // HANDLE DOWNVOTE
   const handleDownvote = (postId: string) => {
-    const downvotes = post?.downvotes || [];
-    const hasDownvotes = downvotes?.includes(currentUserId);
-
-    // Check if user is logged in
     if (!user) {
-      return toast.success('You need to login firs!!');
+      return toast.success('You need to login first!!');
     }
 
-    // For premium users, check if they are verified
-    if (isPremium && !isVerified) {
-      return toast.error('You need to be verified first!');
+    const downvotes = post?.downvotes || [];
+    const hasDownvotes = downvotes.includes(currentUserId);
+
+    if (isPremium && !isVerified && role !== 'admin') {
+      return toast.warning('You need to be verified first!!');
     }
-    // Finally downvote the post
+
     const mutateData = { postId };
     if (!hasDownvotes) {
       downvoteMutate(mutateData, {});
@@ -213,16 +209,19 @@ const PostDetails = () => {
   // HANDLE COMMENT
   const handleComment = () => {
     const postId = post?._id;
-    if (!postId) return; // Ensure postId exists
+    if (!postId) return;
+
     const pathForCreate = `/create-comment?postId=${postId}`;
     const pathForCommentList = `/comments?postId=${postId}`;
-
-    if (isPremium && !isVerified) {
-      return toast.warning('You need to be verified first!!');
-    }
-
     const path =
       post?.numberOfComments > 0 ? pathForCommentList : pathForCreate;
+
+    if (isPremium && !isVerified) {
+      if (role !== 'admin') {
+        return toast.warning('You need to be verified first!!');
+      }
+    }
+
     router.push(path);
   };
 

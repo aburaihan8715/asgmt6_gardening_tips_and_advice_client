@@ -69,7 +69,7 @@ const EditComment: React.FC = () => {
   return (
     <>
       {isCommentUpdatePending && <LoadingWithOverlay />}
-      <div className="mx-auto mt-[80px] max-w-2xl p-4">
+      <div className="mx-auto mt-[10px] max-w-2xl p-4">
         {/* Comment input field with form */}
         <div className="mb-6">
           <form onSubmit={handleSubmit(handleCommentSubmit)}>

@@ -50,6 +50,7 @@ const Post = ({ post }: IProps) => {
   const isOwnPost = user?._id === post?.user?._id;
   const isVerified = currentUser?.isVerified;
   const isPremium = post?.isPremium;
+  const role = user?.role;
 
   const { mutate: followMutate, isPending: followPending } =
     useFollowUserMutation();
@@ -160,20 +161,17 @@ const Post = ({ post }: IProps) => {
 
   // HANDLE UPVOTE
   const handleUpvote = (postId: string) => {
-    const upvotes = post?.upvotes || [];
-    const hasUpvotes = upvotes?.includes(currentUserId);
-
-    // Check if user is logged in
     if (!user) {
       return toast.error('You need to login first!');
     }
 
-    // For premium users, check if they are verified
-    if (isPremium && !isVerified) {
-      return toast.error('You need to be verified first!');
+    const upvotes = post?.upvotes || [];
+    const hasUpvotes = upvotes?.includes(currentUserId);
+
+    if (isPremium && !isVerified && role !== 'admin') {
+      return toast.warning('You need to be verified first!!');
     }
 
-    // Finally upvote the post
     const mutateData = { postId };
     if (!hasUpvotes) {
       upvoteMutate(mutateData, {});
@@ -184,19 +182,17 @@ const Post = ({ post }: IProps) => {
 
   // HANDLE DOWNVOTE
   const handleDownvote = (postId: string) => {
-    const downvotes = post?.downvotes || [];
-    const hasDownvotes = downvotes?.includes(currentUserId);
-
-    // Check if user is logged in
     if (!user) {
-      return toast.success('You need to login firs!!');
+      return toast.success('You need to login first!!');
     }
 
-    // For premium users, check if they are verified
-    if (isPremium && !isVerified) {
-      return toast.error('You need to be verified first!');
+    const downvotes = post?.downvotes || [];
+    const hasDownvotes = downvotes.includes(currentUserId);
+
+    if (isPremium && !isVerified && role !== 'admin') {
+      return toast.warning('You need to be verified first!!');
     }
-    // Finally downvote the post
+
     const mutateData = { postId };
     if (!hasDownvotes) {
       downvoteMutate(mutateData, {});
@@ -205,32 +201,36 @@ const Post = ({ post }: IProps) => {
     }
   };
 
-  // HANDLE VIEW DETAILS
+  // HANDLE VIEW DETAILS / PREMIUM CONTENT
   const handleViewDetail = () => {
-    const path = `/posts/${post?._id}`;
-    if (isPremium) {
-      if (!isVerified) {
+    const postId = post?._id;
+    if (!postId) return;
+    const path = `/posts/${postId}`;
+    if (isPremium && !isVerified) {
+      if (role !== 'admin') {
         return toast.warning('You need to be verified first!!');
       }
-      router.push(path);
-    } else {
-      router.push(path);
+      return router.push(path);
     }
+    router.push(path);
   };
 
   // HANDLE COMMENT
   const handleComment = () => {
     const postId = post?._id;
-    if (!postId) return; // Ensure postId exists
+    if (!postId) return;
+
     const pathForCreate = `/create-comment?postId=${postId}`;
     const pathForCommentList = `/comments?postId=${postId}`;
-
-    if (isPremium && !isVerified) {
-      return toast.warning('You need to be verified first!!');
-    }
-
     const path =
       post?.numberOfComments > 0 ? pathForCommentList : pathForCreate;
+
+    if (isPremium && !isVerified) {
+      if (role !== 'admin') {
+        return toast.warning('You need to be verified first!!');
+      }
+    }
+
     router.push(path);
   };
 
@@ -407,36 +407,6 @@ const Post = ({ post }: IProps) => {
               </button>
             </div>
           )}
-
-          {/* {user && (
-            <div>
-              {post?.numberOfComments > 0 && (
-                <button
-                  onClick={handleComment}
-                  className="flex items-center space-x-2"
-                >
-                  <FaCommentAlt className="text-gray-400" />
-                  <span className="text-gray-500">
-                    {post?.numberOfComments || 0} {''}
-                    Comments
-                  </span>
-                </button>
-              )}
-
-              {post?.numberOfComments < 1 && (
-                <button
-                  onClick={handleComment}
-                  className="flex items-center space-x-2"
-                >
-                  <FaCommentAlt className="text-gray-400" />
-                  <span className="text-gray-500">
-                    {0} {''}
-                    Comments
-                  </span>
-                </button>
-              )}
-            </div>
-          )} */}
 
           <div className="flex items-center space-x-2">
             {/* Favourite Button Icon */}
