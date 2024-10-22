@@ -1,12 +1,64 @@
 'use client';
 import SectionHeading from '@/components/ui/SectionHeading';
 import { motion } from 'framer-motion';
+import html2canvas from 'html2canvas'; // For capturing the screen content
+import jsPDF from 'jspdf'; // For generating the PDF
 
 const ContactUs = () => {
+  // Function to capture and download the page as PDF
+  const downloadPdf = async () => {
+    const input = document.getElementById('pdfContent');
+
+    if (!input) return;
+
+    const canvas = await html2canvas(input);
+    const imgData = canvas.toDataURL('image/png');
+    const pdf = new jsPDF('p', 'mm', 'a4'); // 'p' = portrait, 'mm' = millimeters, 'a4' = paper size
+
+    // Add the image to the PDF
+    const imgWidth = 210; // Width of A4 paper in mm
+    const pageHeight = 297; // Height of A4 paper in mm
+    const imgHeight = (canvas.height * imgWidth) / canvas.width;
+
+    const topMargin = 80; // Top margin in mm
+    const bottomMargin = 80; // Bottom margin in mm
+    const contentHeight = pageHeight - topMargin - bottomMargin; // Available height for content
+
+    let heightLeft = imgHeight;
+    let position = topMargin; // Start from the top margin
+
+    // Add the first page
+    pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+    heightLeft -= contentHeight; // Adjust remaining height
+
+    while (heightLeft >= 0) {
+      position = heightLeft - imgHeight + topMargin; // Adjust position for the next page
+      pdf.addPage();
+      pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+      heightLeft -= contentHeight; // Adjust height for the next page
+    }
+
+    // Save the generated PDF
+    pdf.save('ContactUs.pdf');
+  };
+
   return (
-    <div className="bg-gray-50 pt-10 text-gray-800">
+    <div className="bg-gray-50 text-gray-800">
       {/* Contact Information Section */}
-      <section className="bg-white py-20">
+      <section className="bg-white pb-20">
+        {/* Get PDF Button */}
+        <div className="flex justify-center">
+          <motion.button
+            onClick={downloadPdf} // Trigger download when clicked
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.6 }}
+            type="button"
+            className="mb-10 mt-4 rounded-md bg-green-500 px-3 py-1 text-lg font-medium text-white shadow-sm hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2"
+          >
+            Download PDF
+          </motion.button>
+        </div>
         <div className="mx-auto max-w-7xl px-6 lg:px-8">
           <motion.div
             initial={{ opacity: 0, y: 50 }}
@@ -22,7 +74,7 @@ const ContactUs = () => {
               the form to get in touch.
             </p>
           </motion.div>
-          <div className="mt-12 text-center">
+          <div className="mt-12 text-center" id="pdfContent">
             <p className="mb-4 text-lg font-semibold">
               Email:{' '}
               <a
@@ -41,7 +93,7 @@ const ContactUs = () => {
                 +1 (234) 567-890
               </a>
             </p>
-            <p className="mb-4 text-lg font-semibold">
+            <p className="text-lg font-semibold">
               Office Address: 123 Example St, City, State, ZIP
             </p>
           </div>

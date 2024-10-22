@@ -119,7 +119,8 @@ export const getTopFivePosts = async () => {
     const { data } = await axiosInstance.get('/api/v1/posts/top-5-posts');
     return data;
   } catch (error: any) {
-    throw new Error(error.response?.data?.message || error.message);
+    // throw new Error(error.response?.data?.message || error.message);
+    return error.response?.data?.message || error.message;
   }
 };
 

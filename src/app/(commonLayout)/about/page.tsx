@@ -29,7 +29,7 @@ const teamMembers = [
 
 const AboutUs = () => {
   return (
-    <div className="bg-gray-50 pt-10 text-gray-800">
+    <div className="bg-gray-50 text-gray-800">
       {/* Our Mission Section */}
       <section className="bg-white py-20">
         <div className="md:px-10">
