@@ -7,6 +7,7 @@ import {
   getCommentsOfPost,
   getMyPosts,
   getPost,
+  getPostStats,
   getTopFivePosts,
   makePostPremium,
   updatePost,
@@ -102,6 +103,14 @@ export const useGetPost = (postId: string) => {
   return useQuery({
     queryKey: ['GET_POST', postId],
     queryFn: async () => await getPost(postId),
+  });
+};
+
+// GET TOP 5
+export const useGetPostStats = () => {
+  return useQuery({
+    queryKey: ['GET_POST-STATS'],
+    queryFn: async () => await getPostStats(),
   });
 };
 

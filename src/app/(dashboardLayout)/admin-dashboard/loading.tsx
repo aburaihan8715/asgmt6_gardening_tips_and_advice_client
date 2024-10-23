@@ -1,12 +1,12 @@
 import LoadingSpinner from '@/components/ui/LoadingSpinner';
 import React from 'react';
 
-const PostGroupLoading = () => {
+const Loading = () => {
   return (
-    <div className="mt-[80px]">
+    <div>
       <LoadingSpinner />
     </div>
   );
 };
 
-export default PostGroupLoading;
+export default Loading;

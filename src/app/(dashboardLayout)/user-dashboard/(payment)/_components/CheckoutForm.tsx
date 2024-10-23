@@ -1,5 +1,6 @@
 'use client';
 import { Button } from '@/components/ui/button';
+import LoadingSpinner from '@/components/ui/LoadingSpinner';
 import LoadingWithOverlay from '@/components/ui/LoadingWithOverlay';
 import envConfig from '@/config/envConfig';
 import { useAuth } from '@/context/user.provider';
@@ -7,6 +8,7 @@ import {
   useCreatePaymentIntentMutation,
   useCreatePaymentMutation,
 } from '@/hooks/payment.hook';
+import { useGetMe } from '@/hooks/user.hook';
 import {
   useStripe,
   CardElement,
@@ -21,7 +23,13 @@ const CheckoutForm = () => {
   const [clientSecrets, setClientSecrets] = useState('');
   const [cardError, setCardError] = useState('');
   const [isCardComplete, setIsCardComplete] = useState(false);
+  const [isPaymentComplete, setIsPaymentComplete] = useState(false); // New state for tracking payment completion
   const { user } = useAuth();
+  const {
+    data: currentUserData,
+    refetch,
+    isLoading: isCurrentUserLoading,
+  } = useGetMe();
   const {
     mutate: paymentIntentMutate,
     data: intentData,
@@ -34,6 +42,7 @@ const CheckoutForm = () => {
   } = useCreatePaymentMutation();
 
   const price = Number(envConfig.subscription_price);
+  const currentUser = currentUserData?.data;
 
   const handleSubmit = async (event: FormEvent) => {
     event.preventDefault();
@@ -67,8 +76,8 @@ const CheckoutForm = () => {
         type: 'card',
         card,
         billing_details: {
-          email: user?.email || 'unknown',
-          name: user?.username || 'anonymous',
+          email: currentUser?.email || 'unknown',
+          name: currentUser?.username || 'anonymous',
         },
       });
 
@@ -91,14 +100,20 @@ const CheckoutForm = () => {
 
       if (paymentIntent?.status === 'succeeded') {
         setTransactionId(paymentIntent.id);
+        setIsPaymentComplete(true); // Mark payment as complete
+        card.clear();
         console.log('Payment succeeded:', paymentIntent);
         const paymentInfo = {
-          email: user?.email,
+          email: currentUser?.email,
           transactionId: paymentIntent.id,
           price: price,
         };
         // create payment in database
-        createPaymentMutate(paymentInfo);
+        createPaymentMutate(paymentInfo, {
+          onSuccess: () => {
+            refetch();
+          },
+        });
       }
     } catch (error) {
       console.log(error);
@@ -116,6 +131,12 @@ const CheckoutForm = () => {
   };
 
   useEffect(() => {
+    if (user) {
+      refetch();
+    }
+  }, [user, refetch]);
+
+  useEffect(() => {
     if (price) {
       paymentIntentMutate({ price });
     }
@@ -127,11 +148,14 @@ const CheckoutForm = () => {
     }
   }, [intentData]);
 
+  if (isCurrentUserLoading) {
+    return <LoadingSpinner />;
+  }
+
   return (
     <>
-      {(paymentIntentPending || isCreatePaymentPending) && (
-        <LoadingWithOverlay />
-      )}
+      {isCreatePaymentPending ||
+        (paymentIntentPending && <LoadingWithOverlay />)}
       <form onSubmit={handleSubmit}>
         <div className="overflow-hidden rounded-md border px-1 shadow">
           <CardElement
@@ -158,9 +182,15 @@ const CheckoutForm = () => {
           <Button
             className="w-full text-lg"
             type="submit"
-            disabled={!stripe || !clientSecrets || !isCardComplete}
+            disabled={
+              !stripe ||
+              !clientSecrets ||
+              !isCardComplete ||
+              isPaymentComplete
+            } // Disable if payment complete
           >
-            confirm
+            {isPaymentComplete ? 'Payment Completed' : 'Confirm'}{' '}
+            {/* Button text update */}
           </Button>
         </div>
       </form>

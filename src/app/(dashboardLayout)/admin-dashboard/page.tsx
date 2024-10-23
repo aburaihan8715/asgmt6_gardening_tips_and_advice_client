@@ -1,6 +1,7 @@
 import React from 'react';
 import Card from './_components/Card';
-import Chart from './_components/Chart';
+import UserChart from './_components/UserChart';
+import PostChart from './_components/PostChart';
 
 const AdminHome = () => {
   return (
@@ -13,9 +14,14 @@ const AdminHome = () => {
       </div>
 
       <div className="rounded border p-5">
-        <h5 className="font-semibold">user Analytics</h5>
         <div>
-          <Chart />
+          <UserChart />
+        </div>
+      </div>
+
+      <div className="rounded border p-5">
+        <div>
+          <PostChart />
         </div>
       </div>
     </div>

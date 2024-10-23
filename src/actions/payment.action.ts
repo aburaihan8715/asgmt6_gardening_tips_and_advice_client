@@ -13,7 +13,8 @@ export const createPaymentIntent = async (intentPrice: IIntent) => {
     );
     return data;
   } catch (error: any) {
-    throw new Error(error.response?.data?.message || error.message);
+    // throw new Error(error.response?.data?.message || error.message);
+    return error.response?.data?.message || error.message;
   }
 };
 
@@ -31,6 +32,7 @@ export const createPayment = async (paymentData: IPayment) => {
     );
     return data;
   } catch (error: any) {
-    throw new Error(error.response?.data?.message || error.message);
+    // throw new Error(error.response?.data?.message || error.message);
+    return error.response?.data?.message || error.message;
   }
 };

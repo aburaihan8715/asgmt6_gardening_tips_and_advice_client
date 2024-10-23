@@ -19,7 +19,8 @@ export const registerUser = async (registerData: FieldValues) => {
 
     return data;
   } catch (error: any) {
-    throw new Error(error.response?.data?.message || error.message);
+    // throw new Error(error.response?.data?.message || error.message);
+    return error.response?.data?.message || error.message;
   }
 };
 
@@ -38,7 +39,8 @@ export const loginUser = async (loginData: FieldValues) => {
 
     return data;
   } catch (error: any) {
-    throw new Error(error.response?.data?.message || error.message);
+    // throw new Error(error.response?.data?.message || error.message);
+    return error.response?.data?.message || error.message;
   }
 };
 
@@ -58,7 +60,8 @@ export const changePassword = async (passwordData: FieldValues) => {
 
     return data;
   } catch (error: any) {
-    throw new Error(error.response?.data?.message || error.message);
+    // throw new Error(error.response?.data?.message || error.message);
+    return error.response?.data?.message || error.message;
   }
 };
 
@@ -72,7 +75,8 @@ export const forgetPassword = async (emailData: FieldValues) => {
 
     return data;
   } catch (error: any) {
-    throw new Error(error.response?.data?.message || error.message);
+    // throw new Error(error.response?.data?.message || error.message);
+    return error.response?.data?.message || error.message;
   }
 };
 
@@ -97,7 +101,8 @@ export const resetPassword = async (passwordResetData: FieldValues) => {
 
     return data;
   } catch (error: any) {
-    throw new Error(error.response?.data?.message || error.message);
+    // throw new Error(error.response?.data?.message || error.message);
+    return error.response?.data?.message || error.message;
   }
 };
 
@@ -116,7 +121,8 @@ export const settingsProfile = async (profileData: FieldValues) => {
 
     return data;
   } catch (error: any) {
-    throw new Error(error.response?.data?.message || error.message);
+    // throw new Error(error.response?.data?.message || error.message);
+    return error.response?.data?.message || error.message;
   }
 };
 

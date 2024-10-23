@@ -1,12 +1,12 @@
 import LoadingSpinner from '@/components/ui/LoadingSpinner';
 import React from 'react';
 
-const CommonLayoutLoading = () => {
+const Loading = () => {
   return (
-    <div className="mt-[80px]">
+    <div>
       <LoadingSpinner />
     </div>
   );
 };
 
-export default CommonLayoutLoading;
+export default Loading;

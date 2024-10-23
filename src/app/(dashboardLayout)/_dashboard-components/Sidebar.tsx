@@ -1,7 +1,8 @@
 'use client';
 import ActiveLink from '@/components/ui/ActiveLink';
 import { useAuth } from '@/context/user.provider';
-import { useCheckPremiumStatus } from '@/hooks/user.hook';
+import { useCheckPremiumStatus, useGetMe } from '@/hooks/user.hook';
+import { useEffect } from 'react';
 import {
   FaArrowLeft,
   FaCog,
@@ -15,14 +16,36 @@ import {
 
 const Sidebar = () => {
   const { user } = useAuth();
-  const { data: premiumStatusData } = useCheckPremiumStatus();
-  const isPremiumStatus = premiumStatusData?.data;
-  const isVerified = user?.isVerified;
-  const isAbleToBePremiumRequest = isPremiumStatus && !isVerified;
+
+  const {
+    data: currentUserData,
+    refetch,
+    isLoading: isCurrentUserLoading,
+  } = useGetMe();
+
+  const { data: premiumStatusData, isLoading: statusLoading } =
+    useCheckPremiumStatus();
+
+  const currentUser = currentUserData?.data;
+  const isVerified = currentUser?.isVerified;
+  const hasPremiumStatus = premiumStatusData?.data;
+  const isAbleToBePremiumRequest = hasPremiumStatus && !isVerified;
 
   const favourite = user?.favourites || [];
   const hasFavourite = favourite.length > 0;
 
+  console.log('isAbleToBePremiumRequest', isAbleToBePremiumRequest);
+  console.log('isVerified', isVerified);
+
+  useEffect(() => {
+    if (user) {
+      refetch();
+    }
+  }, [user, refetch]);
+
+  if (isCurrentUserLoading || statusLoading) {
+    return <p>Loading...</p>;
+  }
   return (
     <nav>
       {/* ADMIN ROUTES */}
@@ -156,21 +179,30 @@ const Sidebar = () => {
             </li>
           )}
 
-          <li className="flex">
-            <ActiveLink
-              href={
-                !isAbleToBePremiumRequest ? '#' : '/user-dashboard/payment'
-              }
-              className={`flex items-center gap-2 ${
-                !isAbleToBePremiumRequest
-                  ? 'cursor-not-allowed opacity-50'
-                  : ''
-              }`}
+          {isAbleToBePremiumRequest ? (
+            <li
+              onClick={() => alert('Ten dolors will be charged!!')}
+              className="flex"
             >
-              <FaDollarSign className="text-2xl md:text-base" />
-              <span className="hidden md:block">Be premium</span>
-            </ActiveLink>
-          </li>
+              <ActiveLink
+                href="/user-dashboard/payment"
+                className="flex items-center gap-2"
+              >
+                <FaDollarSign className="text-2xl md:text-base" />
+                <span className="hidden md:block">Be premium</span>
+              </ActiveLink>
+            </li>
+          ) : (
+            <li
+              onClick={() => alert('Already premium user!!')}
+              className="flex"
+            >
+              <ActiveLink href="#" className="flex items-center gap-2">
+                <FaDollarSign className="text-2xl md:text-base" />
+                <span className="hidden md:block">Be premium</span>
+              </ActiveLink>
+            </li>
+          )}
         </ul>
       )}
     </nav>

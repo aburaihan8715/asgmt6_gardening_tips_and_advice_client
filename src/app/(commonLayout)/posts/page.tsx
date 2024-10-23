@@ -1,6 +1,5 @@
 'use client';
 import Gallery from '@/components/ui/Gallery';
-import LoadingSpinner from '@/components/ui/LoadingSpinner';
 import { useGetAllPosts } from '@/hooks/post.hook';
 import { IPost } from '@/types/postData.type';
 import { useDebouncedCallback } from 'use-debounce';
@@ -17,8 +16,8 @@ import {
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { useState } from 'react';
-import NoDataFound from '@/components/ui/NoDataFound';
 import Post from './_components/Post';
+import LoadingSpinner from '@/components/ui/LoadingSpinner';
 const Posts = () => {
   const [voteFilter, setVoteFilter] = useState('');
   const [category, setCategory] = useState('');
@@ -27,13 +26,13 @@ const Posts = () => {
     setSearchTerm(value);
   }, 1000);
 
-  const { data, isLoading, isError } = useGetAllPosts({
+  const { data: postData, isLoading: isPostDataLoading } = useGetAllPosts({
     searchTerm,
     category,
     voteFilter,
   });
-  const postData = data?.data;
-  // console.log(data);
+  const posts = postData?.data || [];
+  // console.log(posts);
 
   const handleClearFilter = () => {
     setVoteFilter('');
@@ -42,7 +41,6 @@ const Posts = () => {
   };
 
   return (
-    // <div className="flex h-[calc(100vh-80px)]">
     <div className="flex">
       <div className="fixed h-full w-[25%]">
         <div className="fixed h-full w-[25%] p-5">
@@ -111,11 +109,16 @@ const Posts = () => {
 
       <div className="ml-[25%] mr-[25%] h-full w-[50%]">
         <ul className="md:p-5">
-          {isLoading && <LoadingSpinner />}
-          {isError && <NoDataFound />}
-          {postData?.map((post: IPost) => {
-            return <Post key={post._id} post={post} />;
-          })}
+          {isPostDataLoading && <LoadingSpinner />}
+          {posts.length > 0 &&
+            posts?.map((post: IPost) => {
+              return <Post key={post._id} post={post} />;
+            })}
+          {!isPostDataLoading && !posts.length && (
+            <li className="mx-auto mb-6 max-w-4xl rounded-lg border bg-white p-6 shadow-md">
+              No Data Found
+            </li>
+          )}
         </ul>
       </div>
 

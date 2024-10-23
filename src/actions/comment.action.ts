@@ -13,7 +13,8 @@ export const updateComment = async (
     );
     return data;
   } catch (error: any) {
-    throw new Error(error.response?.data?.message || error.message);
+    // throw new Error(error.response?.data?.message || error.message);
+    return error.response?.data?.message || error.message;
   }
 };
 
@@ -25,7 +26,8 @@ export const deleteComment = async (commentId: string) => {
     );
     return data;
   } catch (error: any) {
-    throw new Error(error.response?.data?.message || error.message);
+    // throw new Error(error.response?.data?.message || error.message);
+    return error.response?.data?.message || error.message;
   }
 };
 
@@ -37,6 +39,7 @@ export const getComment = async (commentId: string) => {
     );
     return data;
   } catch (error: any) {
-    throw new Error(error.response?.data?.message || error.message);
+    // throw new Error(error.response?.data?.message || error.message);
+    return error.response?.data?.message || error.message;
   }
 };

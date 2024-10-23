@@ -6,6 +6,7 @@ import {
   getFavouritePosts,
   getMe,
   getTopFiveUsers,
+  getUserStats,
   removeFavoritePost,
   unfollowUser,
 } from '@/actions/user.action';
@@ -44,6 +45,13 @@ export const useGetFavouritePosts = () => {
   return useQuery({
     queryKey: ['GET_FAVOURITE_POSTS'],
     queryFn: async () => await getFavouritePosts(),
+  });
+};
+
+export const useGetUserStats = () => {
+  return useQuery({
+    queryKey: ['GET_USER_STATS'],
+    queryFn: async () => await getUserStats(),
   });
 };
 
