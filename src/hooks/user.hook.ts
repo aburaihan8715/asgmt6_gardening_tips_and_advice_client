@@ -3,8 +3,10 @@ import {
   addFavoritePost,
   checkPremiumStatus,
   followUser,
+  getAllUsers,
   getFavouritePosts,
   getMe,
+  getRevenue,
   getTopFiveUsers,
   getUserStats,
   removeFavoritePost,
@@ -33,6 +35,13 @@ export const useGetTopFiveUsers = () => {
   });
 };
 
+export const useGetAllUsers = () => {
+  return useQuery({
+    queryKey: ['GET_USERS'],
+    queryFn: async () => await getAllUsers(),
+  });
+};
+
 // Check premium status
 export const useCheckPremiumStatus = () => {
   return useQuery({
@@ -52,6 +61,13 @@ export const useGetUserStats = () => {
   return useQuery({
     queryKey: ['GET_USER_STATS'],
     queryFn: async () => await getUserStats(),
+  });
+};
+
+export const useGetRevenue = () => {
+  return useQuery({
+    queryKey: ['GET_REVENUE'],
+    queryFn: async () => await getRevenue(),
   });
 };
 

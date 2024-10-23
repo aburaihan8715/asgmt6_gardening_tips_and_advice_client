@@ -1,10 +1,34 @@
 import {
   createPayment,
   createPaymentIntent,
+  getAllPayments,
+  getPaymentStats,
 } from '@/actions/payment.action';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
+import {
+  useMutation,
+  useQuery,
+  useQueryClient,
+} from '@tanstack/react-query';
 import { toast } from 'sonner';
 
+// =========INFO: Query ===========
+
+// GET ALL PAYMENTS
+export const useGetAllPayments = () => {
+  return useQuery({
+    queryKey: ['GET_PAYMENTS'],
+    queryFn: async () => await getAllPayments(),
+  });
+};
+
+// GET PAYMENT STATS
+export const useGetPaymentStats = () => {
+  return useQuery({
+    queryKey: ['GET_PAYMENT-STATS'],
+    queryFn: async () => await getPaymentStats(),
+  });
+};
+// =========INFO: Mutation ===========
 // CREATE INTENT
 interface intentArgs {
   price: number;

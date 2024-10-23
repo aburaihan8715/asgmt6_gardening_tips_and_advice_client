@@ -16,7 +16,6 @@ import { toast } from 'sonner';
 export const useRegisterMutation = () => {
   const router = useRouter();
   return useMutation<any, Error, FieldValues>({
-    mutationKey: ['USER_REGISTRATION'],
     mutationFn: async (registerData) => await registerUser(registerData),
     onSuccess: () => {
       toast.success('User registration successful.');
@@ -30,7 +29,6 @@ export const useRegisterMutation = () => {
 
 export const useLoginMutation = () => {
   return useMutation<any, Error, FieldValues>({
-    mutationKey: ['USER_LOGIN'],
     mutationFn: async (loginData) => await loginUser(loginData),
     onSuccess: () => {
       toast.success('User login successful.');

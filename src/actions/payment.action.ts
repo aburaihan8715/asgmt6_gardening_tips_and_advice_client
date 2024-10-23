@@ -1,6 +1,32 @@
 'use server';
 import axiosInstance from '@/lib/AxiosInstance';
 
+// ===========INFO: Query ==========
+// GET ALL PAYMENTS
+export const getAllPayments = async () => {
+  try {
+    const { data } = await axiosInstance.get(`/api/v1/payments`);
+    return data;
+  } catch (error: any) {
+    // throw new Error(error.response?.data?.message || error.message);
+    return error.response?.data?.message || error.message;
+  }
+};
+// GET PAYMENT STATS
+export const getPaymentStats = async () => {
+  try {
+    const { data } = await axiosInstance.get(
+      `/api/v1/payments/payment-stats`,
+    );
+    return data;
+  } catch (error: any) {
+    // throw new Error(error.response?.data?.message || error.message);
+    return error.response?.data?.message || error.message;
+  }
+};
+
+// ===========INFO: Mutation ==========
+
 // CREATE PAYMENT INTENT
 interface IIntent {
   price: number;

@@ -14,6 +14,17 @@ export const getTopFiveUsers = async () => {
     return error.response?.data?.message || error.message;
   }
 };
+// GET ALL USERS
+export const getAllUsers = async () => {
+  try {
+    const { data } = await axiosInstance.get(`/api/v1/users`);
+    return data;
+  } catch (error: any) {
+    console.log(error);
+    // throw new Error(error.response?.data?.message || error.message);
+    return error.response?.data?.message || error.message;
+  }
+};
 
 // GET ME
 export const getMe = async () => {
@@ -45,6 +56,28 @@ export const getFavouritePosts = async () => {
     const { data } = await axiosInstance.get(
       `/api/v1/users/favourite-posts`,
     );
+    return data;
+  } catch (error: any) {
+    // throw new Error(error.response?.data?.message || error.message);
+    return error.response?.data?.message || error.message;
+  }
+};
+
+// GET USERS STATS
+export const getUserStats = async () => {
+  try {
+    const { data } = await axiosInstance.get(`/api/v1/users/user-stats`);
+    return data;
+  } catch (error: any) {
+    // throw new Error(error.response?.data?.message || error.message);
+    return error.response?.data?.message || error.message;
+  }
+};
+
+// GET REVENUE
+export const getRevenue = async () => {
+  try {
+    const { data } = await axiosInstance.get(`/api/v1/users/revenue`);
     return data;
   } catch (error: any) {
     // throw new Error(error.response?.data?.message || error.message);
@@ -97,17 +130,6 @@ export const removeFavoritePost = async (postId: string) => {
     const { data } = await axiosInstance.patch(
       `/api/v1/users/${postId}/remove-favourites`,
     );
-    return data;
-  } catch (error: any) {
-    // throw new Error(error.response?.data?.message || error.message);
-    return error.response?.data?.message || error.message;
-  }
-};
-
-// REMOVE FROM FAVOURITE
-export const getUserStats = async () => {
-  try {
-    const { data } = await axiosInstance.get(`/api/v1/users/user-stats`);
     return data;
   } catch (error: any) {
     // throw new Error(error.response?.data?.message || error.message);

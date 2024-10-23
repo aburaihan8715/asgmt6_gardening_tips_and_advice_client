@@ -23,17 +23,16 @@ const currentYear = date.getFullYear();
 const previousYear = currentYear - 1;
 interface IChartData {
   month: number;
-  posts: number;
+  numberOfPosts: number;
 }
 
 const PostChart = () => {
-  const { data: userStatsData } = useGetPostStats();
-  const data: IChartData[] = userStatsData?.data?.map(
-    (item: IChartData) => ({
-      ...item,
-      month: monthNames[item.month - 1],
-    }),
-  );
+  const { data: postStats } = useGetPostStats();
+  const data: IChartData[] = postStats?.data?.map((item: IChartData) => ({
+    ...item,
+    month: monthNames[item.month - 1],
+    posts: item.numberOfPosts,
+  }));
 
   return (
     <div>

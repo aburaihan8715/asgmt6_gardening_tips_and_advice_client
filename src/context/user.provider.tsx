@@ -8,7 +8,6 @@ import {
   useState,
 } from 'react';
 
-// import { getCurrentUser } from '../actions/auth.action';
 import { IUser } from '@/types';
 import { getCurrentUser } from '@/actions/auth.action';
 
@@ -29,14 +28,12 @@ const UserProvider = ({ children }: { children: ReactNode }) => {
 
   const handleUser = async () => {
     const user = await getCurrentUser();
-
     setUser(user);
     setIsLoading(false);
   };
 
   useEffect(() => {
     handleUser();
-    // DOUBT: should be rerender based on user state
   }, [isLoading]);
 
   return (

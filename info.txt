@@ -28,6 +28,7 @@ https://via.placeholder.com/400x200
 1. delete comment
 2. infinite scrolling
 3. edit comment not implemented
+4. after login not redirecting
 
 
 

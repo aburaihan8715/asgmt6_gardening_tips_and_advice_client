@@ -106,7 +106,7 @@ export const useGetPost = (postId: string) => {
   });
 };
 
-// GET TOP 5
+// GET POST STATS
 export const useGetPostStats = () => {
   return useQuery({
     queryKey: ['GET_POST-STATS'],

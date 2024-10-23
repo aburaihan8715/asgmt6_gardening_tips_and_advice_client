@@ -4,45 +4,9 @@ import { IUser } from '@/types';
 import Image from 'next/image';
 import React from 'react';
 
-// Define the user type
-// type User = {
-//   id: number;
-//   name: string;
-//   email: string;
-//   userType: 'Basic' | 'Premium';
-//   profilePicture: string;
-// };
-
-// Dummy user data
-// const users: User[] = [
-//   {
-//     id: 1,
-//     name: 'Alice Johnson',
-//     email: 'alice.johnson@example.com',
-//     userType: 'Premium',
-//     profilePicture: 'https://randomuser.me/api/portraits/women/44.jpg',
-//   },
-//   {
-//     id: 2,
-//     name: 'Bob Smith',
-//     email: 'bob.smith@example.com',
-//     userType: 'Basic',
-//     profilePicture: 'https://randomuser.me/api/portraits/men/32.jpg',
-//   },
-//   {
-//     id: 3,
-//     name: 'Clara Bennett',
-//     email: 'clara.bennett@example.com',
-//     userType: 'Premium',
-//     profilePicture: 'https://randomuser.me/api/portraits/women/22.jpg',
-//   },
-// ];
-
-// UserList component
 const TopFiveUsers = () => {
   const { data: userData, isLoading } = useGetTopFiveUsers();
   const users = userData?.data || [];
-  console.log(userData?.data);
 
   return (
     <div className="rounded p-1">
