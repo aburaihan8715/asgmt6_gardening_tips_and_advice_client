@@ -267,6 +267,7 @@ const Post = ({ post }: IProps) => {
                 : 'https://cdn.pixabay.com/photo/2017/11/10/04/47/image-2935360_1280.png'
             }
             alt={`banner image`}
+            priority={false}
             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
             fill
             className="rounded-lg object-cover transition-transform duration-300 group-hover:scale-105"
