@@ -38,10 +38,10 @@ export const useCreatePaymentIntentMutation = () => {
     mutationFn: async (intentData) =>
       await createPaymentIntent(intentData),
     onSuccess: () => {
-      console.log('Payment intent created successfully!!');
+      toast.success('Payment intent created successfully!!');
     },
     onError: (error: any) => {
-      console.log(error);
+      toast.error(error.message || 'Failed to create intent');
     },
   });
 };

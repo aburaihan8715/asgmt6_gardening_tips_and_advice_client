@@ -2,6 +2,7 @@
 import {
   addFavoritePost,
   checkPremiumStatus,
+  deleteUser,
   followUser,
   getAllUsers,
   getFavouritePosts,
@@ -35,10 +36,17 @@ export const useGetTopFiveUsers = () => {
   });
 };
 
-export const useGetAllUsers = () => {
+export const useGetAllUsers = ({
+  page,
+  limit,
+}: {
+  page?: number;
+  limit?: number;
+}) => {
   return useQuery({
-    queryKey: ['GET_USERS'],
-    queryFn: async () => await getAllUsers(),
+    queryKey: ['GET_USERS', { page, limit }],
+    queryFn: async () => await getAllUsers({ page, limit }),
+    // gcTime: 0,
   });
 };
 
@@ -195,6 +203,30 @@ export const useRemoveFavoritePostMutation = () => {
 
     onError: (error: any) => {
       toast.error(error.message);
+    },
+  });
+};
+
+// DELETE USER
+export const useDeleteUserMutation = () => {
+  const queryClient = useQueryClient();
+  return useMutation<unknown, Error, string>({
+    mutationFn: async (id) => await deleteUser(id),
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ['GET_USERS'],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ['GET_TOP_POSTS'],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ['GET_ME'],
+      });
+      toast.success('User deleted successfully.');
+    },
+    onError: (error) => {
+      console.error(error);
+      toast.error('Failed to delete the user: ' + error.message);
     },
   });
 };

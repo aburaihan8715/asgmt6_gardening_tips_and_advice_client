@@ -51,7 +51,6 @@ const Login = () => {
   };
 
   useEffect(() => {
-    console.log('user:', user);
     if (!isPending && isSuccess && !isUserLoading && user) {
       if (redirect) {
         router.push(redirect);

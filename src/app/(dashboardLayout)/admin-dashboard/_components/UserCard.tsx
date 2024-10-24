@@ -5,7 +5,7 @@ import { FaUsers } from 'react-icons/fa';
 import { useGetAllUsers } from '@/hooks/user.hook';
 
 const UserCard = () => {
-  const { data, isLoading } = useGetAllUsers();
+  const { data, isLoading } = useGetAllUsers({});
   const users = data?.data || [];
   const count = users.length || 0;
 

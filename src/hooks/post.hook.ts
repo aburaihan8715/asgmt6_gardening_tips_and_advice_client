@@ -3,6 +3,7 @@ import {
   createPost,
   deletePost,
   downvotePost,
+  fetchPosts,
   getAllPosts,
   getCommentsOfPost,
   getMyPosts,
@@ -14,6 +15,7 @@ import {
   upvotePost,
 } from '@/actions/post.action';
 import {
+  useInfiniteQuery,
   useMutation,
   useQuery,
   useQueryClient,
@@ -50,29 +52,37 @@ export const useGetAllPosts = ({
 
 // GET INFINITE POSTS
 // NOTE: It doesn't work
-// export const useGetInfinitePosts = ({
-//   searchTerm,
-//   limit,
-// }: {
-//   searchTerm?: string;
-//   limit?: number;
-// }) => {
-//   return useInfiniteQuery({
-//     queryKey: ['GET_INFINITE_POSTS', { searchTerm, limit }],
-//     queryFn: async ({ pageParam = 3 }) => {
-//       return await getInfinitePosts({
-//         page: pageParam,
-//         searchTerm,
-//         limit,
-//       });
-//     },
-//     initialPageParam: 1,
-//     getNextPageParam: (lastPage, allPages) => {
-//       const nextPage = lastPage.length ? allPages.length + 1 : undefined;
-//       return nextPage;
-//     },
-//   });
-// };
+
+export const useGetInfinitePosts = ({
+  searchTerm,
+  category,
+  voteFilter,
+  limit = 2,
+}: {
+  searchTerm?: string;
+  category?: string;
+  voteFilter?: string;
+  limit?: number;
+}) => {
+  return useInfiniteQuery({
+    queryKey: ['posts', { searchTerm, category, voteFilter }],
+    queryFn: async ({ pageParam = 1 }) => {
+      const { data, meta } = await fetchPosts({
+        pageParam,
+        searchTerm,
+        category,
+        voteFilter,
+        limit,
+      });
+      return { data, meta };
+    },
+    initialPageParam: 0,
+    getNextPageParam: (lastPage) => {
+      const hasNextPage = lastPage.meta.hasNextPage;
+      return hasNextPage ? lastPage.meta.page + 1 : undefined;
+    },
+  });
+};
 
 // GET MY POSTS
 export const useGetMyPosts = ({
@@ -323,7 +333,7 @@ export const useGetCommentsOfPost = ({
   });
 };
 
-// CREATE
+// CREATE POST
 export const useCreatePostMutation = () => {
   const queryClient = useQueryClient();
   const router = useRouter();
@@ -338,7 +348,6 @@ export const useCreatePostMutation = () => {
       router.push('/user-dashboard/my-posts');
     },
     onError: (error) => {
-      console.log(error);
       toast.error(error.message);
     },
   });

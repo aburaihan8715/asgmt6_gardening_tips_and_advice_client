@@ -36,8 +36,6 @@ export const getAllPosts = async ({
 
     if (params.toString()) queryString += `?${params.toString()}`;
 
-    console.log('queryString🔥🔥', queryString);
-
     const { data } = await axiosInstance.get(queryString);
     return data;
   } catch (error: any) {
@@ -48,35 +46,42 @@ export const getAllPosts = async ({
 
 // GET INFINITE POSTS.
 // NOTE: It does not work
-export const getInfinitePosts = async ({
-  searchTerm,
-  limit = 10,
-  page,
+export const fetchPosts = async ({
+  pageParam = 1,
+  searchTerm = '',
+  category = '',
+  voteFilter = '',
+  limit = 2,
 }: {
+  pageParam?: number;
   searchTerm?: string;
-  page?: number;
+  category?: string;
+  voteFilter?: string;
   limit?: number;
 }) => {
-  try {
-    let queryString = '/api/v1/posts';
+  // Construct the query string
+  const params = new URLSearchParams();
+  params.append('page', String(pageParam));
+  params.append('limit', String(limit));
 
-    const params = new URLSearchParams();
+  if (searchTerm) params.append('searchTerm', searchTerm);
+  if (category) params.append('category', category);
+  if (voteFilter) params.append('voteFilter', voteFilter);
 
-    if (searchTerm) params.append('searchTerm', searchTerm);
-    if (page) params.append('page', String(page));
-    if (limit) params.append('limit', String(limit));
+  const res = await fetch(
+    `http://localhost:5000/api/v1/posts?${params.toString()}`,
+  );
 
-    if (params.toString()) queryString += `?${params.toString()}`;
-
-    // console.log('🔥params====🔥', params);
-
-    const { data } = await axiosInstance.get(queryString);
-
-    return data;
-  } catch (error: any) {
-    // throw new Error(error.response?.data?.message || error.message);
-    return error.response?.data?.message || error.message;
+  if (!res.ok) {
+    throw new Error(`Error: ${res.statusText}`);
   }
+
+  const data = await res.json();
+
+  return {
+    data: data.data,
+    meta: data.meta,
+  };
 };
 
 // GET MY POSTS

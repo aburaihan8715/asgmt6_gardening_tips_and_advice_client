@@ -9,18 +9,31 @@ export const getTopFiveUsers = async () => {
     const { data } = await axiosInstance.get(`/api/v1/users/top-5-users`);
     return data;
   } catch (error: any) {
-    console.log(error);
     // throw new Error(error.response?.data?.message || error.message);
     return error.response?.data?.message || error.message;
   }
 };
 // GET ALL USERS
-export const getAllUsers = async () => {
+export const getAllUsers = async ({
+  page,
+  limit,
+}: {
+  page?: number;
+  limit?: number;
+}) => {
   try {
-    const { data } = await axiosInstance.get(`/api/v1/users`);
+    let queryString = '/api/v1/users';
+
+    const params = new URLSearchParams();
+
+    if (page) params.append('page', page.toString());
+    if (limit) params.append('limit', limit.toString());
+
+    if (params.toString()) queryString += `?${params.toString()}`;
+
+    const { data } = await axiosInstance.get(queryString);
     return data;
   } catch (error: any) {
-    console.log(error);
     // throw new Error(error.response?.data?.message || error.message);
     return error.response?.data?.message || error.message;
   }
@@ -130,6 +143,17 @@ export const removeFavoritePost = async (postId: string) => {
     const { data } = await axiosInstance.patch(
       `/api/v1/users/${postId}/remove-favourites`,
     );
+    return data;
+  } catch (error: any) {
+    // throw new Error(error.response?.data?.message || error.message);
+    return error.response?.data?.message || error.message;
+  }
+};
+
+// DELETE USER
+export const deleteUser = async (userId: string) => {
+  try {
+    const { data } = await axiosInstance.delete(`/api/v1/users/${userId}`);
     return data;
   } catch (error: any) {
     // throw new Error(error.response?.data?.message || error.message);

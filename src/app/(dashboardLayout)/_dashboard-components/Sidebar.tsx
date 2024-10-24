@@ -34,9 +34,6 @@ const Sidebar = () => {
   const favourite = user?.favourites || [];
   const hasFavourite = favourite.length > 0;
 
-  console.log('isAbleToBePremiumRequest', isAbleToBePremiumRequest);
-  console.log('isVerified', isVerified);
-
   useEffect(() => {
     if (user) {
       refetch();
@@ -104,6 +101,16 @@ const Sidebar = () => {
             >
               <FaHeart className="text-2xl text-red-600 md:text-base" />
               <span className="hidden md:block">Favourite Posts</span>
+            </ActiveLink>
+          </li>
+
+          <li className="flex">
+            <ActiveLink
+              className="flex items-center gap-2"
+              href="/admin-dashboard/all-users"
+            >
+              <FaFileAlt className="text-2xl md:text-base" />
+              <span className="hidden md:block">All Users</span>
             </ActiveLink>
           </li>
         </ul>
