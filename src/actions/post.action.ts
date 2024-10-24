@@ -45,13 +45,12 @@ export const getAllPosts = async ({
 };
 
 // GET INFINITE POSTS.
-// NOTE: It does not work
-export const fetchPosts = async ({
+export const getInfinitePosts = async ({
   pageParam = 1,
   searchTerm = '',
   category = '',
   voteFilter = '',
-  limit = 2,
+  limit = 5,
 }: {
   pageParam?: number;
   searchTerm?: string;
@@ -59,29 +58,33 @@ export const fetchPosts = async ({
   voteFilter?: string;
   limit?: number;
 }) => {
-  // Construct the query string
-  const params = new URLSearchParams();
-  params.append('page', String(pageParam));
-  params.append('limit', String(limit));
+  try {
+    // Construct the query string
+    let queryString = '/api/v1/posts';
+    const params = new URLSearchParams();
 
-  if (searchTerm) params.append('searchTerm', searchTerm);
-  if (category) params.append('category', category);
-  if (voteFilter) params.append('voteFilter', voteFilter);
+    params.append('page', String(pageParam));
+    params.append('limit', String(limit));
 
-  const res = await fetch(
-    `http://localhost:5000/api/v1/posts?${params.toString()}`,
-  );
+    if (searchTerm) params.append('searchTerm', searchTerm);
+    if (category) params.append('category', category);
+    if (voteFilter && voteFilter === 'upvotesCount') {
+      params.append('sort', '-upvotesCount');
+    } else if (voteFilter && voteFilter === 'downvotesCount') {
+      params.append('sort', '-downvotesCount');
+    }
 
-  if (!res.ok) {
-    throw new Error(`Error: ${res.statusText}`);
+    if (params.toString()) queryString += `?${params.toString()}`;
+
+    const { data } = await axiosInstance.get(queryString);
+
+    return {
+      data: data.data,
+      meta: data.meta,
+    };
+  } catch (error: any) {
+    return error.response?.data?.message || error.message;
   }
-
-  const data = await res.json();
-
-  return {
-    data: data.data,
-    meta: data.meta,
-  };
 };
 
 // GET MY POSTS

@@ -3,9 +3,9 @@ import {
   createPost,
   deletePost,
   downvotePost,
-  fetchPosts,
   getAllPosts,
   getCommentsOfPost,
+  getInfinitePosts,
   getMyPosts,
   getPost,
   getPostStats,
@@ -51,13 +51,11 @@ export const useGetAllPosts = ({
 };
 
 // GET INFINITE POSTS
-// NOTE: It doesn't work
-
 export const useGetInfinitePosts = ({
   searchTerm,
   category,
   voteFilter,
-  limit = 2,
+  limit = 5,
 }: {
   searchTerm?: string;
   category?: string;
@@ -65,9 +63,9 @@ export const useGetInfinitePosts = ({
   limit?: number;
 }) => {
   return useInfiniteQuery({
-    queryKey: ['posts', { searchTerm, category, voteFilter }],
+    queryKey: ['posts', { searchTerm, category, voteFilter, limit }],
     queryFn: async ({ pageParam = 1 }) => {
-      const { data, meta } = await fetchPosts({
+      const { data, meta } = await getInfinitePosts({
         pageParam,
         searchTerm,
         category,
@@ -78,8 +76,8 @@ export const useGetInfinitePosts = ({
     },
     initialPageParam: 0,
     getNextPageParam: (lastPage) => {
-      const hasNextPage = lastPage.meta.hasNextPage;
-      return hasNextPage ? lastPage.meta.page + 1 : undefined;
+      const hasNextPage = lastPage?.meta?.hasNextPage;
+      return hasNextPage ? lastPage?.meta?.page + 1 : undefined;
     },
   });
 };
