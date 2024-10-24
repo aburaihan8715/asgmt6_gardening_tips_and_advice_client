@@ -17,12 +17,6 @@ const PostOfHome = () => {
   const { isPending: followPending } = useFollowUserMutation();
   const { isPending: unfollowPending } = useUnfollowUserMutation();
 
-  // useEffect(() => {
-  //   if (data && !data?.success) {
-  //     toast.error(data?.message as string);
-  //   }
-  // }, [data]);
-
   if (isLoading) {
     return <LoadingSpinner />;
   }

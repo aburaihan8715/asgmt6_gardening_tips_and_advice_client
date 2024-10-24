@@ -92,7 +92,7 @@ const MyPosts = () => {
             height={48}
             src={image || 'https://via.placeholder.com/400x400'}
             alt="Payment"
-            className="h-12 w-12 rounded object-cover"
+            className="h-10 w-10 rounded object-cover md:h-12 md:w-12"
           />
         );
       },
@@ -103,7 +103,9 @@ const MyPosts = () => {
       accessorKey: 'title',
       header: 'Title',
       cell: ({ row }) => (
-        <div className="capitalize">{row.getValue('title')}</div>
+        <div className="text-nowrap capitalize">
+          {row.getValue('title')}
+        </div>
       ),
     },
 
@@ -212,7 +214,7 @@ const MyPosts = () => {
   return (
     <>
       <div className="w-full">
-        <div className="flex items-center py-4">
+        <div className="flex items-center gap-2 py-4">
           <Input
             placeholder="Filter title..."
             value={

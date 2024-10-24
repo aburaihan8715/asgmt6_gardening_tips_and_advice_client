@@ -143,7 +143,7 @@ const MyPosts = () => {
             height={48}
             src={image || 'https://via.placeholder.com/400x400'}
             alt="Payment"
-            className="h-12 w-12 rounded object-cover"
+            className="h-10 w-10 rounded object-cover md:h-12 md:w-12"
           />
         );
       },
@@ -154,7 +154,9 @@ const MyPosts = () => {
       accessorKey: 'title',
       header: 'Title',
       cell: ({ row }) => (
-        <div className="capitalize">{row.getValue('title')}</div>
+        <div className="text-nowrap capitalize">
+          {row.getValue('title')}
+        </div>
       ),
     },
 
@@ -278,7 +280,7 @@ const MyPosts = () => {
         <LoadingWithOverlay />
       )}
       <div className="w-full">
-        <div className="flex items-center py-4">
+        <div className="flex flex-col items-center gap-3 py-4 md:flex-row">
           <Input
             placeholder="Filter title..."
             value={
@@ -291,8 +293,11 @@ const MyPosts = () => {
           />
 
           <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="outline" className="ml-auto">
+            <DropdownMenuTrigger asChild className="border">
+              <Button
+                variant="outline"
+                className="ml-auto w-full md:w-auto"
+              >
                 Columns <ChevronDownIcon className="ml-2 h-4 w-4" />
               </Button>
             </DropdownMenuTrigger>

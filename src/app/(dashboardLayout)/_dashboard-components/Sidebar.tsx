@@ -50,7 +50,7 @@ const Sidebar = () => {
         <ul className="flex flex-col gap-4">
           <li className="flex">
             <ActiveLink className="flex items-center gap-2" href="/">
-              <FaArrowLeft className="text-2xl md:text-base" />
+              <FaArrowLeft className="text-2xl text-gray-600 md:text-base" />
               <span className="hidden md:block">Back</span>
             </ActiveLink>
           </li>
@@ -60,7 +60,7 @@ const Sidebar = () => {
               className="flex items-center gap-2"
               href="/admin-dashboard"
             >
-              <FaHome className="text-2xl md:text-base" />
+              <FaHome className="text-2xl text-gray-600 md:text-base" />
               <span className="hidden md:block">Admin Home</span>
             </ActiveLink>
           </li>
@@ -69,7 +69,7 @@ const Sidebar = () => {
               className="flex items-center gap-2"
               href="/profile/change-password"
             >
-              <FaLock className="text-2xl md:text-base" />
+              <FaLock className="text-2xl text-gray-600 md:text-base" />
               <span className="hidden md:block">Change Password</span>
             </ActiveLink>
           </li>
@@ -79,7 +79,7 @@ const Sidebar = () => {
               className="flex items-center gap-2"
               href="/profile/settings-profile"
             >
-              <FaCog className="text-2xl md:text-base" />
+              <FaCog className="text-2xl text-gray-600 md:text-base" />
               <span className="hidden md:block">Settings Profile</span>
             </ActiveLink>
           </li>
@@ -89,7 +89,7 @@ const Sidebar = () => {
               className="flex items-center gap-2"
               href="/admin-dashboard/all-posts"
             >
-              <FaFileAlt className="text-2xl md:text-base" />
+              <FaFileAlt className="text-2xl text-gray-600 md:text-base" />
               <span className="hidden md:block">All Posts</span>
             </ActiveLink>
           </li>
@@ -99,7 +99,7 @@ const Sidebar = () => {
               className="flex items-center gap-2"
               href="/profile/favourite-posts"
             >
-              <FaHeart className="text-2xl text-red-600 md:text-base" />
+              <FaHeart className="text-2xl text-gray-600 text-red-600 md:text-base" />
               <span className="hidden md:block">Favourite Posts</span>
             </ActiveLink>
           </li>
@@ -109,7 +109,7 @@ const Sidebar = () => {
               className="flex items-center gap-2"
               href="/admin-dashboard/all-users"
             >
-              <FaFileAlt className="text-2xl md:text-base" />
+              <FaFileAlt className="text-2xl text-gray-600 md:text-base" />
               <span className="hidden md:block">All Users</span>
             </ActiveLink>
           </li>
@@ -121,7 +121,7 @@ const Sidebar = () => {
         <ul className="flex flex-col gap-4">
           <li className="flex">
             <ActiveLink className="flex items-center gap-2" href="/">
-              <FaArrowLeft className="text-2xl md:text-base" />
+              <FaArrowLeft className="text-2xl text-gray-600 md:text-base" />
               <span className="hidden md:block">Back</span>
             </ActiveLink>
           </li>
@@ -130,7 +130,7 @@ const Sidebar = () => {
               className="flex items-center gap-2"
               href="/user-dashboard"
             >
-              <FaHome className="text-2xl md:text-base" />
+              <FaHome className="text-2xl text-gray-600 md:text-base" />
               <span className="hidden md:block">User Home</span>
             </ActiveLink>
           </li>
@@ -140,7 +140,7 @@ const Sidebar = () => {
               className="flex items-center gap-2"
               href="/profile/change-password"
             >
-              <FaLock className="text-2xl md:text-base" />
+              <FaLock className="text-2xl text-gray-600 md:text-base" />
               <span className="hidden md:block">Change Password</span>
             </ActiveLink>
           </li>
@@ -149,7 +149,7 @@ const Sidebar = () => {
               className="flex items-center gap-2"
               href="/profile/settings-profile"
             >
-              <FaCog className="text-2xl md:text-base" />
+              <FaCog className="text-2xl text-gray-600 md:text-base" />
               <span className="hidden md:block">Settings Profile</span>
             </ActiveLink>
           </li>
@@ -159,7 +159,7 @@ const Sidebar = () => {
               className="flex items-center gap-2"
               href="/user-dashboard/create-post"
             >
-              <FaPlus className="text-2xl md:text-base" />
+              <FaPlus className="text-2xl text-gray-600 md:text-base" />
               <span className="hidden md:block">Create Post</span>
             </ActiveLink>
           </li>
@@ -169,7 +169,7 @@ const Sidebar = () => {
               className="flex items-center gap-2"
               href="/user-dashboard/my-posts"
             >
-              <FaFileAlt className="text-2xl md:text-base" />
+              <FaFileAlt className="text-2xl text-gray-600 md:text-base" />
               <span className="hidden md:block">My Posts</span>
             </ActiveLink>
           </li>
@@ -180,7 +180,7 @@ const Sidebar = () => {
                 className="flex items-center gap-2"
                 href="/profile/favourite-posts"
               >
-                <FaHeart className="text-2xl text-red-600 md:text-base" />
+                <FaHeart className="text-2xl text-gray-600 text-red-600 md:text-base" />
                 <span className="hidden md:block">Favourite Posts</span>
               </ActiveLink>
             </li>
@@ -195,7 +195,7 @@ const Sidebar = () => {
                 href="/user-dashboard/payment"
                 className="flex items-center gap-2"
               >
-                <FaDollarSign className="text-2xl md:text-base" />
+                <FaDollarSign className="text-2xl text-gray-600 md:text-base" />
                 <span className="hidden md:block">Be premium</span>
               </ActiveLink>
             </li>
@@ -205,7 +205,7 @@ const Sidebar = () => {
               className="flex"
             >
               <ActiveLink href="#" className="flex items-center gap-2">
-                <FaDollarSign className="text-2xl md:text-base" />
+                <FaDollarSign className="text-2xl text-gray-600 md:text-base" />
                 <span className="hidden md:block">Be premium</span>
               </ActiveLink>
             </li>

@@ -48,7 +48,7 @@ const ChangePassword = () => {
   return (
     <>
       {isPending && <LoadingWithOverlay />}
-      <div className="mx-auto mt-12 rounded-md bg-white p-8">
+      <div className="mx-auto mt-12 rounded-md bg-white md:p-8">
         <div className="flex justify-center">
           <SectionHeading heading="Change Password" />
         </div>
@@ -119,7 +119,7 @@ const ChangePassword = () => {
           <div className="text-right">
             <button
               type="submit"
-              className="rounded bg-green-500 px-4 py-2 text-white hover:bg-green-600"
+              className="w-full rounded bg-green-500 px-4 py-2 text-white hover:bg-green-600 md:w-fit"
             >
               Change Password
             </button>

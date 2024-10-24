@@ -41,9 +41,9 @@ const Register = () => {
   return (
     <>
       {isPending && <LoadingWithOverlay />}
-      <div className="flex min-h-screen justify-center bg-gray-50 py-12 sm:px-6 lg:px-8">
+      <div className="mt-[80px] flex min-h-screen justify-center bg-gray-50 sm:px-6 md:mt-0 md:py-12 lg:px-8">
         <motion.div
-          className="w-full max-w-md rounded bg-white p-8 shadow"
+          className="w-full max-w-md rounded bg-white p-1 shadow md:p-8"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}

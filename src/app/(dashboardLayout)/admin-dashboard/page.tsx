@@ -17,19 +17,19 @@ const AdminHome = () => {
         <RevenueCard />
       </div>
 
-      <div className="rounded border p-5">
+      <div className="rounded border p-1 md:p-5">
         <div>
           <UserChart />
         </div>
       </div>
 
-      <div className="rounded border p-5">
+      <div className="rounded border p-1 md:p-5">
         <div>
           <PostChart />
         </div>
       </div>
 
-      <div className="rounded border p-5">
+      <div className="rounded border p-1 md:p-5">
         <div>
           <PaymentChart />
         </div>

@@ -18,6 +18,7 @@ const Gallery = () => {
           <Image
             src={`${images[0] || 'https://cdn.pixabay.com/photo/2017/11/10/04/47/image-2935360_1280.png'}`}
             alt="Top Image"
+            priority={false}
             width={1600}
             height={900}
             className="h-full w-full rounded-lg object-cover shadow-md"
@@ -30,6 +31,7 @@ const Gallery = () => {
             src={`${images[1] || 'https://cdn.pixabay.com/photo/2017/11/10/04/47/image-2935360_1280.png'}`}
             alt="Middle Left Image"
             width={800}
+            priority={false}
             height={900}
             className="h-full w-full rounded-lg object-cover shadow-md"
           />
@@ -40,6 +42,7 @@ const Gallery = () => {
             alt="Middle Right Image"
             width={800}
             height={900}
+            priority={false}
             className="aspect-[16/9] h-full w-full rounded-lg object-cover shadow-md"
           />
         </div>
@@ -51,6 +54,7 @@ const Gallery = () => {
             alt="Bottom Image"
             width={1600}
             height={900}
+            priority={false}
             className="h-full w-full rounded-lg object-cover shadow-md"
           />
         </div>

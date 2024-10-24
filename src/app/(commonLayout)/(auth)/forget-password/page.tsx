@@ -31,8 +31,8 @@ const ForgotPassword: React.FC = () => {
   return (
     <>
       {isPending && <LoadingWithOverlay />}
-      <div className="flex h-screen items-center justify-center bg-gray-100">
-        <div className="w-full max-w-md rounded-lg bg-white p-8 shadow-md">
+      <div className="mt-[80px] flex h-screen items-center justify-center bg-gray-100 md:mt-0">
+        <div className="w-full max-w-md rounded-lg bg-white p-2 shadow-md md:p-8">
           <h2 className="mb-6 text-center text-2xl font-bold">
             Forget Password
           </h2>

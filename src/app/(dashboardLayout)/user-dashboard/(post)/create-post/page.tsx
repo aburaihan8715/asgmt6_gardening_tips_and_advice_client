@@ -108,8 +108,8 @@ const CreatePost = () => {
   return (
     <>
       {isPending && <LoadingWithOverlay />}
-      <div className="container mx-auto p-5">
-        <h1 className="mb-5 text-2xl font-bold text-green-700">
+      <div className="container mx-auto md:p-5">
+        <h1 className="mb-5 text-xl font-bold text-green-700 md:text-2xl">
           Create a New Post
         </h1>
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
@@ -190,7 +190,7 @@ const CreatePost = () => {
           {/* Image Input with Preview */}
           <div>
             {imagePreview ? (
-              <div className="relative h-[400px] w-full">
+              <div className="relative h-[150px] w-full md:h-[400px]">
                 <Image
                   priority={true}
                   src={imagePreview}
@@ -200,7 +200,7 @@ const CreatePost = () => {
                 />
               </div>
             ) : (
-              <div className="relative h-[400px] w-full">
+              <div className="relative h-[150px] w-full md:h-[400px]">
                 <Image
                   priority={true}
                   src={'https://dummyimage.com/600x400'}

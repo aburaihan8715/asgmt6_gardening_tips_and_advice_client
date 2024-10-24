@@ -8,7 +8,9 @@ export default function CommonLayout({
 }>) {
   return (
     <div>
-      <Notification />
+      <div className="hidden md:block">
+        <Notification />
+      </div>
       <Header />
       <div>{children}</div>
     </div>

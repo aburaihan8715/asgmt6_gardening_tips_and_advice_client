@@ -157,7 +157,7 @@ const CheckoutForm = () => {
       {isCreatePaymentPending ||
         (paymentIntentPending && <LoadingWithOverlay />)}
       <form onSubmit={handleSubmit}>
-        <div className="overflow-hidden rounded-md border px-1 shadow">
+        <div className="overflow-hidden rounded-md border px-1 md:shadow">
           <CardElement
             options={{
               style: {

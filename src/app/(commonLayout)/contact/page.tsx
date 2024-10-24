@@ -43,7 +43,7 @@ const ContactUs = () => {
   };
 
   return (
-    <div className="bg-gray-50 text-gray-800">
+    <div className="mt-[80px] bg-gray-50 text-gray-800 md:mt-0">
       {/* Contact Information Section */}
       <section className="bg-white pb-20">
         {/* Get PDF Button */}

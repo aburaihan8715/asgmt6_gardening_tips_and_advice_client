@@ -132,7 +132,7 @@ const AllUsers = () => {
             height={48}
             src={image || 'https://via.placeholder.com/400x400'}
             alt="user"
-            className="h-12 w-12 rounded object-cover"
+            className="h-10 w-10 rounded object-cover md:h-12 md:w-12"
           />
         );
       },
@@ -150,7 +150,7 @@ const AllUsers = () => {
     // TYPE
     {
       accessorKey: 'isVerified',
-      header: 'User Type',
+      header: () => <span className="whitespace-nowrap">User Type</span>,
       cell: ({ row }) => {
         const isVerified = row.getValue('isVerified');
         return (
@@ -214,7 +214,7 @@ const AllUsers = () => {
     <>
       {isUserDeletePending && <LoadingWithOverlay />}
       <div className="w-full">
-        <div className="flex items-center py-4">
+        <div className="flex items-center gap-2 py-4">
           <Input
             placeholder="Filter email..."
             value={

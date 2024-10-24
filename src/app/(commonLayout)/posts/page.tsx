@@ -64,9 +64,9 @@ const Posts = () => {
   }, [inView, fetchNextPage, hasNextPage]);
 
   return (
-    <div className="flex">
-      <div className="fixed h-full w-[25%]">
-        <div className="fixed h-full w-[25%] p-5">
+    <div className="mt-[80px] flex flex-col md:mt-0 md:flex-row">
+      <div className="h-full border md:fixed md:w-[25%]">
+        <div className="h-full p-1 md:fixed md:w-[25%] md:p-5">
           <div className="h-full">
             <section className="flex flex-col gap-4">
               <div className="flex-1">
@@ -130,7 +130,7 @@ const Posts = () => {
         </div>
       </div>
 
-      <div className="ml-[25%] mr-[25%] h-full w-[50%]">
+      <div className="h-full md:ml-[25%] md:mr-[25%] md:w-[50%]">
         <ul className="md:p-5">
           {status === 'pending' && <LoadingWithOverlay />}
           {status === 'error' && (
@@ -162,7 +162,7 @@ const Posts = () => {
         </div>
       </div>
 
-      <div className="fixed right-0 h-full w-[25%]">
+      <div className="fixed right-0 hidden h-full w-[25%] md:block">
         <div className="fixed h-full w-[25%] p-5">
           <div className="h-full">
             <Gallery />

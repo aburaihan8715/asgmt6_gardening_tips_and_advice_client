@@ -257,7 +257,7 @@ const Post = ({ post }: IProps) => {
         removeFavouritePostPending ||
         isUpvotePending ||
         isDownvotePending) && <LoadingWithOverlay />}
-      <li className="group relative mx-auto mb-6 max-w-4xl rounded-lg border bg-white p-6 shadow-md">
+      <li className="group relative mx-auto mb-6 max-w-4xl rounded-lg border bg-white p-1 shadow-md md:p-6">
         {/* Post Image with Hover Overlay */}
         <div className="group relative aspect-[16/9] w-full overflow-hidden rounded-lg">
           <Image
@@ -302,14 +302,14 @@ const Post = ({ post }: IProps) => {
         </div>
 
         {/* Title */}
-        <h2 className="mt-3 text-2xl font-semibold text-gray-900">
+        <h2 className="mt-3 font-semibold text-gray-900 md:text-2xl">
           {post?.title}
         </h2>
 
         {/* Author Information */}
         <div className="mt-2 flex items-center justify-between text-sm text-gray-500">
           <div className="flex items-center">
-            <div className="relative mr-3 h-10 w-10 rounded-full object-cover">
+            <div className="relative mr-3 h-5 w-5 rounded-full object-cover md:h-10 md:w-10">
               <Image
                 fill
                 src={
@@ -335,7 +335,10 @@ const Post = ({ post }: IProps) => {
                 Followers
                 {post.user.isVerified && (
                   <span className="ml-2 rounded-full bg-yellow-400 px-2 py-1 text-xs font-semibold text-yellow-900">
-                    Premium User 💎
+                    <span className="hidden md:inline-block">
+                      Premium User
+                    </span>
+                    <span>💎</span>
                   </span>
                 )}
               </div>
