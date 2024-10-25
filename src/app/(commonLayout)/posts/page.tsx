@@ -47,7 +47,7 @@ const Posts = () => {
   });
 
   const { ref: loadMoreRef, inView } = useInView({
-    threshold: 1.0,
+    threshold: 0.5,
     triggerOnce: false,
   });
 
@@ -58,10 +58,10 @@ const Posts = () => {
   };
 
   useEffect(() => {
-    if (inView && hasNextPage) {
+    if (inView && hasNextPage && !isFetchingNextPage) {
       fetchNextPage();
     }
-  }, [inView, fetchNextPage, hasNextPage]);
+  }, [inView, fetchNextPage, hasNextPage, isFetchingNextPage]);
 
   return (
     <div className="mt-[80px] flex flex-col md:mt-0 md:flex-row">

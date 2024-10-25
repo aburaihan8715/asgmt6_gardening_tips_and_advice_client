@@ -8,8 +8,7 @@ export const getAllPayments = async () => {
     const { data } = await axiosInstance.get(`/api/v1/payments`);
     return data;
   } catch (error: any) {
-    // throw new Error(error.response?.data?.message || error.message);
-    return error.response?.data?.message || error.message;
+    throw new Error(error.response?.data?.message || error.message);
   }
 };
 // GET PAYMENT STATS
@@ -20,8 +19,7 @@ export const getPaymentStats = async () => {
     );
     return data;
   } catch (error: any) {
-    // throw new Error(error.response?.data?.message || error.message);
-    return error.response?.data?.message || error.message;
+    throw new Error(error.response?.data?.message || error.message);
   }
 };
 
@@ -39,8 +37,7 @@ export const createPaymentIntent = async (intentPrice: IIntent) => {
     );
     return data;
   } catch (error: any) {
-    // throw new Error(error.response?.data?.message || error.message);
-    return error.response?.data?.message || error.message;
+    throw new Error(error.response?.data?.message || error.message);
   }
 };
 
@@ -58,7 +55,6 @@ export const createPayment = async (paymentData: IPayment) => {
     );
     return data;
   } catch (error: any) {
-    // throw new Error(error.response?.data?.message || error.message);
-    return error.response?.data?.message || error.message;
+    throw new Error(error.response?.data?.message || error.message);
   }
 };

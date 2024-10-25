@@ -111,8 +111,7 @@ export const getMyPosts = async ({
     const { data } = await axiosInstance.get(queryString);
     return data;
   } catch (error: any) {
-    // throw new Error(error.response?.data?.message || error.message);
-    return error.response?.data?.message || error.message;
+    throw new Error(error.response?.data?.message || error.message);
   }
 };
 
@@ -122,8 +121,7 @@ export const getTopFivePosts = async () => {
     const { data } = await axiosInstance.get('/api/v1/posts/top-5-posts');
     return data;
   } catch (error: any) {
-    // throw new Error(error.response?.data?.message || error.message);
-    return error.response?.data?.message || error.message;
+    throw new Error(error.response?.data?.message || error.message);
   }
 };
 
@@ -133,8 +131,7 @@ export const getPost = async (postId: string) => {
     const { data } = await axiosInstance.get(`/api/v1/posts/${postId}`);
     return data;
   } catch (error: any) {
-    // throw new Error(error.response?.data?.message || error.message);
-    return error.response?.data?.message || error.message;
+    throw new Error(error.response?.data?.message || error.message);
   }
 };
 
@@ -164,8 +161,7 @@ export const getCommentsOfPost = async ({
     const { data } = await axiosInstance.get(queryString);
     return data;
   } catch (error: any) {
-    // throw new Error(error.response?.data?.message || error.message);
-    return error.response?.data?.message || error.message;
+    throw new Error(error.response?.data?.message || error.message);
   }
 };
 
@@ -175,8 +171,7 @@ export const getPostStats = async () => {
     const { data } = await axiosInstance.get(`/api/v1/posts/post-stats`);
     return data;
   } catch (error: any) {
-    // throw new Error(error.response?.data?.message || error.message);
-    return error.response?.data?.message || error.message;
+    throw new Error(error.response?.data?.message || error.message);
   }
 };
 
@@ -188,8 +183,7 @@ export const createPost = async (postData: FieldValues) => {
     const { data } = await axiosInstance.post('/api/v1/posts', postData);
     return data;
   } catch (error: any) {
-    // throw new Error(error.response?.data?.message || error.message);
-    return error.response?.data?.message || error.message;
+    throw new Error(error.response?.data?.message || error.message);
   }
 };
 
@@ -205,8 +199,7 @@ export const createCommentOnPost = async (
     );
     return data;
   } catch (error: any) {
-    // throw new Error(error.response?.data?.message || error.message);
-    return error.response?.data?.message || error.message;
+    throw new Error(error.response?.data?.message || error.message);
   }
 };
 
@@ -222,8 +215,7 @@ export const updatePost = async (
     );
     return data;
   } catch (error: any) {
-    // throw new Error(error.response?.data?.message || error.message);
-    return error.response?.data?.message || error.message;
+    throw new Error(error.response?.data?.message || error.message);
   }
 };
 
@@ -233,8 +225,7 @@ export const deletePost = async (postId: string) => {
     const { data } = await axiosInstance.delete(`/api/v1/posts/${postId}`);
     return data;
   } catch (error: any) {
-    // throw new Error(error.response?.data?.message || error.message);
-    return error.response?.data?.message || error.message;
+    throw new Error(error.response?.data?.message || error.message);
   }
 };
 
@@ -246,8 +237,7 @@ export const makePostPremium = async (postId: string) => {
     );
     return data;
   } catch (error: any) {
-    // throw new Error(error.response?.data?.message || error.message);
-    return error.response?.data?.message || error.message;
+    throw new Error(error.response?.data?.message || error.message);
   }
 };
 
@@ -259,8 +249,7 @@ export const upvotePost = async (postId: string) => {
     );
     return data;
   } catch (error: any) {
-    // throw new Error(error.response?.data?.message || error.message);
-    return error.response?.data?.message || error.message;
+    throw new Error(error.response?.data?.message || error.message);
   }
 };
 
@@ -272,7 +261,6 @@ export const downvotePost = async (postId: string) => {
     );
     return data;
   } catch (error: any) {
-    // throw new Error(error.response?.data?.message || error.message);
-    return error.response?.data?.message || error.message;
+    throw new Error(error.response?.data?.message || error.message);
   }
 };

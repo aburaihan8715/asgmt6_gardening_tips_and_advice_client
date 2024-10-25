@@ -29,6 +29,7 @@ https://via.placeholder.com/400x200
 2. infinite scrolling
 3. edit comment not implemented
 4. after login not redirecting
+5. password change is not working
 
 
 

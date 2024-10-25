@@ -9,6 +9,7 @@ import {
   getMe,
   getRevenue,
   getTopFiveUsers,
+  getUser,
   getUserStats,
   removeFavoritePost,
   unfollowUser,
@@ -25,6 +26,14 @@ export const useGetMe = () => {
   return useQuery({
     queryKey: ['GET_ME'],
     queryFn: async () => await getMe(),
+    enabled: false,
+  });
+};
+
+export const useGetUser = (userId: string) => {
+  return useQuery({
+    queryKey: ['GET_USER'],
+    queryFn: async () => await getUser(userId),
     enabled: false,
   });
 };

@@ -34,6 +34,7 @@ export const useLoginMutation = () => {
       toast.success('User login successful.');
     },
     onError: (error) => {
+      console.log(error);
       toast.error(error.message);
     },
   });
@@ -47,6 +48,7 @@ export const useChangePasswordMutation = () => {
       toast.success('Password changed successful.');
     },
     onError: (error) => {
+      console.log(error);
       toast.error(error.message);
     },
   });

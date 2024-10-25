@@ -9,8 +9,7 @@ export const getTopFiveUsers = async () => {
     const { data } = await axiosInstance.get(`/api/v1/users/top-5-users`);
     return data;
   } catch (error: any) {
-    // throw new Error(error.response?.data?.message || error.message);
-    return error.response?.data?.message || error.message;
+    throw new Error(error.response?.data?.message || error.message);
   }
 };
 // GET ALL USERS
@@ -34,8 +33,7 @@ export const getAllUsers = async ({
     const { data } = await axiosInstance.get(queryString);
     return data;
   } catch (error: any) {
-    // throw new Error(error.response?.data?.message || error.message);
-    return error.response?.data?.message || error.message;
+    throw new Error(error.response?.data?.message || error.message);
   }
 };
 
@@ -45,8 +43,17 @@ export const getMe = async () => {
     const { data } = await axiosInstance.get(`/api/v1/users/me`);
     return data;
   } catch (error: any) {
-    // throw new Error(error.response?.data?.message || error.message);
-    return error.response?.data?.message || error.message;
+    throw new Error(error.response?.data?.message || error.message);
+  }
+};
+
+// GET USER
+export const getUser = async (userId: string) => {
+  try {
+    const { data } = await axiosInstance.get(`/api/v1/users/${userId}`);
+    return data;
+  } catch (error: any) {
+    throw new Error(error.response?.data?.message || error.message);
   }
 };
 
@@ -58,8 +65,7 @@ export const checkPremiumStatus = async () => {
     );
     return data;
   } catch (error: any) {
-    // throw new Error(error.response?.data?.message || error.message);
-    return error.response?.data?.message || error.message;
+    throw new Error(error.response?.data?.message || error.message);
   }
 };
 
@@ -71,8 +77,7 @@ export const getFavouritePosts = async () => {
     );
     return data;
   } catch (error: any) {
-    // throw new Error(error.response?.data?.message || error.message);
-    return error.response?.data?.message || error.message;
+    throw new Error(error.response?.data?.message || error.message);
   }
 };
 
@@ -82,8 +87,7 @@ export const getUserStats = async () => {
     const { data } = await axiosInstance.get(`/api/v1/users/user-stats`);
     return data;
   } catch (error: any) {
-    // throw new Error(error.response?.data?.message || error.message);
-    return error.response?.data?.message || error.message;
+    throw new Error(error.response?.data?.message || error.message);
   }
 };
 
@@ -93,8 +97,7 @@ export const getRevenue = async () => {
     const { data } = await axiosInstance.get(`/api/v1/users/revenue`);
     return data;
   } catch (error: any) {
-    // throw new Error(error.response?.data?.message || error.message);
-    return error.response?.data?.message || error.message;
+    throw new Error(error.response?.data?.message || error.message);
   }
 };
 
@@ -107,8 +110,7 @@ export const followUser = async (postUserId: string) => {
     );
     return data;
   } catch (error: any) {
-    // throw new Error(error.response?.data?.message || error.message);
-    return error.response?.data?.message || error.message;
+    throw new Error(error.response?.data?.message || error.message);
   }
 };
 
@@ -120,8 +122,7 @@ export const unfollowUser = async (postUserId: string) => {
     );
     return data;
   } catch (error: any) {
-    // throw new Error(error.response?.data?.message || error.message);
-    return error.response?.data?.message || error.message;
+    throw new Error(error.response?.data?.message || error.message);
   }
 };
 
@@ -145,8 +146,7 @@ export const removeFavoritePost = async (postId: string) => {
     );
     return data;
   } catch (error: any) {
-    // throw new Error(error.response?.data?.message || error.message);
-    return error.response?.data?.message || error.message;
+    throw new Error(error.response?.data?.message || error.message);
   }
 };
 
@@ -156,7 +156,6 @@ export const deleteUser = async (userId: string) => {
     const { data } = await axiosInstance.delete(`/api/v1/users/${userId}`);
     return data;
   } catch (error: any) {
-    // throw new Error(error.response?.data?.message || error.message);
-    return error.response?.data?.message || error.message;
+    throw new Error(error.response?.data?.message || error.message);
   }
 };
