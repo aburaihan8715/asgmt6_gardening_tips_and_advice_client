@@ -119,6 +119,7 @@ export const settingsProfile = async (profileData: FieldValues) => {
   }
 };
 
+// get current user
 export const getCurrentUser = async () => {
   const accessToken = cookies().get('accessToken')?.value;
 

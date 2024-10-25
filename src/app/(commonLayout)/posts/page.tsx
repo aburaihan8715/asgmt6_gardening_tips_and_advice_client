@@ -29,7 +29,7 @@ const Posts = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const searchTermDebounce = useDebouncedCallback((value) => {
     setSearchTerm(value);
-  }, 1000);
+  }, 300);
 
   const {
     data,

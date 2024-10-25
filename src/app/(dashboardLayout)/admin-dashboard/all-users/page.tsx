@@ -142,9 +142,7 @@ const AllUsers = () => {
     {
       accessorKey: 'email',
       header: 'Email',
-      cell: ({ row }) => (
-        <div className="capitalize">{row.getValue('email')}</div>
-      ),
+      cell: ({ row }) => <div className="">{row.getValue('email')}</div>,
     },
 
     // TYPE

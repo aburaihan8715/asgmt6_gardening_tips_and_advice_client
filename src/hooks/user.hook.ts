@@ -229,6 +229,9 @@ export const useDeleteUserMutation = () => {
         queryKey: ['GET_TOP_POSTS'],
       });
       queryClient.invalidateQueries({
+        queryKey: ['GET_POSTS'],
+      });
+      queryClient.invalidateQueries({
         queryKey: ['GET_ME'],
       });
       toast.success('User deleted successfully.');

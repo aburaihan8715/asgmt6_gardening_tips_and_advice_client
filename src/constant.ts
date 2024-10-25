@@ -8,4 +8,6 @@ export const protectedRoutes = [
   '/forget-password',
   '/create-comment',
   '/comment-list',
+  '/comments',
+  '/edit-comment',
 ];
