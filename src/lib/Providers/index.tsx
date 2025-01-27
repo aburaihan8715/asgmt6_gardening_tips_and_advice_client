@@ -14,7 +14,10 @@ const Providers = ({ children }: { children: ReactNode }) => {
         <Toaster />
         {children}
       </UserProvider>
-      <ReactQueryDevtools initialIsOpen={false} />
+      <ReactQueryDevtools
+        initialIsOpen={false}
+        buttonPosition="bottom-left"
+      />
     </QueryClientProvider>
   );
 };

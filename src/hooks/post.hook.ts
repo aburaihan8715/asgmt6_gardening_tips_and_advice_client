@@ -129,7 +129,6 @@ export const useUpdatePostMutation = () => {
   const queryClient = useQueryClient();
 
   return useMutation<unknown, Error, FieldValues>({
-    mutationKey: ['UPDATE_POST'],
     mutationFn: async (options) =>
       await updatePost(options.postId, options.formData),
     onSuccess: () => {
@@ -156,7 +155,6 @@ export const useUpdatePostMutation = () => {
 export const useDeletePostMutation = () => {
   const queryClient = useQueryClient();
   return useMutation<unknown, Error, string>({
-    mutationKey: ['DELETE_POST'],
     mutationFn: async (id) => await deletePost(id),
     onSuccess: () => {
       queryClient.invalidateQueries({
@@ -181,7 +179,6 @@ export const useDeletePostMutation = () => {
 export const useMakePostPremiumMutation = () => {
   const queryClient = useQueryClient();
   return useMutation<unknown, Error, string>({
-    mutationKey: ['MAKE_POST_PREMIUM'],
     mutationFn: async (id) => await makePostPremium(id),
     onSuccess: () => {
       queryClient.invalidateQueries({
