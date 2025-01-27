@@ -69,7 +69,7 @@ const Header = () => {
       <header className="sticky right-0 top-0 z-50 w-full bg-white">
         {/* DESKTOP NAV */}
         <Container>
-          <div className="sticky top-0 z-20 hidden h-[80px] w-full items-center border-b lg:flex">
+          <div className="sticky top-0 z-20 hidden h-[80px] w-full items-center gap-5 border-b lg:flex">
             {/* LOGO */}
             <Link href="/">
               <BrandLogo />
@@ -85,14 +85,6 @@ const Header = () => {
               {user && (
                 <div className="flex items-center">
                   <ProfilePopover />
-                </div>
-              )}
-
-              {!user && (
-                <div>
-                  <Link href={`/login`}>
-                    <Button>Login</Button>
-                  </Link>
                 </div>
               )}
 

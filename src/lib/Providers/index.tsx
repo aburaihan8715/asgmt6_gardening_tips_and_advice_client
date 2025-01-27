@@ -2,8 +2,9 @@
 import React, { ReactNode } from 'react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { Toaster } from 'sonner';
-import UserProvider from '@/context/user.provider';
+// import UserProvider from '@/context/user.provider';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
+import UserProvider from '@/context/user.provider';
 
 const queryClient = new QueryClient();
 

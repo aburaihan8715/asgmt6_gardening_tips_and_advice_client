@@ -14,6 +14,7 @@ import Post from '../_components/Post';
 import ErrorMessage from '@/components/common/ErrorMessage';
 import LoadingWithOverlay from '@/components/common/LoadingWithOverlay';
 import Container from '@/components/common/Container';
+import { useAuth } from '@/context/user.provider';
 
 const itemForPerPage = 2;
 
@@ -39,6 +40,10 @@ const Posts = () => {
     voteFilter,
     limit: itemForPerPage,
   });
+
+  const { user } = useAuth();
+
+  console.log('user', user);
 
   const { ref: loadMoreRef, inView } = useInView({
     threshold: 0.5,
