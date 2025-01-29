@@ -1,6 +1,5 @@
 'use client';
 
-import React, { useEffect } from 'react';
 import Image from 'next/image';
 import {
   FaCommentAlt,
@@ -14,7 +13,6 @@ import { useAuth } from '@/context/user.provider';
 import {
   useAddFavoritePostMutation,
   useFollowUserMutation,
-  useGetMe,
   useRemoveFavoritePostMutation,
   useUnfollowUserMutation,
 } from '@/hooks/user.hook';
@@ -32,23 +30,17 @@ interface IProps {
 }
 
 const Post = ({ post }: IProps) => {
-  const { user } = useAuth();
-  const {
-    data: currentUserData,
-    refetch,
-    isLoading: isCurrentUserLoading,
-  } = useGetMe();
-
   const router = useRouter();
+  const { user, isLoading: isUserLoading } = useAuth();
+
   const postUserId = post?.user?._id as string;
-  const currentUser = currentUserData?.data;
-  const currentUserId = currentUser?._id;
-  const followings = currentUser?.followings || [];
+  const userId = user?._id as string;
+  const followings = user?.followings || [];
   const isFollowing = followings?.includes(postUserId);
-  const favourites = currentUser?.favourites || [];
+  const favourites = user?.favourites || [];
   const isFavourite = favourites.includes(post?._id);
   const isOwnPost = user?._id === post?.user?._id;
-  const isVerified = currentUser?.isVerified;
+  const isVerified = user?.isVerified;
   const isPremium = post?.isPremium;
   const role = user?.role;
 
@@ -99,16 +91,12 @@ const Post = ({ post }: IProps) => {
         return toast.warning('You need to be verified first!!');
       }
       addFavouritePostMutate(mutateData, {
-        onSuccess: () => {
-          refetch();
-        },
+        onSuccess: () => {},
         onError: () => {},
       });
     } else {
       addFavouritePostMutate(mutateData, {
-        onSuccess: () => {
-          refetch();
-        },
+        onSuccess: () => {},
         onError: () => {},
       });
     }
@@ -122,16 +110,12 @@ const Post = ({ post }: IProps) => {
         return toast.warning('You need to be verified first!!');
       }
       removeFavouritePostMutate(mutateData, {
-        onSuccess: () => {
-          refetch();
-        },
+        onSuccess: () => {},
         onError: () => {},
       });
     } else {
       removeFavouritePostMutate(mutateData, {
-        onSuccess: () => {
-          refetch();
-        },
+        onSuccess: () => {},
         onError: () => {},
       });
     }
@@ -141,9 +125,7 @@ const Post = ({ post }: IProps) => {
   const handleFollow = (postUserId: string) => {
     const mutateData = { postUserId };
     followMutate(mutateData, {
-      onSuccess: () => {
-        refetch();
-      },
+      onSuccess: () => {},
       onError: () => {},
     });
   };
@@ -152,9 +134,7 @@ const Post = ({ post }: IProps) => {
   const handleUnfollow = (postUserId: string) => {
     const mutateData = { postUserId };
     unFollowMutate(mutateData, {
-      onSuccess: () => {
-        refetch();
-      },
+      onSuccess: () => {},
       onError: () => {},
     });
   };
@@ -166,7 +146,7 @@ const Post = ({ post }: IProps) => {
     }
 
     const upvotes = post?.upvotes || [];
-    const hasUpvotes = upvotes?.includes(currentUserId);
+    const hasUpvotes = upvotes?.includes(userId);
 
     if (isPremium && !isVerified && role !== 'admin') {
       return toast.warning('You need to be verified first!!');
@@ -187,7 +167,7 @@ const Post = ({ post }: IProps) => {
     }
 
     const downvotes = post?.downvotes || [];
-    const hasDownvotes = downvotes.includes(currentUserId);
+    const hasDownvotes = downvotes.includes(userId);
 
     if (isPremium && !isVerified && role !== 'admin') {
       return toast.warning('You need to be verified first!!');
@@ -234,14 +214,7 @@ const Post = ({ post }: IProps) => {
     router.push(path);
   };
 
-  useEffect(() => {
-    if (user) {
-      refetch();
-    }
-  }, [user, refetch]);
-
-  // NOTE: This not for all only for current user
-  if (isCurrentUserLoading) {
+  if (isUserLoading) {
     return (
       <div className="mt-[90px]">
         <LoadingSpinner />
@@ -299,7 +272,7 @@ const Post = ({ post }: IProps) => {
           </h2>
 
           {/* Author Information */}
-          <div className="mt-2 flex items-center justify-between text-sm text-gray-500">
+          <div className="mt-2 flex items-center gap-5 text-sm text-gray-500">
             <div className="flex items-center">
               <div className="relative mr-3 h-5 w-5 rounded-full object-cover md:h-10 md:w-10">
                 <Image

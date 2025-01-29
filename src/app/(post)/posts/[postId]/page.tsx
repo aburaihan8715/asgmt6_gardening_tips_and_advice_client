@@ -1,6 +1,5 @@
 'use client';
 
-import React, { useEffect } from 'react';
 import Image from 'next/image';
 import {
   FaCommentAlt,
@@ -18,7 +17,6 @@ import QuillContent from '@/components/common/QuillContent';
 import {
   useAddFavoritePostMutation,
   useFollowUserMutation,
-  useGetMe,
   useRemoveFavoritePostMutation,
   useUnfollowUserMutation,
 } from '@/hooks/user.hook';
@@ -31,30 +29,22 @@ import { toast } from 'sonner';
 const PostDetails = () => {
   const params = useParams();
   const postId = params?.postId as string;
-  const { user } = useAuth();
+  const { user, isLoading: isUserLoading } = useAuth();
   const role = user?.role;
 
-  const {
-    data: currentUserData,
-    refetch,
-    isLoading: isCurrentUserLoading,
-  } = useGetMe();
-
   const router = useRouter();
-
   const { data: postDetailsData, isLoading: isPostLoading } =
     useGetPost(postId);
   const post = postDetailsData?.data;
 
   const postUserId = post?.user?._id as string;
-  const currentUser = currentUserData?.data;
-  const currentUserId = currentUser?._id;
-  const followings = currentUser?.followings || [];
+  const userId = user?._id;
+  const followings = user?.followings || [];
   const isFollowing = followings?.includes(postUserId);
-  const favourites = currentUser?.favourites || [];
+  const favourites = user?.favourites || [];
   const isFavourite = favourites.includes(post?._id);
   const isOwnPost = user?._id === post?.user?._id;
-  const isVerified = currentUser?.isVerified;
+  const isVerified = user?.isVerified;
   const isPremium = post?.isPremium;
 
   const { mutate: followMutate, isPending: followPending } =
@@ -104,16 +94,12 @@ const PostDetails = () => {
         return toast.warning('You need to be verified first!!');
       }
       addFavouritePostMutate(mutateData, {
-        onSuccess: () => {
-          refetch();
-        },
+        onSuccess: () => {},
         onError: () => {},
       });
     } else {
       addFavouritePostMutate(mutateData, {
-        onSuccess: () => {
-          refetch();
-        },
+        onSuccess: () => {},
         onError: () => {},
       });
     }
@@ -127,16 +113,12 @@ const PostDetails = () => {
         return toast.warning('You need to be verified first!!');
       }
       removeFavouritePostMutate(mutateData, {
-        onSuccess: () => {
-          refetch();
-        },
+        onSuccess: () => {},
         onError: () => {},
       });
     } else {
       removeFavouritePostMutate(mutateData, {
-        onSuccess: () => {
-          refetch();
-        },
+        onSuccess: () => {},
         onError: () => {},
       });
     }
@@ -146,9 +128,7 @@ const PostDetails = () => {
   const handleFollow = (postUserId: string) => {
     const mutateData = { postUserId };
     followMutate(mutateData, {
-      onSuccess: () => {
-        refetch();
-      },
+      onSuccess: () => {},
       onError: () => {},
     });
   };
@@ -157,9 +137,7 @@ const PostDetails = () => {
   const handleUnfollow = (postUserId: string) => {
     const mutateData = { postUserId };
     unFollowMutate(mutateData, {
-      onSuccess: () => {
-        refetch();
-      },
+      onSuccess: () => {},
       onError: () => {},
     });
   };
@@ -171,7 +149,7 @@ const PostDetails = () => {
     }
 
     const upvotes = post?.upvotes || [];
-    const hasUpvotes = upvotes?.includes(currentUserId);
+    const hasUpvotes = upvotes?.includes(userId);
 
     if (isPremium && !isVerified && role !== 'admin') {
       return toast.warning('You need to be verified first!!');
@@ -192,7 +170,7 @@ const PostDetails = () => {
     }
 
     const downvotes = post?.downvotes || [];
-    const hasDownvotes = downvotes.includes(currentUserId);
+    const hasDownvotes = downvotes.includes(userId);
 
     if (isPremium && !isVerified && role !== 'admin') {
       return toast.warning('You need to be verified first!!');
@@ -225,15 +203,8 @@ const PostDetails = () => {
     router.push(path);
   };
 
-  // HANDLE USE EFFECT
-  useEffect(() => {
-    if (user) {
-      refetch();
-    }
-  }, [user, refetch]);
-
   // LOADING SPINNER
-  if (isPostLoading || isCurrentUserLoading) {
+  if (isPostLoading || isUserLoading) {
     return (
       <div className="mt-[90px]">
         <LoadingSpinner />

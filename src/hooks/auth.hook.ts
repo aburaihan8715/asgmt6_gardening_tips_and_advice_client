@@ -7,8 +7,9 @@ import {
   resetPassword,
   settingsProfile,
 } from '@/actions/auth.action';
+import { useAuth } from '@/context/user.provider';
 
-import { useMutation, useQuery } from '@tanstack/react-query';
+import { useMutation } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
 import { FieldValues } from 'react-hook-form';
 import { toast } from 'sonner';
@@ -28,10 +29,13 @@ export const useRegisterMutation = () => {
 };
 
 export const useLoginMutation = () => {
+  const { setUser } = useAuth();
   return useMutation<any, Error, FieldValues>({
     mutationFn: async (loginData) => await loginUser(loginData),
-    onSuccess: () => {
+    onSuccess: async () => {
       toast.success('User login successful.');
+      const userData = await getCurrentUser();
+      setUser(userData?.data);
     },
     onError: (error) => {
       console.log(error);
@@ -89,13 +93,5 @@ export const useSettingsProfileMutation = () => {
     onError: (error) => {
       toast.error(error.message);
     },
-  });
-};
-
-// NOTE: important
-export const useGetCurrentUser = () => {
-  return useQuery({
-    queryKey: ['CURRENT_USER'],
-    queryFn: async () => await getCurrentUser(),
   });
 };

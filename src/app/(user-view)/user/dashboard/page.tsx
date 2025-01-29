@@ -9,10 +9,6 @@ const UserDashboard = () => {
   return (
     <div className="flex h-full items-center justify-center">
       <div>
-        {/* <h1 className="text-center text-2xl font-semibold md:text-4xl">
-          Welcome {user?.username}
-        </h1> */}
-
         <SectionHeading
           heading={`Welcome ${user?.username || 'Anonymous'}`}
         />

@@ -1,11 +1,11 @@
 import React from 'react';
-import UserChart from '../../../../components/admin-view/UserChart';
-import PostChart from '../../../../components/admin-view/PostChart';
-import PaymentChart from '../../../../components/admin-view/PaymentChart';
-import PaymentCard from '../../../../components/admin-view/PaymentCard';
-import UserCard from '../../../../components/admin-view/UserCard';
-import PostCard from '../../../../components/admin-view/PostCard';
-import RevenueCard from '../../../../components/admin-view/RevenueCard';
+import UserChart from '../../_components/UserChart';
+import PostChart from '../../_components/PostChart';
+import PaymentChart from '../../_components/PaymentChart';
+import PaymentCard from '../../_components/PaymentCard';
+import UserCard from '../../_components/UserCard';
+import PostCard from '../../_components/PostCard';
+import RevenueCard from '../../_components/RevenueCard';
 
 const AdminDashboard = () => {
   return (

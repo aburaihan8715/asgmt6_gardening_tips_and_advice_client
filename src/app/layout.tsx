@@ -10,7 +10,7 @@ const roboto = Roboto({
 });
 
 export const metadata: Metadata = {
-  title: 'Gardening Tips & Advice Platform',
+  title: 'GardenSage',
   description: 'Your go-to platform for gardening knowledge and tips.',
 };
 

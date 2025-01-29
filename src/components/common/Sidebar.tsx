@@ -1,8 +1,8 @@
 'use client';
 import ActiveLink from '@/components/common/ActiveLink';
 import { useAuth } from '@/context/user.provider';
-import { useCheckPremiumStatus, useGetMe } from '@/hooks/user.hook';
-import { useEffect } from 'react';
+import { useCheckPremiumStatus } from '@/hooks/user.hook';
+
 import {
   FaArrowLeft,
   FaCog,
@@ -15,32 +15,19 @@ import {
 } from 'react-icons/fa';
 
 const Sidebar = () => {
-  const { user } = useAuth();
-
-  const {
-    data: currentUserData,
-    refetch,
-    isLoading: isCurrentUserLoading,
-  } = useGetMe();
+  const { user, isLoading: isUserLoading } = useAuth();
 
   const { data: premiumStatusData, isLoading: statusLoading } =
     useCheckPremiumStatus();
 
-  const currentUser = currentUserData?.data;
-  const isVerified = currentUser?.isVerified;
+  const isVerified = user?.isVerified;
   const hasPremiumStatus = premiumStatusData?.data;
   const isAbleToBePremiumRequest = hasPremiumStatus && !isVerified;
 
   const favourite = user?.favourites || [];
   const hasFavourite = favourite.length > 0;
 
-  useEffect(() => {
-    if (user) {
-      refetch();
-    }
-  }, [user, refetch]);
-
-  if (isCurrentUserLoading || statusLoading) {
+  if (isUserLoading || statusLoading) {
     return <p>Loading...</p>;
   }
   return (

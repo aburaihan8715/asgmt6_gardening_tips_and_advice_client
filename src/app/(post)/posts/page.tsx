@@ -14,7 +14,6 @@ import Post from '../_components/Post';
 import ErrorMessage from '@/components/common/ErrorMessage';
 import LoadingWithOverlay from '@/components/common/LoadingWithOverlay';
 import Container from '@/components/common/Container';
-import { useAuth } from '@/context/user.provider';
 
 const itemForPerPage = 2;
 
@@ -40,10 +39,6 @@ const Posts = () => {
     voteFilter,
     limit: itemForPerPage,
   });
-
-  const { user } = useAuth();
-
-  console.log('user', user);
 
   const { ref: loadMoreRef, inView } = useInView({
     threshold: 0.5,
@@ -112,27 +107,6 @@ const Posts = () => {
                       placeholder="Search a post..."
                     />
                   </div>
-                  {/* <div className="flex-1">
-                    <Select
-                      value={voteFilter}
-                      onValueChange={setVoteFilter}
-                    >
-                      <SelectTrigger className="w-full">
-                        <SelectValue placeholder="Sort by vote" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectGroup>
-                          <SelectLabel>vote</SelectLabel>
-                          <SelectItem value="upvotesCount">
-                            Upvote high
-                          </SelectItem>
-                          <SelectItem value="downvotesCount">
-                            Downvote high
-                          </SelectItem>
-                        </SelectGroup>
-                      </SelectContent>
-                    </Select>
-                  </div> */}
 
                   <div className="flex-1 space-y-3 font-semibold">
                     <p>Filter</p>
@@ -180,26 +154,6 @@ const Posts = () => {
                     </RadioGroup>
                   </div>
 
-                  {/* <div className="flex-1">
-                    <Select value={category} onValueChange={setCategory}>
-                      <SelectTrigger className="w-full">
-                        <SelectValue placeholder="Filter by category" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectGroup>
-                          <SelectLabel>Category</SelectLabel>
-                          <SelectItem value="Vegetables">
-                            Vegetables
-                          </SelectItem>
-                          <SelectItem value="Flowers">Flowers</SelectItem>
-                          <SelectItem value="Landscaping">
-                            Landscaping
-                          </SelectItem>
-                          <SelectItem value="Others">Others</SelectItem>
-                        </SelectGroup>
-                      </SelectContent>
-                    </Select>
-                  </div> */}
                   <div>
                     <Button
                       className="w-full md:w-auto"

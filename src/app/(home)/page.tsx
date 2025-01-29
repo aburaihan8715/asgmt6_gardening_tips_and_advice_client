@@ -64,7 +64,7 @@ const Login = () => {
     if (role === 'admin') {
       setValue('email', 'admin@gmail.com');
       setValue('password', 'test1234');
-    } else {
+    } else if (role === 'user') {
       setValue('email', 'user@gmail.com');
       setValue('password', 'test1234');
     }

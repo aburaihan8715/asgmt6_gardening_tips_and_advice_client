@@ -24,10 +24,11 @@ import Container from './Container';
 // HEADER COMPONENT
 const Header = () => {
   const [open, setOpen] = useState(true);
-  const { user, setIsLoading: userLoading } = useAuth();
+  const { user, setUser } = useAuth();
+  console.log('user from header', user);
 
   const router = useRouter();
-  const pathname = usePathname();
+  // const pathname = usePathname();
   const menuItems = (
     <>
       <li>
@@ -55,13 +56,13 @@ const Header = () => {
   );
 
   const handleLogout = () => {
-    console.log('testing...');
     logout();
-    userLoading(true);
+    setUser(null);
+    router.push('/');
 
-    if (protectedRoutes.some((route) => pathname.match(route))) {
-      router.push('/auth/login');
-    }
+    // if (protectedRoutes.some((route) => pathname.match(route))) {
+    //   router.push('/');
+    // }
   };
 
   return (
@@ -158,13 +159,12 @@ export default Header;
 
 // PROFILE POPOVER COMPONENT
 const ProfilePopover = () => {
-  const { user, setIsLoading: userLoading } = useAuth();
+  const { user } = useAuth();
   const router = useRouter();
   const pathname = usePathname();
 
   const handleLogout = () => {
     logout();
-    userLoading(true);
 
     if (protectedRoutes.some((route) => pathname.match(route))) {
       router.push('/');

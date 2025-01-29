@@ -8,7 +8,7 @@ import {
   useCreatePaymentIntentMutation,
   useCreatePaymentMutation,
 } from '@/hooks/payment.hook';
-import { useGetMe } from '@/hooks/user.hook';
+
 import {
   useStripe,
   CardElement,
@@ -24,12 +24,8 @@ const CheckoutForm = () => {
   const [cardError, setCardError] = useState('');
   const [isCardComplete, setIsCardComplete] = useState(false);
   const [isPaymentComplete, setIsPaymentComplete] = useState(false); // New state for tracking payment completion
-  const { user } = useAuth();
-  const {
-    data: currentUserData,
-    refetch,
-    isLoading: isCurrentUserLoading,
-  } = useGetMe();
+  const { user, isLoading: isUserLoading } = useAuth();
+
   const {
     mutate: paymentIntentMutate,
     data: intentData,
@@ -42,7 +38,6 @@ const CheckoutForm = () => {
   } = useCreatePaymentMutation();
 
   const price = Number(envConfig.subscription_price);
-  const currentUser = currentUserData?.data;
 
   const handleSubmit = async (event: FormEvent) => {
     event.preventDefault();
@@ -76,8 +71,8 @@ const CheckoutForm = () => {
         type: 'card',
         card,
         billing_details: {
-          email: currentUser?.email || 'unknown',
-          name: currentUser?.username || 'anonymous',
+          email: user?.email || 'unknown',
+          name: user?.username || 'anonymous',
         },
       });
 
@@ -104,15 +99,13 @@ const CheckoutForm = () => {
         card.clear();
         console.log('Payment succeeded:', paymentIntent);
         const paymentInfo = {
-          email: currentUser?.email,
+          email: user?.email,
           transactionId: paymentIntent.id,
           price: price,
         };
         // create payment in database
         createPaymentMutate(paymentInfo, {
-          onSuccess: () => {
-            refetch();
-          },
+          onSuccess: () => {},
         });
       }
     } catch (error: any) {
@@ -131,12 +124,6 @@ const CheckoutForm = () => {
   };
 
   useEffect(() => {
-    if (user) {
-      refetch();
-    }
-  }, [user, refetch]);
-
-  useEffect(() => {
     if (price) {
       paymentIntentMutate({ price });
     }
@@ -148,7 +135,7 @@ const CheckoutForm = () => {
     }
   }, [intentData]);
 
-  if (isCurrentUserLoading) {
+  if (isUserLoading) {
     return <LoadingSpinner />;
   }
 
