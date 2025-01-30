@@ -3,8 +3,6 @@
 import axiosInstance from '@/lib/AxiosInstance';
 import { FieldValues } from 'react-hook-form';
 
-// ===========INFO: Query ============
-
 // GET ALL
 export const getAllPosts = async ({
   page,

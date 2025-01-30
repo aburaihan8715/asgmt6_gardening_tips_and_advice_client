@@ -1,4 +1,3 @@
-// import { UserServices } from '@/services/user.service';
 import {
   addFavoritePost,
   checkPremiumStatus,
@@ -21,7 +20,6 @@ import {
 } from '@tanstack/react-query';
 import { toast } from 'sonner';
 
-//=========== INFO: Query===========
 export const useGetMe = () => {
   return useQuery({
     queryKey: ['GET_ME'],
@@ -34,7 +32,7 @@ export const useGetUser = (userId: string) => {
   return useQuery({
     queryKey: ['GET_USER'],
     queryFn: async () => await getUser(userId),
-    enabled: false,
+    // enabled: false,
   });
 };
 
@@ -88,132 +86,92 @@ export const useGetRevenue = () => {
   });
 };
 
-//=========== INFO: Mutation===========
-// Follow hook
-interface IFollowArgs {
-  postUserId: string;
-}
-export const useFollowUserMutation = (postId?: string) => {
+export const useFollow = () => {
   const queryClient = useQueryClient();
-  return useMutation<unknown, Error, IFollowArgs>({
-    mutationFn: async (options) => {
-      return await followUser(options.postUserId);
-    },
+  // Follow mutation
+  const followMutation = useMutation({
+    mutationFn: followUser,
     onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: ['GET_POSTS'],
       });
       queryClient.invalidateQueries({
-        queryKey: ['GET_POST', postId],
+        queryKey: ['GET_USER'],
       });
-      queryClient.invalidateQueries({
-        queryKey: ['GET_TOP_5_POSTS'],
-      });
-      queryClient.invalidateQueries({
-        queryKey: ['GET_ME'],
-      });
-      toast.success('User followed successfully.');
-      // router.refresh();
+      toast.success('Followed successfully!');
     },
-    onError: (error: any) => {
+    onError: (error: Error) => {
       toast.error(error.message);
     },
   });
-};
 
-// Unfollow hook
-interface IUnfollowArgs {
-  postUserId: string;
-}
-export const useUnfollowUserMutation = (postId?: string) => {
-  // const router = useRouter();
-  const queryClient = useQueryClient();
-  return useMutation<unknown, Error, IUnfollowArgs>({
-    mutationFn: async (options) => {
-      return await unfollowUser(options.postUserId);
-    },
+  // Unfollow mutation
+  const unfollowMutation = useMutation({
+    mutationFn: unfollowUser,
     onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: ['GET_POSTS'],
       });
       queryClient.invalidateQueries({
-        queryKey: ['GET_POST', postId],
+        queryKey: ['GET_USER'],
       });
-      queryClient.invalidateQueries({
-        queryKey: ['GET_TOP_5_POSTS'],
-      });
-      queryClient.invalidateQueries({
-        queryKey: ['GET_ME'],
-      });
-      toast.success('User unfollowed successfully.');
-      // router.refresh();
+      toast.success('Unfollow successfully!');
     },
-    onError: (error: any) => {
+    onError: (error: Error) => {
       toast.error(error.message);
     },
   });
+
+  return {
+    handleFollow: followMutation.mutate,
+    handleUnfollow: unfollowMutation.mutate,
+    isFollowingPending: followMutation.isPending,
+    isUnfollowPending: unfollowMutation.isPending,
+  };
 };
 
-// Add Favorite hook
-interface IAddFavouritePostArgs {
-  postId: string;
-}
-export const useAddFavoritePostMutation = () => {
+// NOTE: It is also need to be updated
+export const useFavourite = () => {
   const queryClient = useQueryClient();
 
-  return useMutation<unknown, Error, IAddFavouritePostArgs>({
-    mutationFn: async (options) => {
-      return await addFavoritePost(options.postId);
-    },
-
+  const addFavouriteMutation = useMutation({
+    mutationFn: addFavoritePost,
     onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: ['GET_POSTS'],
       });
       queryClient.invalidateQueries({
-        queryKey: ['GET_TOP_5_POSTS'],
+        queryKey: ['GET_USER'],
       });
-      queryClient.invalidateQueries({
-        queryKey: ['GET_ME'],
-      });
-      toast.success('Added to favourite successfully!.');
+      toast.success('Add to favourite successfully!');
     },
-
-    onError: (error: any) => {
+    onError: (error: Error) => {
       toast.error(error.message);
     },
   });
-};
 
-// Remove Favourite hook
-interface IRemoveFavouritePostArgs {
-  postId: string;
-}
-export const useRemoveFavoritePostMutation = () => {
-  const queryClient = useQueryClient();
-
-  return useMutation<unknown, Error, IRemoveFavouritePostArgs>({
-    mutationFn: async (options) => {
-      return await removeFavoritePost(options.postId);
-    },
-
+  const removeFavouriteMutation = useMutation({
+    mutationFn: removeFavoritePost,
     onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: ['GET_POSTS'],
       });
       queryClient.invalidateQueries({
-        queryKey: ['GET_TOP_5_POSTS'],
-      });
-      queryClient.invalidateQueries({
-        queryKey: ['GET_ME'],
+        queryKey: ['GET_USER'],
       });
       toast.success('Remove from favourite successfully!');
     },
-
-    onError: (error: any) => {
+    onError: (error: Error) => {
       toast.error(error.message);
     },
   });
+
+  return {
+    handleAddToFavourite: addFavouriteMutation.mutate,
+    handleRemoveFromFavourite: removeFavouriteMutation.mutate,
+    isAddFavouritePending: addFavouriteMutation.isPending,
+    isRemoveFavouritePending: removeFavouriteMutation.isPending,
+  };
 };
 
 // DELETE USER

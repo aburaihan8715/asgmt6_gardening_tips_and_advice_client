@@ -26,7 +26,7 @@ const UserProvider = ({ children }: { children: ReactNode }) => {
     const handleUser = async () => {
       try {
         const userData = await getCurrentUser();
-        setUser(userData?.data);
+        setUser(userData);
       } catch (error) {
         console.error('Error fetching user:', error);
       } finally {

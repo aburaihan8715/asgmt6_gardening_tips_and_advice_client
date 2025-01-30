@@ -32,6 +32,7 @@ const Posts = () => {
     hasNextPage,
     isFetchingNextPage,
     status,
+    refetch,
     isFetching,
   } = useGetInfinitePosts({
     searchTerm,
@@ -72,7 +73,7 @@ const Posts = () => {
               {data?.pages?.map((group, i) => (
                 <React.Fragment key={i}>
                   {group?.data?.map((item: IPost) => (
-                    <Post key={item._id} post={item} />
+                    <Post key={item._id} refetch={refetch} post={item} />
                   ))}
                 </React.Fragment>
               ))}

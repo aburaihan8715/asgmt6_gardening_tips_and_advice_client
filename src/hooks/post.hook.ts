@@ -19,12 +19,15 @@ import {
   useMutation,
   useQuery,
   useQueryClient,
+  QueryObserverResult,
+  RefetchOptions,
 } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
 import { FieldValues } from 'react-hook-form';
 import { toast } from 'sonner';
 
-//=========== INFO: Query===========
+import { IUser } from '@/types';
+
 // GET ALL
 export const useGetAllPosts = ({
   page,
@@ -122,7 +125,6 @@ export const useGetPostStats = () => {
   });
 };
 
-//=========== INFO: Mutation===========
 // UPDATE
 export const useUpdatePostMutation = () => {
   const router = useRouter();
@@ -199,45 +201,33 @@ export const useMakePostPremiumMutation = () => {
   });
 };
 
-// UPVOTE
-interface IUpvoteArgs {
+interface UseVoteProps {
+  user: IUser | null;
+  userId: string;
   postId: string;
+  post?: { upvotes?: string[]; downvotes?: string[] };
+  isPremium: boolean;
+  isVerified: boolean | undefined;
+  role: string;
+  refetch: (
+    options?: RefetchOptions,
+  ) => Promise<QueryObserverResult<any, Error>>;
 }
-export const useUpvotePostMutation = (postId?: string) => {
-  const queryClient = useQueryClient();
-  return useMutation<unknown, Error, IUpvoteArgs>({
-    mutationFn: async (options) => {
-      return await upvotePost(options.postId);
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: ['GET_POSTS'],
-      });
-      queryClient.invalidateQueries({
-        queryKey: ['GET_POST', postId],
-      });
-      queryClient.invalidateQueries({
-        queryKey: ['GET_TOP_5_POSTS'],
-      });
-      toast.success('Post upvoted successfully.');
-    },
-    onError: (error: any) => {
-      console.log(error);
-      toast.error(error.message);
-    },
-  });
-};
 
-// DOWNVOTE
-interface IDownvoteArgs {
-  postId: string;
-}
-export const useDownvotePostMutation = (postId?: string) => {
+export const useVote = ({
+  user,
+  userId,
+  postId,
+  post,
+  isPremium,
+  isVerified,
+  role,
+  refetch,
+}: UseVoteProps) => {
   const queryClient = useQueryClient();
-  return useMutation<unknown, Error, IDownvoteArgs>({
-    mutationFn: async (options) => {
-      return await downvotePost(options.postId);
-    },
+  // Upvote mutation
+  const upvoteMutation = useMutation({
+    mutationFn: upvotePost,
     onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: ['GET_POSTS'],
@@ -245,15 +235,77 @@ export const useDownvotePostMutation = (postId?: string) => {
       queryClient.invalidateQueries({
         queryKey: ['GET_POST', postId],
       });
-      queryClient.invalidateQueries({
-        queryKey: ['GET_TOP_5_POSTS'],
-      });
-      toast.success('Post downvoted successfully.');
+      refetch();
+
+      toast.success('Upvote successfully!');
     },
-    onError: (error: any) => {
+    onError: (error: Error) => {
       toast.error(error.message);
     },
   });
+
+  // Downvote mutation
+  const downvoteMutation = useMutation({
+    mutationFn: downvotePost,
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ['GET_POSTS'],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ['GET_POST', postId],
+      });
+      refetch();
+      toast.success('Downvote successfully!');
+    },
+    onError: (error: Error) => {
+      toast.error(error.message);
+    },
+  });
+
+  const handleUpvote = (postId: string) => {
+    if (!user) {
+      return toast.error('You need to login first!');
+    }
+
+    const upvotes = post?.upvotes || [];
+    const hasUpvote = upvotes.includes(userId);
+
+    if (isPremium && !isVerified && role !== 'admin') {
+      return toast.warning('You need to be verified first!!');
+    }
+
+    if (!hasUpvote) {
+      upvoteMutation.mutate(postId);
+    } else {
+      toast.error('You already upvote!');
+    }
+  };
+
+  const handleDownvote = (postId: string) => {
+    if (!user) {
+      return toast.error('You need to login first!');
+    }
+
+    const downvotes = post?.downvotes || [];
+    const hasDownvote = downvotes.includes(userId);
+
+    if (isPremium && !isVerified && role !== 'admin') {
+      return toast.warning('You need to be verified first!!');
+    }
+
+    if (!hasDownvote) {
+      downvoteMutation.mutate(postId);
+    } else {
+      toast.error('You already downvote!');
+    }
+  };
+
+  return {
+    handleUpvote,
+    handleDownvote,
+    isUpvotePending: upvoteMutation.isPending,
+    isDownvotePending: downvoteMutation.isPending,
+  };
 };
 
 // CREATE COMMENT OF A POST

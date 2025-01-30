@@ -151,7 +151,7 @@
 import { cookies } from 'next/headers';
 import { FieldValues } from 'react-hook-form';
 import axiosInstance from '@/lib/AxiosInstance';
-import { jwtDecode, JwtPayload } from 'jwt-decode';
+import { jwtDecode } from 'jwt-decode';
 // register
 export const registerUser = async (registerData: FieldValues) => {
   try {
@@ -262,33 +262,52 @@ export const settingsProfile = async (profileData: FieldValues) => {
 };
 
 // get current user
-interface DecodedToken extends JwtPayload {
-  _id: string;
-}
+// interface DecodedToken extends JwtPayload {
+//   _id: string;
+// }
 
+// export const getCurrentUser = async () => {
+//   let accessToken;
+//   if (typeof window !== 'undefined') {
+//     accessToken = document.cookie
+//       .split('; ')
+//       .find((row) => row.startsWith('accessToken='))
+//       ?.split('=')[1];
+//   } else {
+//     accessToken = cookies().get('accessToken')?.value;
+//   }
+
+//   if (!accessToken) return null;
+
+//   const decodedToken = jwtDecode<DecodedToken>(accessToken);
+
+//   if (!decodedToken || !decodedToken._id) return null;
+
+//   try {
+//     const { data } = await axiosInstance.get(
+//       `/api/v1/users/${decodedToken._id}`,
+//     );
+//     return data;
+//   } catch (error: any) {
+//     throw new Error(error.response?.data?.message || error.message);
+//   }
+
+// };
+
+// get current user
 export const getCurrentUser = async () => {
-  let accessToken;
-  if (typeof window !== 'undefined') {
-    accessToken = document.cookie
-      .split('; ')
-      .find((row) => row.startsWith('accessToken='))
-      ?.split('=')[1];
-  } else {
-    accessToken = cookies().get('accessToken')?.value;
+  const accessToken = cookies().get('accessToken')?.value;
+
+  let decodedToken = null;
+
+  if (accessToken) {
+    decodedToken = await jwtDecode(accessToken);
+    return {
+      _id: decodedToken._id,
+      email: decodedToken.email,
+      role: decodedToken.role,
+    };
   }
 
-  if (!accessToken) return null;
-
-  const decodedToken = jwtDecode<DecodedToken>(accessToken); // ✅ Type assertion
-
-  if (!decodedToken || !decodedToken._id) return null;
-
-  try {
-    const { data } = await axiosInstance.get(
-      `/api/v1/users/${decodedToken._id}`,
-    );
-    return data;
-  } catch (error: any) {
-    throw new Error(error.response?.data?.message || error.message);
-  }
+  return decodedToken;
 };

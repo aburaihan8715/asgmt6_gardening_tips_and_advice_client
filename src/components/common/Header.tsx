@@ -25,15 +25,11 @@ import Container from './Container';
 const Header = () => {
   const [open, setOpen] = useState(true);
   const { user, setUser } = useAuth();
-  console.log('user from header', user);
 
   const router = useRouter();
   // const pathname = usePathname();
   const menuItems = (
     <>
-      <li>
-        <ActiveLink href="/">Home</ActiveLink>
-      </li>
       <li>
         <ActiveLink href="/posts">News Feed</ActiveLink>
       </li>
@@ -72,9 +68,7 @@ const Header = () => {
         <Container>
           <div className="sticky top-0 z-20 hidden h-[80px] w-full items-center gap-5 border-b lg:flex">
             {/* LOGO */}
-            <Link href="/">
-              <BrandLogo />
-            </Link>
+            <BrandLogo />
             <nav className="ml-auto">
               <ul className="flex gap-4 font-semibold text-gray-700">
                 {menuItems}
@@ -188,7 +182,8 @@ const ProfilePopover = () => {
           alt=""
         />
       </PopoverTrigger>
-      <PopoverContent className="mt-5">
+
+      <PopoverContent className="mt-5 md:mr-[58px]">
         <h4 className="text-lg font-semibold">My account</h4>
         <hr className="my-2 border-gray-300" />
 

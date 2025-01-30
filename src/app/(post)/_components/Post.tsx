@@ -10,61 +10,73 @@ import {
 } from 'react-icons/fa';
 import { IPost } from '@/types/postData.type';
 import { useAuth } from '@/context/user.provider';
-import {
-  useAddFavoritePostMutation,
-  useFollowUserMutation,
-  useRemoveFavoritePostMutation,
-  useUnfollowUserMutation,
-} from '@/hooks/user.hook';
+import { useFavourite, useFollow, useGetUser } from '@/hooks/user.hook';
 import LoadingWithOverlay from '@/components/common/LoadingWithOverlay';
 import { toast } from 'sonner';
 import LoadingSpinner from '@/components/common/LoadingSpinner';
-import {
-  useDownvotePostMutation,
-  useUpvotePostMutation,
-} from '@/hooks/post.hook';
+
 import { useRouter } from 'next/navigation';
+import {
+  QueryObserverResult,
+  RefetchOptions,
+} from '@tanstack/react-query';
+import { useVote } from '@/hooks/post.hook';
 
 interface IProps {
   post: IPost;
+  refetch: (
+    options?: RefetchOptions,
+  ) => Promise<QueryObserverResult<any, Error>>;
 }
 
-const Post = ({ post }: IProps) => {
+const Post = ({ post, refetch }: IProps) => {
   const router = useRouter();
   const { user, isLoading: isUserLoading } = useAuth();
 
+  const { data: updatedUserInfo } = useGetUser(user?._id as string);
+  const currentUser = updatedUserInfo?.data;
+
   const postUserId = post?.user?._id as string;
-  const userId = user?._id as string;
-  const followings = user?.followings || [];
+  const postId = post?._id as string;
+  const userId = currentUser?._id as string;
+  const followings = currentUser?.followings || [];
   const isFollowing = followings?.includes(postUserId);
-  const favourites = user?.favourites || [];
+  const favourites = currentUser?.favourites || [];
   const isFavourite = favourites.includes(post?._id);
-  const isOwnPost = user?._id === post?.user?._id;
-  const isVerified = user?.isVerified;
+  const isOwnPost = currentUser?._id === post?.user?._id;
+  const isVerified = currentUser?.isVerified;
   const isPremium = post?.isPremium;
-  const role = user?.role;
-
-  const { mutate: followMutate, isPending: followPending } =
-    useFollowUserMutation();
-
-  const { mutate: unFollowMutate, isPending: unfollowPending } =
-    useUnfollowUserMutation();
+  const role = currentUser?.role;
 
   const {
-    mutate: addFavouritePostMutate,
-    isPending: addFavouritePostPending,
-  } = useAddFavoritePostMutation();
+    handleUpvote,
+    handleDownvote,
+    isUpvotePending,
+    isDownvotePending,
+  } = useVote({
+    user,
+    userId,
+    postId,
+    post,
+    isPremium,
+    isVerified,
+    role,
+    refetch,
+  });
 
   const {
-    mutate: removeFavouritePostMutate,
-    isPending: removeFavouritePostPending,
-  } = useRemoveFavoritePostMutation();
+    handleAddToFavourite,
+    handleRemoveFromFavourite,
+    isAddFavouritePending,
+    isRemoveFavouritePending,
+  } = useFavourite();
 
-  const { mutate: upvoteMutate, isPending: isUpvotePending } =
-    useUpvotePostMutation();
-
-  const { mutate: downvoteMutate, isPending: isDownvotePending } =
-    useDownvotePostMutation();
+  const {
+    handleFollow,
+    handleUnfollow,
+    isFollowingPending,
+    isUnfollowPending,
+  } = useFollow();
 
   // HANDLE SHARE
   const handleShare = async () => {
@@ -80,104 +92,6 @@ const Post = ({ post }: IProps) => {
       }
     } catch (error) {
       console.error('Error sharing:', error);
-    }
-  };
-
-  // HANDLE ADD FAVOURITE
-  const handleAddFavourite = (postId: string) => {
-    const mutateData = { postId };
-    if (isPremium) {
-      if (!isVerified) {
-        return toast.warning('You need to be verified first!!');
-      }
-      addFavouritePostMutate(mutateData, {
-        onSuccess: () => {},
-        onError: () => {},
-      });
-    } else {
-      addFavouritePostMutate(mutateData, {
-        onSuccess: () => {},
-        onError: () => {},
-      });
-    }
-  };
-
-  // HANDLE REMOVE FAVOURITE
-  const handleRemoveFavourite = (postId: string) => {
-    const mutateData = { postId };
-    if (isPremium) {
-      if (!isVerified) {
-        return toast.warning('You need to be verified first!!');
-      }
-      removeFavouritePostMutate(mutateData, {
-        onSuccess: () => {},
-        onError: () => {},
-      });
-    } else {
-      removeFavouritePostMutate(mutateData, {
-        onSuccess: () => {},
-        onError: () => {},
-      });
-    }
-  };
-
-  // HANDLE FOLLOW
-  const handleFollow = (postUserId: string) => {
-    const mutateData = { postUserId };
-    followMutate(mutateData, {
-      onSuccess: () => {},
-      onError: () => {},
-    });
-  };
-
-  // HANDLE UNFOLLOW
-  const handleUnfollow = (postUserId: string) => {
-    const mutateData = { postUserId };
-    unFollowMutate(mutateData, {
-      onSuccess: () => {},
-      onError: () => {},
-    });
-  };
-
-  // HANDLE UPVOTE
-  const handleUpvote = (postId: string) => {
-    if (!user) {
-      return toast.error('You need to login first!');
-    }
-
-    const upvotes = post?.upvotes || [];
-    const hasUpvotes = upvotes?.includes(userId);
-
-    if (isPremium && !isVerified && role !== 'admin') {
-      return toast.warning('You need to be verified first!!');
-    }
-
-    const mutateData = { postId };
-    if (!hasUpvotes) {
-      upvoteMutate(mutateData, {});
-    } else {
-      toast.error('You already upvoted!');
-    }
-  };
-
-  // HANDLE DOWNVOTE
-  const handleDownvote = (postId: string) => {
-    if (!user) {
-      return toast.success('You need to login first!!');
-    }
-
-    const downvotes = post?.downvotes || [];
-    const hasDownvotes = downvotes.includes(userId);
-
-    if (isPremium && !isVerified && role !== 'admin') {
-      return toast.warning('You need to be verified first!!');
-    }
-
-    const mutateData = { postId };
-    if (!hasDownvotes) {
-      downvoteMutate(mutateData, {});
-    } else {
-      toast.error('You already downvoted!');
     }
   };
 
@@ -224,10 +138,10 @@ const Post = ({ post }: IProps) => {
 
   return (
     <>
-      {(followPending ||
-        unfollowPending ||
-        addFavouritePostPending ||
-        removeFavouritePostPending ||
+      {(isFollowingPending ||
+        isUnfollowPending ||
+        isAddFavouritePending ||
+        isRemoveFavouritePending ||
         isUpvotePending ||
         isDownvotePending) && <LoadingWithOverlay />}
       <li className="group relative mb-6 flex gap-10 rounded-lg bg-white p-1">
@@ -283,7 +197,7 @@ const Post = ({ post }: IProps) => {
                       : 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png'
                   }
                   sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                  alt={post?.user?.username}
+                  alt={post?.user?.username || 'User profile'}
                   className="rounded-full object-cover"
                 />
               </div>
@@ -389,7 +303,16 @@ const Post = ({ post }: IProps) => {
                 <div className="flex items-center">
                   {!isFavourite && (
                     <button
-                      onClick={() => handleAddFavourite(post?._id)}
+                      onClick={() => {
+                        if (isPremium) {
+                          if (!isVerified) {
+                            return toast.warning(
+                              'You need to be verified first!!',
+                            );
+                          }
+                        }
+                        handleAddToFavourite(post?._id);
+                      }}
                       className={`text-lg text-gray-500`}
                     >
                       <FaHeart />
@@ -398,7 +321,7 @@ const Post = ({ post }: IProps) => {
 
                   {isFavourite && (
                     <button
-                      onClick={() => handleRemoveFavourite(post?._id)}
+                      onClick={() => handleRemoveFromFavourite(post?._id)}
                       className={`text-lg text-red-500`}
                     >
                       <FaHeart />
