@@ -4,7 +4,6 @@ import { useAuth } from '@/context/user.provider';
 import { useCheckPremiumStatus } from '@/hooks/user.hook';
 
 import {
-  FaArrowLeft,
   FaCog,
   FaDollarSign,
   FaFileAlt,
@@ -36,25 +35,18 @@ const Sidebar = () => {
       {user && user?.role === 'admin' && (
         <ul className="flex flex-col gap-4">
           <li className="flex">
-            <ActiveLink className="flex items-center gap-2" href="/">
-              <FaArrowLeft className="text-2xl text-gray-600 md:text-base" />
-              <span className="hidden md:block">Back</span>
-            </ActiveLink>
-          </li>
-
-          <li className="flex">
             <ActiveLink
               className="flex items-center gap-2"
-              href="/admin-dashboard"
+              href="/admin/dashboard"
             >
               <FaHome className="text-2xl text-gray-600 md:text-base" />
-              <span className="hidden md:block">Admin Home</span>
+              <span className="hidden md:block">Dashboard</span>
             </ActiveLink>
           </li>
           <li className="flex">
             <ActiveLink
               className="flex items-center gap-2"
-              href="/profile/change-password"
+              href="/auth/change-password"
             >
               <FaLock className="text-2xl text-gray-600 md:text-base" />
               <span className="hidden md:block">Change Password</span>
@@ -64,7 +56,7 @@ const Sidebar = () => {
           <li className="flex">
             <ActiveLink
               className="flex items-center gap-2"
-              href="/profile/settings-profile"
+              href="/auth/settings-profile"
             >
               <FaCog className="text-2xl text-gray-600 md:text-base" />
               <span className="hidden md:block">Settings Profile</span>
@@ -74,7 +66,7 @@ const Sidebar = () => {
           <li className="flex">
             <ActiveLink
               className="flex items-center gap-2"
-              href="/admin-dashboard/all-posts"
+              href="/admin/all-posts"
             >
               <FaFileAlt className="text-2xl text-gray-600 md:text-base" />
               <span className="hidden md:block">All Posts</span>
@@ -84,17 +76,7 @@ const Sidebar = () => {
           <li className="flex">
             <ActiveLink
               className="flex items-center gap-2"
-              href="/profile/favourite-posts"
-            >
-              <FaHeart className="text-2xl text-gray-600 md:text-base" />
-              <span className="hidden md:block">Favourite Posts</span>
-            </ActiveLink>
-          </li>
-
-          <li className="flex">
-            <ActiveLink
-              className="flex items-center gap-2"
-              href="/admin-dashboard/all-users"
+              href="/admin/all-users"
             >
               <FaFileAlt className="text-2xl text-gray-600 md:text-base" />
               <span className="hidden md:block">All Users</span>
@@ -107,25 +89,19 @@ const Sidebar = () => {
       {user && user.role === 'user' && (
         <ul className="flex flex-col gap-4">
           <li className="flex">
-            <ActiveLink className="flex items-center gap-2" href="/">
-              <FaArrowLeft className="text-2xl text-gray-600 md:text-base" />
-              <span className="hidden md:block">Back</span>
-            </ActiveLink>
-          </li>
-          <li className="flex">
             <ActiveLink
               className="flex items-center gap-2"
-              href="/user-dashboard"
+              href="/user/dashboard"
             >
               <FaHome className="text-2xl text-gray-600 md:text-base" />
-              <span className="hidden md:block">User Home</span>
+              <span className="hidden md:block">Dashboard</span>
             </ActiveLink>
           </li>
 
           <li className="flex">
             <ActiveLink
               className="flex items-center gap-2"
-              href="/profile/change-password"
+              href="/auth/change-password"
             >
               <FaLock className="text-2xl text-gray-600 md:text-base" />
               <span className="hidden md:block">Change Password</span>
@@ -134,7 +110,7 @@ const Sidebar = () => {
           <li className="flex">
             <ActiveLink
               className="flex items-center gap-2"
-              href="/profile/settings-profile"
+              href="/auth/settings-profile"
             >
               <FaCog className="text-2xl text-gray-600 md:text-base" />
               <span className="hidden md:block">Settings Profile</span>
@@ -144,7 +120,7 @@ const Sidebar = () => {
           <li className="flex">
             <ActiveLink
               className="flex items-center gap-2"
-              href="/user-dashboard/create-post"
+              href="/user/create-post"
             >
               <FaPlus className="text-2xl text-gray-600 md:text-base" />
               <span className="hidden md:block">Create Post</span>
@@ -154,7 +130,7 @@ const Sidebar = () => {
           <li className="flex">
             <ActiveLink
               className="flex items-center gap-2"
-              href="/user-dashboard/my-posts"
+              href="/user/my-posts"
             >
               <FaFileAlt className="text-2xl text-gray-600 md:text-base" />
               <span className="hidden md:block">My Posts</span>
@@ -165,7 +141,7 @@ const Sidebar = () => {
             <li className="flex">
               <ActiveLink
                 className="flex items-center gap-2"
-                href="/profile/favourite-posts"
+                href="/auth/favourite-posts"
               >
                 <FaHeart className="text-2xl text-gray-600 md:text-base" />
                 <span className="hidden md:block">Favourite Posts</span>
@@ -179,7 +155,7 @@ const Sidebar = () => {
               className="flex"
             >
               <ActiveLink
-                href="/user-dashboard/payment"
+                href="/payment"
                 className="flex items-center gap-2"
               >
                 <FaDollarSign className="text-2xl text-gray-600 md:text-base" />

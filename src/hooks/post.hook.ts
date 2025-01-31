@@ -19,8 +19,6 @@ import {
   useMutation,
   useQuery,
   useQueryClient,
-  QueryObserverResult,
-  RefetchOptions,
 } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
 import { FieldValues } from 'react-hook-form';
@@ -209,9 +207,6 @@ interface UseVoteProps {
   isPremium: boolean;
   isVerified: boolean | undefined;
   role: string;
-  refetch: (
-    options?: RefetchOptions,
-  ) => Promise<QueryObserverResult<any, Error>>;
 }
 
 export const useVote = ({
@@ -222,7 +217,6 @@ export const useVote = ({
   isPremium,
   isVerified,
   role,
-  refetch,
 }: UseVoteProps) => {
   const queryClient = useQueryClient();
   // Upvote mutation
@@ -235,7 +229,6 @@ export const useVote = ({
       queryClient.invalidateQueries({
         queryKey: ['GET_POST', postId],
       });
-      refetch();
 
       toast.success('Upvote successfully!');
     },
@@ -254,7 +247,7 @@ export const useVote = ({
       queryClient.invalidateQueries({
         queryKey: ['GET_POST', postId],
       });
-      refetch();
+
       toast.success('Downvote successfully!');
     },
     onError: (error: Error) => {
@@ -399,3 +392,66 @@ export const useCreatePostMutation = () => {
     },
   });
 };
+
+// import { useCallback } from 'react';
+// interface IShareProps {
+//   title: string;
+//   text: string;
+//   url: string;
+// }
+
+// export const useShare = ({ title, text, url }: IShareProps) => {
+//   const handleShare = useCallback(async () => {
+//     try {
+//       if (navigator.share) {
+//         await navigator.share({
+//           title: title || document.title,
+//           text: text || '',
+//           url: url || window.location.href,
+//         });
+//       } else {
+//         alert('Share API is not supported in your browser.');
+//       }
+//     } catch (error) {
+//       console.error('Error sharing:', error);
+//     }
+//   }, [title, text, url]);
+
+//   return { handleShare };
+// };
+
+// interface UseHandleCommentProps {
+//   post?: { _id?: string; numberOfComments?: number };
+//   isPremium: boolean;
+//   isVerified: boolean;
+//   role: string;
+// }
+
+// export const useHandleComment = ({
+//   post,
+//   isPremium,
+//   isVerified,
+//   role,
+// }: UseHandleCommentProps) => {
+//   const router = useRouter();
+
+//   const handleComment = useCallback(() => {
+//     const postId = post?._id;
+//     if (!postId) return;
+
+//     const pathForCreate = `/create-comment?postId=${postId}`;
+//     const pathForCommentList = `/comments?postId=${postId}`;
+//     const path =
+//       post?.numberOfComments && post.numberOfComments > 0
+//         ? pathForCommentList
+//         : pathForCreate;
+
+//     if (isPremium && !isVerified && role !== 'admin') {
+//       return toast.warning('You need to be verified first!!');
+//     }
+
+//     router.push(path);
+//   }, [post, isPremium, isVerified, role, router]);
+
+//   return { handleComment };
+// };

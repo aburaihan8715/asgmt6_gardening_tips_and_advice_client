@@ -77,7 +77,7 @@ const CommentItem = ({
                   {commentUser?._id === user?._id && (
                     <div className="flex items-center space-x-2">
                       <Link
-                        href={`/edit-comment?commentId=${item?._id}&postId=${postId}`}
+                        href={`/comments/edit?commentId=${item?._id}&postId=${postId}`}
                         className="text-blue-500 hover:text-blue-700"
                       >
                         <FaEdit />

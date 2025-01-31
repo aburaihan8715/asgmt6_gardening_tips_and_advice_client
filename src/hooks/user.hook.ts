@@ -131,7 +131,16 @@ export const useFollow = () => {
 };
 
 // NOTE: It is also need to be updated
-export const useFavourite = () => {
+
+interface IUseFavouriteProps {
+  isPremium: boolean;
+  isFavourite: boolean;
+  isVerified: boolean | undefined;
+}
+export const useFavourite = ({
+  isPremium,
+  isVerified,
+}: IUseFavouriteProps) => {
   const queryClient = useQueryClient();
 
   const addFavouriteMutation = useMutation({
@@ -166,9 +175,21 @@ export const useFavourite = () => {
     },
   });
 
+  const handleAddToFavourite = (postId: string) => {
+    if (isPremium) {
+      if (!isVerified) {
+        return toast.warning('You need to be verified first!!');
+      }
+    }
+    addFavouriteMutation.mutate(postId);
+  };
+  const handleRemoveFromFavourite = (postId: string) => {
+    removeFavouriteMutation.mutate(postId);
+  };
+
   return {
-    handleAddToFavourite: addFavouriteMutation.mutate,
-    handleRemoveFromFavourite: removeFavouriteMutation.mutate,
+    handleAddToFavourite,
+    handleRemoveFromFavourite,
     isAddFavouritePending: addFavouriteMutation.isPending,
     isRemoveFavouritePending: removeFavouriteMutation.isPending,
   };

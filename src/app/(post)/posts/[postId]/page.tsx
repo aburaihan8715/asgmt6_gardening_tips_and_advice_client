@@ -8,18 +8,9 @@ import {
   FaArrowUp,
   FaArrowDown,
 } from 'react-icons/fa';
-import {
-  useDownvotePostMutation,
-  useGetPost,
-  useUpvotePostMutation,
-} from '@/hooks/post.hook';
+import { useGetPost, useVote } from '@/hooks/post.hook';
 import QuillContent from '@/components/common/QuillContent';
-import {
-  useAddFavoritePostMutation,
-  useFollowUserMutation,
-  useRemoveFavoritePostMutation,
-  useUnfollowUserMutation,
-} from '@/hooks/user.hook';
+import { useFavourite, useFollow, useGetUser } from '@/hooks/user.hook';
 import LoadingWithOverlay from '@/components/common/LoadingWithOverlay';
 import LoadingSpinner from '@/components/common/LoadingSpinner';
 import { useAuth } from '@/context/user.provider';
@@ -28,46 +19,56 @@ import { toast } from 'sonner';
 
 const PostDetails = () => {
   const params = useParams();
-  const postId = params?.postId as string;
-  const { user, isLoading: isUserLoading } = useAuth();
-  const role = user?.role;
-
   const router = useRouter();
+  const postId = params?.postId as string;
+
+  const { user, isLoading: isUserLoading } = useAuth();
+  const { data: updatedUserInfo } = useGetUser(user?._id as string);
+  const currentUser = updatedUserInfo?.data;
+
   const { data: postDetailsData, isLoading: isPostLoading } =
     useGetPost(postId);
   const post = postDetailsData?.data;
 
   const postUserId = post?.user?._id as string;
-  const userId = user?._id;
-  const followings = user?.followings || [];
+  const userId = currentUser?._id;
+  const followings = currentUser?.followings || [];
   const isFollowing = followings?.includes(postUserId);
-  const favourites = user?.favourites || [];
+  const favourites = currentUser?.favourites || [];
   const isFavourite = favourites.includes(post?._id);
-  const isOwnPost = user?._id === post?.user?._id;
-  const isVerified = user?.isVerified;
+  const isOwnPost = currentUser?._id === post?.user?._id;
+  const isVerified = currentUser?.isVerified;
   const isPremium = post?.isPremium;
-
-  const { mutate: followMutate, isPending: followPending } =
-    useFollowUserMutation();
-
-  const { mutate: unFollowMutate, isPending: unfollowPending } =
-    useUnfollowUserMutation();
+  const role = currentUser?.role;
 
   const {
-    mutate: addFavouritePostMutate,
-    isPending: addFavouritePostPending,
-  } = useAddFavoritePostMutation();
+    handleUpvote,
+    handleDownvote,
+    isUpvotePending,
+    isDownvotePending,
+  } = useVote({
+    user,
+    userId,
+    postId,
+    post,
+    isPremium,
+    isVerified,
+    role,
+  });
 
   const {
-    mutate: removeFavouritePostMutate,
-    isPending: removeFavouritePostPending,
-  } = useRemoveFavoritePostMutation();
+    handleAddToFavourite,
+    handleRemoveFromFavourite,
+    isAddFavouritePending,
+    isRemoveFavouritePending,
+  } = useFavourite({ isFavourite, isPremium, isVerified });
 
-  const { mutate: upvoteMutate, isPending: isUpvotePending } =
-    useUpvotePostMutation();
-
-  const { mutate: downvoteMutate, isPending: isDownvotePending } =
-    useDownvotePostMutation();
+  const {
+    handleFollow,
+    handleUnfollow,
+    isFollowingPending,
+    isUnfollowPending,
+  } = useFollow();
 
   // HANDLE SHARE
   const handleShare = async () => {
@@ -83,104 +84,6 @@ const PostDetails = () => {
       }
     } catch (error) {
       console.error('Error sharing:', error);
-    }
-  };
-
-  // HANDLE ADD FAVOURITE
-  const handleAddFavourite = (postId: string) => {
-    const mutateData = { postId };
-    if (isPremium) {
-      if (!isVerified) {
-        return toast.warning('You need to be verified first!!');
-      }
-      addFavouritePostMutate(mutateData, {
-        onSuccess: () => {},
-        onError: () => {},
-      });
-    } else {
-      addFavouritePostMutate(mutateData, {
-        onSuccess: () => {},
-        onError: () => {},
-      });
-    }
-  };
-
-  // HANDLE REMOVE FAVOURITE
-  const handleRemoveFavourite = (postId: string) => {
-    const mutateData = { postId };
-    if (isPremium) {
-      if (!isVerified) {
-        return toast.warning('You need to be verified first!!');
-      }
-      removeFavouritePostMutate(mutateData, {
-        onSuccess: () => {},
-        onError: () => {},
-      });
-    } else {
-      removeFavouritePostMutate(mutateData, {
-        onSuccess: () => {},
-        onError: () => {},
-      });
-    }
-  };
-
-  // HANDLE FOLLOW
-  const handleFollow = (postUserId: string) => {
-    const mutateData = { postUserId };
-    followMutate(mutateData, {
-      onSuccess: () => {},
-      onError: () => {},
-    });
-  };
-
-  // HANDLE UNFOLLOW
-  const handleUnfollow = (postUserId: string) => {
-    const mutateData = { postUserId };
-    unFollowMutate(mutateData, {
-      onSuccess: () => {},
-      onError: () => {},
-    });
-  };
-
-  // HANDLE UPVOTE
-  const handleUpvote = (postId: string) => {
-    if (!user) {
-      return toast.error('You need to login first!');
-    }
-
-    const upvotes = post?.upvotes || [];
-    const hasUpvotes = upvotes?.includes(userId);
-
-    if (isPremium && !isVerified && role !== 'admin') {
-      return toast.warning('You need to be verified first!!');
-    }
-
-    const mutateData = { postId };
-    if (!hasUpvotes) {
-      upvoteMutate(mutateData, {});
-    } else {
-      toast.error('You already upvoted!');
-    }
-  };
-
-  // HANDLE DOWNVOTE
-  const handleDownvote = (postId: string) => {
-    if (!user) {
-      return toast.success('You need to login first!!');
-    }
-
-    const downvotes = post?.downvotes || [];
-    const hasDownvotes = downvotes.includes(userId);
-
-    if (isPremium && !isVerified && role !== 'admin') {
-      return toast.warning('You need to be verified first!!');
-    }
-
-    const mutateData = { postId };
-    if (!hasDownvotes) {
-      downvoteMutate(mutateData, {});
-    } else {
-      toast.error('You already downvoted!');
     }
   };
 
@@ -215,14 +118,14 @@ const PostDetails = () => {
   // MAIN CONTENT
   return (
     <>
-      {(followPending ||
-        unfollowPending ||
-        addFavouritePostPending ||
-        removeFavouritePostPending ||
+      {(isFollowingPending ||
+        isUnfollowPending ||
+        isAddFavouritePending ||
+        isRemoveFavouritePending ||
         isUpvotePending ||
         isDownvotePending) && <LoadingWithOverlay />}
       <section className="mt-[80px]">
-        <div className="mx-auto max-w-5xl p-6">
+        <div className="mx-auto max-w-4xl">
           {/* Header */}
           <div className="relative mb-6 aspect-[16/9] rounded-lg">
             <Image
@@ -261,7 +164,7 @@ const PostDetails = () => {
           </div>
 
           {/* Author Information */}
-          <div className="mt-2 flex items-center justify-between text-sm text-gray-500">
+          <div className="mt-2 flex items-center gap-5 text-sm text-gray-500">
             <div className="flex items-center">
               <div className="relative mr-3 h-10 w-10 rounded-full object-cover">
                 <Image
@@ -321,10 +224,12 @@ const PostDetails = () => {
           </div>
 
           {/* Main Content */}
-          <QuillContent content={post?.content} />
+          <div className="mt-10">
+            <QuillContent content={post?.content} />
+          </div>
 
           {/* Actions */}
-          <div className="mt-6 flex items-center justify-between">
+          <div className="my-10 flex items-center gap-10">
             <div className="flex items-center space-x-4">
               {/* Upvote Button */}
               <button
@@ -345,43 +250,40 @@ const PostDetails = () => {
               </button>
             </div>
 
-            {user && (
-              <div>
-                <button
-                  onClick={handleComment}
-                  className="flex items-center space-x-2"
-                >
-                  <FaCommentAlt className="text-gray-400" />
-                  <span className="text-gray-500">
-                    {post?.numberOfComments || 0} {''} Comments
-                  </span>
-                </button>
-              </div>
-            )}
+            <div>
+              <button
+                onClick={handleComment}
+                className="flex items-center space-x-2"
+              >
+                <FaCommentAlt className="text-gray-400" />
+                <span className="text-gray-500">
+                  {post?.numberOfComments || 0} {''} Comments
+                </span>
+              </button>
+            </div>
 
             <div className="flex items-center space-x-2">
               {/* Favourite Button Icon */}
-              {user && (
-                <div className="flex items-center">
-                  {!isFavourite && (
-                    <button
-                      onClick={() => handleAddFavourite(post?._id)}
-                      className={`text-lg text-gray-500`}
-                    >
-                      <FaHeart />
-                    </button>
-                  )}
 
-                  {isFavourite && (
-                    <button
-                      onClick={() => handleRemoveFavourite(post?._id)}
-                      className={`text-lg text-red-500`}
-                    >
-                      <FaHeart />
-                    </button>
-                  )}
-                </div>
-              )}
+              <div className="flex items-center">
+                {!isFavourite && (
+                  <button
+                    onClick={() => handleAddToFavourite(post?._id)}
+                    className={`text-lg text-gray-500`}
+                  >
+                    <FaHeart />
+                  </button>
+                )}
+
+                {isFavourite && (
+                  <button
+                    onClick={() => handleRemoveFromFavourite(post?._id)}
+                    className={`text-lg text-red-500`}
+                  >
+                    <FaHeart />
+                  </button>
+                )}
+              </div>
 
               {/* Share Button Icon */}
               <div className="">
