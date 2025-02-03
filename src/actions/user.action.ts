@@ -2,7 +2,6 @@
 
 import axiosInstance from '@/lib/AxiosInstance';
 
-// ==========INFO: Query=============
 // GET ME
 export const getTopFiveUsers = async () => {
   try {
@@ -48,7 +47,7 @@ export const getMe = async () => {
 };
 
 // GET USER
-export const getUser = async (userId: string) => {
+export const getSingleUser = async (userId: string) => {
   try {
     const { data } = await axiosInstance.get(`/api/v1/users/${userId}`);
     return data;
@@ -101,7 +100,6 @@ export const getRevenue = async () => {
   }
 };
 
-// ==========INFO: Mutation=============
 // FOLLOW USER
 export const followUser = async (postUserId: string) => {
   try {

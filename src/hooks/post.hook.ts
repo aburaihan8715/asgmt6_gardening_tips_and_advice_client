@@ -1,10 +1,8 @@
 import {
-  createCommentOnPost,
   createPost,
   deletePost,
   downvotePost,
   getAllPosts,
-  getCommentsOfPost,
   getInfinitePosts,
   getMyPosts,
   getPost,
@@ -301,78 +299,6 @@ export const useVote = ({
   };
 };
 
-// CREATE COMMENT OF A POST
-interface ICreateCommentArgs {
-  postId: string;
-  content: string;
-}
-export const useCreateCommentOnPost = ({
-  page,
-  limit,
-  searchTerm,
-  postId,
-}: {
-  page?: number;
-  limit?: number;
-  searchTerm?: string;
-  postId?: string;
-}) => {
-  const queryClient = useQueryClient();
-  const router = useRouter();
-
-  return useMutation<unknown, Error, ICreateCommentArgs>({
-    mutationFn: async (options) => {
-      return await createCommentOnPost(options.postId, options.content);
-    },
-
-    onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: ['GET_MY_POSTS'],
-      });
-      queryClient.invalidateQueries({
-        queryKey: ['GET_POSTS'],
-      });
-      queryClient.invalidateQueries({
-        queryKey: ['GET_TOP_5_POSTS'],
-      });
-
-      queryClient.invalidateQueries({
-        queryKey: [
-          'GET_COMMENTS_OF_POST',
-          { page, limit, searchTerm, postId },
-        ],
-      });
-      toast.success('Comment posted successfully.');
-      router.push(`/comments?postId=${postId}`);
-    },
-    onError: (error: any) => {
-      toast.error(error.message);
-    },
-  });
-};
-
-// GET COMMENTS OF POST
-export const useGetCommentsOfPost = ({
-  page,
-  limit,
-  searchTerm,
-  postId,
-}: {
-  page?: number;
-  limit?: number;
-  searchTerm?: string;
-  postId?: string;
-}) => {
-  return useQuery({
-    queryKey: [
-      'GET_COMMENTS_OF_POST',
-      { page, limit, searchTerm, postId },
-    ],
-    queryFn: async () =>
-      await getCommentsOfPost({ page, limit, searchTerm, postId }),
-  });
-};
-
 // CREATE POST
 export const useCreatePostMutation = () => {
   const queryClient = useQueryClient();
@@ -393,65 +319,106 @@ export const useCreatePostMutation = () => {
   });
 };
 
-// import { useCallback } from 'react';
-// interface IShareProps {
-//   title: string;
-//   text: string;
-//   url: string;
+// ==========comment related hooks =================
+
+// CREATE COMMENT OF A POST
+
+// interface ICreateCommentArgs {
+//   postId: string;
+//   content: string;
 // }
 
-// export const useShare = ({ title, text, url }: IShareProps) => {
-//   const handleShare = useCallback(async () => {
-//     try {
-//       if (navigator.share) {
-//         await navigator.share({
-//           title: title || document.title,
-//           text: text || '',
-//           url: url || window.location.href,
-//         });
-//       } else {
-//         alert('Share API is not supported in your browser.');
-//       }
-//     } catch (error) {
-//       console.error('Error sharing:', error);
-//     }
-//   }, [title, text, url]);
+// export const useCreateCommentOnPost = (postId: string) => {
+//   const queryClient = useQueryClient();
 
-//   return { handleShare };
+//   return useMutation<unknown, Error, ICreateCommentArgs>({
+//     mutationFn: async ({ postId, content }) => {
+//       return createCommentOnPost(postId, content);
+//     },
+
+//     onSuccess: () => {
+//       queryClient.invalidateQueries({
+//         queryKey: ['GET_COMMENTS_OF_POST', { postId }],
+//       });
+//       toast.success('Comment created successfully.');
+//     },
+//     onError: (error: any) => {
+//       toast.error(error.message);
+//     },
+//   });
 // };
 
-// interface UseHandleCommentProps {
-//   post?: { _id?: string; numberOfComments?: number };
-//   isPremium: boolean;
-//   isVerified: boolean;
-//   role: string;
+// // GET COMMENTS OF POST
+// export const useGetCommentsOfPost = ({
+//   page,
+//   limit,
+//   searchTerm,
+//   postId,
+// }: {
+//   page?: number;
+//   limit?: number;
+//   searchTerm?: string;
+//   postId?: string;
+// }) => {
+//   return useQuery({
+//     queryKey: [
+//       'GET_COMMENTS_OF_POST',
+//       { page, limit, searchTerm, postId },
+//     ],
+//     queryFn: async () =>
+//       await getCommentsOfPost({ page, limit, searchTerm, postId }),
+//   });
+// };
+
+// export const useGetCommentOfPost = (postId: string, commentId: string) => {
+//   return useQuery({
+//     queryKey: ['GET_COMMENT_OF_POST', postId],
+//     queryFn: async () => getCommentOfPost(postId, commentId),
+//   });
+// };
+
+// // UPDATE
+// export const useUpdateCommentOfPostMutation = (postId: string) => {
+//   const queryClient = useQueryClient();
+
+//   return useMutation<unknown, Error, FieldValues>({
+//     mutationFn: async ({ postId, commentId, payload }) => {
+//       return updateCommentOfPost(postId, commentId, payload);
+//     },
+
+//     onSuccess: () => {
+//       queryClient.invalidateQueries({
+//         queryKey: ['GET_COMMENTS_OF_POST', { postId }],
+//       });
+
+//       toast.success('Comment updated successfully.');
+//     },
+//     onError: (error) => {
+//       console.error(error);
+//       toast.error('Failed to update the post: ' + error.message);
+//     },
+//   });
+// };
+
+// // DELETE
+// interface IDeleteCommentOfPostArgs {
+//   postId: string;
+//   commentId: string;
 // }
-
-// export const useHandleComment = ({
-//   post,
-//   isPremium,
-//   isVerified,
-//   role,
-// }: UseHandleCommentProps) => {
-//   const router = useRouter();
-
-//   const handleComment = useCallback(() => {
-//     const postId = post?._id;
-//     if (!postId) return;
-
-//     const pathForCreate = `/create-comment?postId=${postId}`;
-//     const pathForCommentList = `/comments?postId=${postId}`;
-//     const path =
-//       post?.numberOfComments && post.numberOfComments > 0
-//         ? pathForCommentList
-//         : pathForCreate;
-
-//     if (isPremium && !isVerified && role !== 'admin') {
-//       return toast.warning('You need to be verified first!!');
-//     }
-
-//     router.push(path);
-//   }, [post, isPremium, isVerified, role, router]);
-
-//   return { handleComment };
+// export const useDeleteCommentOfPostMutation = (postId: string) => {
+//   const queryClient = useQueryClient();
+//   return useMutation<unknown, Error, IDeleteCommentOfPostArgs>({
+//     mutationFn: async ({ postId, commentId }) =>
+//       deleteCommentOfPost(postId, commentId),
+//     onSuccess: () => {
+//       queryClient.invalidateQueries({
+//         queryKey: ['GET_COMMENTS_OF_POST', { postId }],
+//       });
+//       toast.success('Comment deleted successfully.');
+//     },
+//     onError: (error) => {
+//       console.error(error);
+//       toast.error('Failed to delete the comment: ' + error.message);
+//     },
+//   });
 // };

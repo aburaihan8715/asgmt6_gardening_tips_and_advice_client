@@ -133,36 +133,6 @@ export const getPost = async (postId: string) => {
   }
 };
 
-// GET COMMENTS OF A POST
-export const getCommentsOfPost = async ({
-  page,
-  limit,
-  searchTerm,
-  postId,
-}: {
-  page?: number;
-  limit?: number;
-  searchTerm?: string;
-  postId?: string;
-}) => {
-  try {
-    let queryString = `/api/v1/posts/${postId}/comments`;
-
-    const params = new URLSearchParams();
-
-    if (page) params.append('page', page.toString());
-    if (limit) params.append('limit', limit.toString());
-    if (searchTerm) params.append('searchTerm', searchTerm);
-
-    if (params.toString()) queryString += `?${params.toString()}`;
-
-    const { data } = await axiosInstance.get(queryString);
-    return data;
-  } catch (error: any) {
-    throw new Error(error.response?.data?.message || error.message);
-  }
-};
-
 // GET POST STATS
 export const getPostStats = async () => {
   try {
@@ -173,28 +143,10 @@ export const getPostStats = async () => {
   }
 };
 
-// ===========INFO: Mutation ============
-
 // CREATE
 export const createPost = async (postData: FieldValues) => {
   try {
     const { data } = await axiosInstance.post('/api/v1/posts', postData);
-    return data;
-  } catch (error: any) {
-    throw new Error(error.response?.data?.message || error.message);
-  }
-};
-
-// CREATE COMMENT OT A POST
-export const createCommentOnPost = async (
-  postId: string,
-  content: string,
-) => {
-  try {
-    const { data } = await axiosInstance.post(
-      `/api/v1/posts/${postId}/comments`,
-      { content },
-    );
     return data;
   } catch (error: any) {
     throw new Error(error.response?.data?.message || error.message);
@@ -262,3 +214,98 @@ export const downvotePost = async (postId: string) => {
     throw new Error(error.response?.data?.message || error.message);
   }
 };
+
+// ===========comment related actions =================
+
+// // CREATE COMMENT OT A POST
+// export const createCommentOnPost = async (
+//   postId: string,
+//   content: string,
+// ) => {
+//   try {
+//     const { data } = await axiosInstance.post(
+//       `/api/v1/posts/${postId}/comments`,
+//       { content },
+//     );
+//     return data;
+//   } catch (error: any) {
+//     throw new Error(error.response?.data?.message || error.message);
+//   }
+// };
+
+// // GET COMMENTS OF A POST
+// export const getCommentsOfPost = async ({
+//   page,
+//   limit,
+//   searchTerm,
+//   postId,
+// }: {
+//   page?: number;
+//   limit?: number;
+//   searchTerm?: string;
+//   postId?: string;
+// }) => {
+//   try {
+//     let queryString = `/api/v1/posts/${postId}/comments`;
+
+//     const params = new URLSearchParams();
+
+//     if (page) params.append('page', page.toString());
+//     if (limit) params.append('limit', limit.toString());
+//     if (searchTerm) params.append('searchTerm', searchTerm);
+
+//     if (params.toString()) queryString += `?${params.toString()}`;
+
+//     const { data } = await axiosInstance.get(queryString);
+//     return data;
+//   } catch (error: any) {
+//     throw new Error(error.response?.data?.message || error.message);
+//   }
+// };
+
+// // UPDATE
+// export const updateCommentOfPost = async (
+//   postId: string,
+//   commentId: string,
+//   payload: { content: string },
+// ) => {
+//   try {
+//     const { data } = await axiosInstance.patch(
+//       `/api/v1/posts/${postId}/comments/${commentId}`,
+//       payload,
+//     );
+//     return data;
+//   } catch (error: any) {
+//     throw new Error(error.response?.data?.message || error.message);
+//   }
+// };
+
+// // DELETE
+// export const deleteCommentOfPost = async (
+//   postId: string,
+//   commentId: string,
+// ) => {
+//   try {
+//     const { data } = await axiosInstance.delete(
+//       `/api/v1/posts/${postId}/comments/${commentId}`,
+//     );
+//     return data;
+//   } catch (error: any) {
+//     throw new Error(error.response?.data?.message || error.message);
+//   }
+// };
+
+// // GET ONE
+// export const getCommentOfPost = async (
+//   postId: string,
+//   commentId: string,
+// ) => {
+//   try {
+//     const { data } = await axiosInstance.get(
+//       `/api/v1/posts/${postId}/comments/${commentId}`,
+//     );
+//     return data;
+//   } catch (error: any) {
+//     throw new Error(error.response?.data?.message || error.message);
+//   }
+// };

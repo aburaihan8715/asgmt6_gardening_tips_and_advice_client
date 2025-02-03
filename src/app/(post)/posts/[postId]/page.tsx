@@ -10,7 +10,11 @@ import {
 } from 'react-icons/fa';
 import { useGetPost, useVote } from '@/hooks/post.hook';
 import QuillContent from '@/components/common/QuillContent';
-import { useFavourite, useFollow, useGetUser } from '@/hooks/user.hook';
+import {
+  useFavourite,
+  useFollow,
+  useGetSingleUser,
+} from '@/hooks/user.hook';
 import LoadingWithOverlay from '@/components/common/LoadingWithOverlay';
 import LoadingSpinner from '@/components/common/LoadingSpinner';
 import { useAuth } from '@/context/user.provider';
@@ -23,7 +27,7 @@ const PostDetails = () => {
   const postId = params?.postId as string;
 
   const { user, isLoading: isUserLoading } = useAuth();
-  const { data: updatedUserInfo } = useGetUser(user?._id as string);
+  const { data: updatedUserInfo } = useGetSingleUser(user?._id as string);
   const currentUser = updatedUserInfo?.data;
 
   const { data: postDetailsData, isLoading: isPostLoading } =
@@ -251,7 +255,7 @@ const PostDetails = () => {
             </div>
 
             <div>
-              <button
+              <span
                 onClick={handleComment}
                 className="flex items-center space-x-2"
               >
@@ -259,7 +263,7 @@ const PostDetails = () => {
                 <span className="text-gray-500">
                   {post?.numberOfComments || 0} {''} Comments
                 </span>
-              </button>
+              </span>
             </div>
 
             <div className="flex items-center space-x-2">

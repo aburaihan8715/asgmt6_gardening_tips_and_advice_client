@@ -4,22 +4,24 @@ import Image from 'next/image';
 import { FaCommentAlt, FaArrowUp, FaArrowDown } from 'react-icons/fa';
 import { IPost } from '@/types/postData.type';
 import { useAuth } from '@/context/user.provider';
-import { useGetUser } from '@/hooks/user.hook';
 import LoadingWithOverlay from '@/components/common/LoadingWithOverlay';
 import { toast } from 'sonner';
 import LoadingSpinner from '@/components/common/LoadingSpinner';
 import { useRouter } from 'next/navigation';
+import { useGetSingleUser } from '@/hooks/user.hook';
 
 const Post = ({ post }: { post: IPost }) => {
   const router = useRouter();
   const { user, isLoading: isUserLoading } = useAuth();
 
   const { data: updatedUserInfo, isLoading: isCurrentLoading } =
-    useGetUser(user?._id as string);
+    useGetSingleUser(user?._id as string);
   const currentUser = updatedUserInfo?.data;
   const isVerified = currentUser?.isVerified;
   const isPremium = post?.isPremium;
   const role = currentUser?.role;
+
+  console.log(post);
 
   const handleViewDetail = () => {
     const postId = post?._id;

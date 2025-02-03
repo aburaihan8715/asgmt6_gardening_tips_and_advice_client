@@ -1,7 +1,6 @@
 'use server';
 import axiosInstance from '@/lib/AxiosInstance';
 
-// ===========INFO: Query ==========
 // GET ALL PAYMENTS
 export const getAllPayments = async () => {
   try {
@@ -22,8 +21,6 @@ export const getPaymentStats = async () => {
     throw new Error(error.response?.data?.message || error.message);
   }
 };
-
-// ===========INFO: Mutation ==========
 
 // CREATE PAYMENT INTENT
 interface IIntent {

@@ -35,7 +35,7 @@ export const useLoginMutation = () => {
     onSuccess: async () => {
       toast.success('User login successful.');
       const userData = await getCurrentUser();
-      setUser(userData?.data);
+      setUser(userData);
     },
     onError: (error) => {
       console.log(error);

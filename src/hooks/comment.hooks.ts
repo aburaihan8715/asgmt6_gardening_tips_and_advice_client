@@ -1,6 +1,8 @@
 import {
+  createComment,
   deleteComment,
-  getComment,
+  getAllCommentsOnPost,
+  getSingleComment,
   updateComment,
 } from '@/actions/comment.action';
 import {
@@ -8,99 +10,85 @@ import {
   useQuery,
   useQueryClient,
 } from '@tanstack/react-query';
-import { useRouter } from 'next/navigation';
+import { FieldValues } from 'react-hook-form';
 
 import { toast } from 'sonner';
 
-// UPDATE
-interface updateCommentArgs {
-  commentId: string;
-  content: string;
+interface ICreateCommentArgs {
+  postId: string;
+  comment: string;
 }
-export const useUpdateCommentMutation = ({
-  page,
-  limit,
-  searchTerm,
-  postId,
-}: {
-  page?: number;
-  limit?: number;
-  searchTerm?: string;
-  postId?: string;
-}) => {
-  const queryClient = useQueryClient();
-  const router = useRouter();
 
-  return useMutation<unknown, Error, updateCommentArgs>({
-    mutationKey: ['UPDATE_COMMENT'],
-    mutationFn: async (options) =>
-      await updateComment(options.commentId, { content: options.content }),
+export const useCreateComment = (postId: string) => {
+  const queryClient = useQueryClient();
+
+  return useMutation<unknown, Error, ICreateCommentArgs>({
+    mutationFn: async ({ postId, comment }) => {
+      return createComment(postId, comment);
+    },
+
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: ['GET_POSTS'],
+        queryKey: ['GET_ALL_COMMENTS_ON_POST', postId],
       });
-      queryClient.invalidateQueries({
-        queryKey: ['GET_TOP_5_POSTS'],
-      });
-      queryClient.invalidateQueries({
-        queryKey: [
-          'GET_COMMENTS_OF_POST',
-          { page, limit, searchTerm, postId },
-        ],
-      });
-      toast.success('Comment updated successfully.');
-      router.back();
+      toast.success('Comment created successfully.');
     },
-    onError: (error) => {
-      console.error(error);
-      toast.error('Failed to update the Comment: ' + error.message);
+    onError: (error: any) => {
+      toast.error(error.message);
     },
   });
 };
 
-// DELETE
-export const useDeleteCommentMutation = ({
-  page,
-  limit,
-  searchTerm,
-  postId,
-}: {
-  page?: number;
-  limit?: number;
-  searchTerm?: string;
-  postId?: string;
-}) => {
+export const useGetAllCommentsOnPost = (postId: string) => {
+  return useQuery({
+    queryKey: ['GET_ALL_COMMENTS_ON_POST', postId],
+    queryFn: async () => getAllCommentsOnPost(postId),
+  });
+};
+
+export const useGetSingleComment = (commentId: string) => {
+  return useQuery({
+    queryKey: ['GET_SINGLE_COMMENT', commentId],
+    queryFn: async () => await getSingleComment(commentId),
+  });
+};
+
+export const useDeleteComment = (postId: string) => {
   const queryClient = useQueryClient();
 
   return useMutation<unknown, Error, string>({
-    mutationKey: ['DELETE_COMMENT'],
-    mutationFn: async (commentId) => await deleteComment(commentId),
+    mutationFn: async (commentId) => deleteComment(commentId),
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: ['GET_POSTS'],
-      });
-      queryClient.invalidateQueries({
-        queryKey: [
-          'GET_COMMENTS_OF_POST',
-          { page, limit, searchTerm, postId },
-        ],
-      });
-      queryClient.invalidateQueries({
-        queryKey: ['GET_TOP_5_POSTS'],
+        queryKey: ['GET_ALL_COMMENTS_ON_POST', postId],
       });
       toast.success('Comment deleted successfully.');
     },
     onError: (error) => {
       console.error(error);
-      toast.error('Failed to delete the Comment: ' + error.message);
+      toast.error('Failed to delete the comment: ' + error.message);
     },
   });
 };
 
-// GET ONE
-export const useGetComment = (commentId: string) => {
-  return useQuery({
-    queryKey: ['GET_COMMENT', commentId],
-    queryFn: async () => await getComment(commentId),
+export const useUpdateComment = (postId: string) => {
+  const queryClient = useQueryClient();
+
+  return useMutation<unknown, Error, FieldValues>({
+    mutationFn: async ({ commentId, payload }) => {
+      return updateComment(commentId, payload);
+    },
+
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ['GET_ALL_COMMENTS_ON_POST', postId],
+      });
+
+      toast.success('Comment updated successfully.');
+    },
+    onError: (error) => {
+      console.error(error);
+      toast.error('Failed to update the post: ' + error.message);
+    },
   });
 };

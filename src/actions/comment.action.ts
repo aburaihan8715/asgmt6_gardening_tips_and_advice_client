@@ -1,15 +1,12 @@
 'use server';
+
 import axiosInstance from '@/lib/AxiosInstance';
 
-// UPDATE
-export const updateComment = async (
-  commentId: string,
-  updatedCommentData: { content: string },
-) => {
+export const createComment = async (postId: string, comment: string) => {
   try {
-    const { data } = await axiosInstance.patch(
-      `/api/v1/comments/${commentId}`,
-      updatedCommentData,
+    const { data } = await axiosInstance.post(
+      `/api/v1/posts/${postId}/comments`,
+      { comment },
     );
     return data;
   } catch (error: any) {
@@ -17,7 +14,28 @@ export const updateComment = async (
   }
 };
 
-// DELETE
+export const getAllCommentsOnPost = async (postId: string) => {
+  try {
+    const { data } = await axiosInstance.get(
+      `/api/v1/posts/${postId}/comments`,
+    );
+    return data;
+  } catch (error: any) {
+    throw new Error(error.response?.data?.message || error.message);
+  }
+};
+
+export const getSingleComment = async (commentId: string) => {
+  try {
+    const { data } = await axiosInstance.get(
+      `/api/v1/comments/${commentId}`,
+    );
+    return data;
+  } catch (error: any) {
+    throw new Error(error.response?.data?.message || error.message);
+  }
+};
+
 export const deleteComment = async (commentId: string) => {
   try {
     const { data } = await axiosInstance.delete(
@@ -29,11 +47,14 @@ export const deleteComment = async (commentId: string) => {
   }
 };
 
-// GET ONE
-export const getComment = async (commentId: string) => {
+export const updateComment = async (
+  commentId: string,
+  payload: { comment: string },
+) => {
   try {
-    const { data } = await axiosInstance.get(
+    const { data } = await axiosInstance.patch(
       `/api/v1/comments/${commentId}`,
+      payload,
     );
     return data;
   } catch (error: any) {

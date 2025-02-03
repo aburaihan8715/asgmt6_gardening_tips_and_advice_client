@@ -7,8 +7,8 @@ import {
   getFavouritePosts,
   getMe,
   getRevenue,
+  getSingleUser,
   getTopFiveUsers,
-  getUser,
   getUserStats,
   removeFavoritePost,
   unfollowUser,
@@ -28,11 +28,11 @@ export const useGetMe = () => {
   });
 };
 
-export const useGetUser = (userId: string) => {
+export const useGetSingleUser = (userId: string) => {
   return useQuery({
-    queryKey: ['GET_USER'],
-    queryFn: async () => await getUser(userId),
-    // enabled: false,
+    queryKey: ['GET_SINGLE_USER', userId],
+    queryFn: async () => await getSingleUser(userId),
+    enabled: userId ? true : false,
   });
 };
 

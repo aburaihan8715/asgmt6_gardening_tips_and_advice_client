@@ -3,7 +3,7 @@ import LoadingWithOverlay from '@/components/common/LoadingWithOverlay';
 import { useAuth } from '@/context/user.provider';
 import { IComment } from '@/types/comment.type';
 import Image from 'next/image';
-import Link from 'next/link';
+
 import React from 'react';
 import { FaEdit, FaTrash } from 'react-icons/fa';
 
@@ -11,15 +11,16 @@ interface IProps {
   comments: IComment[];
   postId: string;
   handleDelete: (commentId: string) => void;
+  handleUpdate: (commentId: string) => void;
   isDeleteCommentPending: boolean;
   commentDeleteError: any;
 }
 
 const CommentItem = ({
   comments,
-  postId,
   isDeleteCommentPending,
   handleDelete,
+  handleUpdate,
   commentDeleteError,
 }: IProps) => {
   const { user } = useAuth();
@@ -70,18 +71,18 @@ const CommentItem = ({
                         ).toLocaleDateString()}
                       </span>
                     </div>
-                    <p className="mt-2 text-gray-700">{item?.content}</p>
+                    <p className="mt-2 text-gray-700">{item?.comment}</p>
                   </div>
 
                   {/* Edit and Delete Icons */}
                   {commentUser?._id === user?._id && (
                     <div className="flex items-center space-x-2">
-                      <Link
-                        href={`/comments/edit?commentId=${item?._id}&postId=${postId}`}
+                      <button
+                        onClick={() => handleUpdate(item?._id)}
                         className="text-blue-500 hover:text-blue-700"
                       >
                         <FaEdit />
-                      </Link>
+                      </button>
                       <button
                         onClick={() => handleDelete(item?._id)}
                         className="text-red-500 hover:text-red-700"

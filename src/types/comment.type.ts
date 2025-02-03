@@ -5,7 +5,7 @@ export interface IComment {
   _id: string;
   post: IPost;
   user: IUser;
-  content: string;
+  comment: string;
   isDeleted?: boolean;
   createdAt?: string;
 }
