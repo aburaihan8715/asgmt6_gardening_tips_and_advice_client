@@ -1,6 +1,5 @@
 'use client';
 import { logout } from '@/actions/auth.action';
-import ActiveLink from '@/components/common/ActiveLink';
 import BrandLogo from '@/components/common/BrandLogo';
 import LogoutButton from '@/components/common/LogoutButton';
 import {
@@ -18,16 +17,9 @@ import { MdMenu } from 'react-icons/md';
 interface NavbarProps {
   setIsOpen: (isOpen: boolean) => void;
 }
-const UserNavbar = ({ setIsOpen }: NavbarProps) => {
+const AdminNavbar = ({ setIsOpen }: NavbarProps) => {
   const { currentUser } = useAuth();
 
-  const links = (
-    <>
-      <li>
-        <ActiveLink href="/posts">News Feed</ActiveLink>
-      </li>
-    </>
-  );
   return (
     <header className="sticky right-0 top-0 z-50 w-full bg-white px-1">
       <div className="sticky top-0 z-20 flex h-[80px] w-full items-center gap-5 border-b md:px-10">
@@ -42,14 +34,8 @@ const UserNavbar = ({ setIsOpen }: NavbarProps) => {
           <MdMenu />
         </button>
 
-        <nav className="ml-auto hidden md:block">
-          <ul className="flex gap-4 font-semibold text-gray-700">
-            {links}
-          </ul>
-        </nav>
-
         {/* LOGIN,PROFILE GROUP */}
-        <div className="ml-auto flex items-center gap-4 md:ml-0">
+        <div className="ml-auto flex items-center gap-4">
           {currentUser && (
             <div className="flex items-center">
               <ProfilePopover />
@@ -67,7 +53,7 @@ const UserNavbar = ({ setIsOpen }: NavbarProps) => {
   );
 };
 
-export default UserNavbar;
+export default AdminNavbar;
 
 // PROFILE POPOVER COMPONENT
 const ProfilePopover = () => {
@@ -76,7 +62,7 @@ const ProfilePopover = () => {
 
   const handleLogout = () => {
     logout();
-    router.push('/Resources');
+    router.push('/');
   };
 
   return (
@@ -103,21 +89,21 @@ const ProfilePopover = () => {
 
         <div className="flex flex-col gap-2">
           <Link
-            href="/user/dashboard"
+            href="/admin/dashboard"
             className="w-fit border-b-2 border-b-transparent hover:border-b-2 hover:border-b-primary"
           >
             Dashboard
           </Link>
 
           <Link
-            href="/auth/change-password"
+            href="/admin/change-password"
             className="w-fit border-b-2 border-b-transparent hover:border-b-2 hover:border-b-primary"
           >
             Change Password
           </Link>
 
           <Link
-            href="/auth/settings-profile"
+            href="/admin/settings-profile"
             className="w-fit border-b-2 border-b-transparent hover:border-b-2 hover:border-b-primary"
           >
             Settings Profile

@@ -9,7 +9,7 @@ interface SidebarDrawerProps {
   title?: string;
 }
 
-const MobileSidebar: React.FC<SidebarDrawerProps> = ({
+const UserMobileSidebar: React.FC<SidebarDrawerProps> = ({
   isOpen,
   onClose,
   children,
@@ -55,4 +55,4 @@ const MobileSidebar: React.FC<SidebarDrawerProps> = ({
   );
 };
 
-export default MobileSidebar;
+export default UserMobileSidebar;
