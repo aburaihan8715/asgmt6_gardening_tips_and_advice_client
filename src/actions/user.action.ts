@@ -57,10 +57,10 @@ export const getSingleUser = async (userId: string) => {
 };
 
 // CHECK PREMIUM STATUS
-export const checkPremiumStatus = async () => {
+export const checkHasUpvoteForPost = async () => {
   try {
     const { data } = await axiosInstance.get(
-      `/api/v1/users/check-premium-status`,
+      `/api/v1/users/check-has-upvote-for-post`,
     );
     return data;
   } catch (error: any) {

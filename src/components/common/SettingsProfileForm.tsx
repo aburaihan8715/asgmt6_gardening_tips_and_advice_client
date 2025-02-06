@@ -10,6 +10,7 @@ import { useAuth } from '@/context/user.provider';
 import LoadingWithOverlay from '@/components/common/LoadingWithOverlay';
 import { AuthSchemas } from '@/schemas/auth.schema';
 import { useSettingsProfileMutation } from '@/hooks/auth.hook';
+import { Button } from '../ui/button';
 
 // Interface for the form data
 interface IUserSettingsFormData {
@@ -17,7 +18,7 @@ interface IUserSettingsFormData {
   email: string;
 }
 
-export default function SettingsProfile() {
+export default function SettingsProfileForm() {
   const { user } = useAuth();
   const { mutate: profileMutate, isPending } =
     useSettingsProfileMutation();
@@ -149,12 +150,7 @@ export default function SettingsProfile() {
         </div>
 
         <div className="text-right">
-          <button
-            type="submit"
-            className="w-full rounded bg-green-500 px-4 py-2 text-white hover:bg-green-600 md:w-fit"
-          >
-            Save settings
-          </button>
+          <Button type="submit">Save settings</Button>
         </div>
       </form>
 

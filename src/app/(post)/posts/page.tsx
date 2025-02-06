@@ -60,7 +60,7 @@ const Posts = () => {
   return (
     <section className="py-5">
       <Container>
-        <div className="mt-[80px] flex flex-col gap-10 md:mt-0 md:flex-row">
+        <div className="flex flex-col-reverse gap-10 md:flex-row">
           <div className="flex-[3]">
             <ul className="">
               {status === 'pending' && <LoadingWithOverlay />}
@@ -93,7 +93,7 @@ const Posts = () => {
             </div>
           </div>
 
-          <div className="h-full flex-1">
+          <div className="h-full flex-1 px-2">
             <div className="h-full">
               <div className="h-full">
                 <section className="flex flex-col gap-10">

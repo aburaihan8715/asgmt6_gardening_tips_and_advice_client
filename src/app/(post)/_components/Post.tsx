@@ -21,8 +21,6 @@ const Post = ({ post }: { post: IPost }) => {
   const isPremium = post?.isPremium;
   const role = currentUser?.role;
 
-  console.log(post);
-
   const handleViewDetail = () => {
     const postId = post?._id;
     if (!postId) return;
@@ -47,7 +45,7 @@ const Post = ({ post }: { post: IPost }) => {
   return (
     <>
       {(isUserLoading || isCurrentLoading) && <LoadingWithOverlay />}
-      <li className="group relative mb-6 flex gap-10 rounded-lg bg-white p-1">
+      <li className="group relative mb-6 flex flex-col gap-10 rounded-lg bg-white p-1 md:flex-row">
         {/* Post Image with Hover Overlay */}
         <div className="group relative aspect-[16/9] w-full flex-1 overflow-hidden rounded-lg">
           <Image

@@ -10,13 +10,14 @@ import LoadingWithOverlay from '@/components/common/LoadingWithOverlay';
 
 import { AuthSchemas } from '@/schemas/auth.schema';
 import { useChangePasswordMutation } from '@/hooks/auth.hook';
+import { Button } from '../ui/button';
 
 interface IPasswordChangeFormValues {
   currentPassword: string;
   newPassword: string;
 }
 
-const ChangePassword = () => {
+const ChangePasswordForm = () => {
   const {
     register,
     handleSubmit,
@@ -64,6 +65,7 @@ const ChangePassword = () => {
             </label>
             <div className="relative">
               <input
+                placeholder="Current Password"
                 id="currentPassword"
                 type={showPassword.currentPassword ? 'text' : 'password'}
                 {...register('currentPassword')}
@@ -94,6 +96,7 @@ const ChangePassword = () => {
             <div className="relative">
               <input
                 id="newPassword"
+                placeholder="New Password"
                 type={showPassword.newPassword ? 'text' : 'password'}
                 {...register('newPassword')}
                 className={`w-full rounded border p-2 focus:outline-none focus:ring-2 focus:ring-green-500 ${
@@ -117,12 +120,7 @@ const ChangePassword = () => {
 
           {/* Submit Button */}
           <div className="text-right">
-            <button
-              type="submit"
-              className="w-full rounded bg-green-500 px-4 py-2 text-white hover:bg-green-600 md:w-fit"
-            >
-              Change Password
-            </button>
+            <Button type="submit">Change Password</Button>
           </div>
         </form>
       </div>
@@ -130,4 +128,4 @@ const ChangePassword = () => {
   );
 };
 
-export default ChangePassword;
+export default ChangePasswordForm;

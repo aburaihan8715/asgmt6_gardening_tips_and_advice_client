@@ -1,6 +1,6 @@
 import {
   addFavoritePost,
-  checkPremiumStatus,
+  checkHasUpvoteForPost,
   deleteUser,
   followUser,
   getAllUsers,
@@ -57,11 +57,11 @@ export const useGetAllUsers = ({
   });
 };
 
-// Check premium status
-export const useCheckPremiumStatus = () => {
+// Check has upvote for post
+export const useCheckHasUpvoteForPost = () => {
   return useQuery({
-    queryKey: ['GET_PREMIUM_STATUS'],
-    queryFn: async () => await checkPremiumStatus(),
+    queryKey: ['HAS_UPVOTE_FOR_POST'],
+    queryFn: async () => await checkHasUpvoteForPost(),
   });
 };
 

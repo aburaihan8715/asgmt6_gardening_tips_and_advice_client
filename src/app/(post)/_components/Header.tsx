@@ -1,8 +1,6 @@
 'use client';
 
-import { useState } from 'react';
-
-import { Button } from '../ui/button';
+import { useRef, useState } from 'react';
 
 import {
   Popover,
@@ -11,24 +9,28 @@ import {
 } from '@/components/ui/popover';
 
 import Image from 'next/image';
-import BrandLogo from './BrandLogo';
+import BrandLogo from '../../../components/common/BrandLogo';
 import { MdClose, MdMenu } from 'react-icons/md';
-import ActiveLink from './ActiveLink';
+import ActiveLink from '../../../components/common/ActiveLink';
 import { useAuth } from '@/context/user.provider';
-import { protectedRoutes } from '@/constants';
-import { usePathname, useRouter } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { logout } from '@/actions/auth.action';
-import Container from './Container';
+import Container from '../../../components/common/Container';
+import useOutsideClick from '@/hooks/outside-click.hook';
+import LogoutButton from '../../../components/common/LogoutButton';
 
 // HEADER COMPONENT
 const Header = () => {
-  const [open, setOpen] = useState(true);
-  const { user, setUser } = useAuth();
+  const [isOpen, setIsOpen] = useState(false);
+  const { currentUser } = useAuth();
 
-  const router = useRouter();
-  // const pathname = usePathname();
-  const menuItems = (
+  const outsideClickRef = useRef(null);
+  // Close the menu when clicking outside
+  useOutsideClick(outsideClickRef, () => setIsOpen(false));
+
+  // const router = useRouter();
+  const links = (
     <>
       <li>
         <ActiveLink href="/posts">News Feed</ActiveLink>
@@ -41,51 +43,49 @@ const Header = () => {
       </li>
 
       <li>
-        {user && user.role === 'user' && (
+        {currentUser && currentUser.role === 'user' && (
           <ActiveLink href={`/user/dashboard`}>Dashboard</ActiveLink>
         )}
-        {user && user.role === 'admin' && (
+        {currentUser && currentUser.role === 'admin' && (
           <ActiveLink href={`/admin/dashboard`}>Dashboard</ActiveLink>
         )}
       </li>
     </>
   );
 
-  const handleLogout = () => {
-    logout();
-    setUser(null);
-    router.push('/');
-
-    // if (protectedRoutes.some((route) => pathname.match(route))) {
-    //   router.push('/');
-    // }
-  };
-
   return (
     <>
-      <header className="sticky right-0 top-0 z-50 w-full bg-white">
-        {/* DESKTOP NAV */}
+      <header className="sticky right-0 top-0 z-50 w-full bg-white px-1">
         <Container>
-          <div className="sticky top-0 z-20 hidden h-[80px] w-full items-center gap-5 border-b lg:flex">
-            {/* LOGO */}
-            <BrandLogo />
-            <nav className="ml-auto">
+          <div className="sticky top-0 z-20 flex h-[80px] w-full items-center gap-5 border-b">
+            <div className="hidden md:block">
+              <BrandLogo />
+            </div>
+            {/* menu button */}
+            <button
+              onClick={() => setIsOpen(!isOpen)}
+              className="flex h-10 w-10 items-center justify-center rounded border border-gray-700/50 text-3xl md:hidden"
+            >
+              {isOpen ? <MdClose /> : <MdMenu />}
+            </button>
+
+            <nav className="ml-auto hidden md:block">
               <ul className="flex gap-4 font-semibold text-gray-700">
-                {menuItems}
+                {links}
               </ul>
             </nav>
 
             {/* LOGIN,PROFILE GROUP */}
-            <div className="flex items-center gap-4">
-              {user && (
+            <div className="ml-auto flex items-center gap-4 md:ml-0">
+              {currentUser && (
                 <div className="flex items-center">
                   <ProfilePopover />
                 </div>
               )}
 
-              {user && (
+              {currentUser && (
                 <div>
-                  <Button onClick={handleLogout}>Logout</Button>
+                  <LogoutButton />
                 </div>
               )}
             </div>
@@ -93,58 +93,15 @@ const Header = () => {
         </Container>
       </header>
 
-      <header>
-        {/* MOBILE NAV */}
-        <div className="lg:hidden">
-          <div className="fixed top-0 z-20 flex h-[80px] w-full items-center justify-between bg-[#e9effd] px-2">
-            <div onClick={() => setOpen(!open)} className="">
-              {open && (
-                <button className="flex h-10 w-10 items-center justify-center border border-primary text-3xl text-primary">
-                  <MdMenu />
-                </button>
-              )}
-
-              {!open && (
-                <button className="flex h-10 w-10 items-center justify-center border border-primary text-3xl text-primary">
-                  <MdClose />
-                </button>
-              )}
-            </div>
-
-            <div className="flex items-center gap-4">
-              {user && (
-                <div className="flex items-center">
-                  <ProfilePopover />
-                </div>
-              )}
-
-              {!user && (
-                <div>
-                  <Link href={`/login`}>
-                    <Button>Login</Button>
-                  </Link>
-                </div>
-              )}
-
-              {user && (
-                <div>
-                  <Button onClick={handleLogout}>Logout</Button>
-                </div>
-              )}
-            </div>
-          </div>
-
-          <nav className="">
-            <ul
-              className={`fixed top-[80px] z-20 flex h-full w-[180px] -translate-x-[100%] flex-col gap-2 bg-yellow-50/90 pl-8 pt-5 font-semibold text-[#212529] transition-transform duration-500 ${
-                !open && 'translate-x-0'
-              }`}
-            >
-              {menuItems}
-            </ul>
-          </nav>
-        </div>
-      </header>
+      {/* sidebar */}
+      <ul
+        ref={outsideClickRef}
+        className={`fixed top-[80px] z-50 flex h-full w-[200px] flex-col gap-2 overflow-y-auto bg-gray-200/95 pl-8 pr-3 pt-5 transition-transform duration-500 ${
+          isOpen ? 'translate-x-0' : '-translate-x-full'
+        }`}
+      >
+        {links}
+      </ul>
     </>
   );
 };
@@ -153,27 +110,23 @@ export default Header;
 
 // PROFILE POPOVER COMPONENT
 const ProfilePopover = () => {
-  const { user } = useAuth();
+  const { currentUser } = useAuth();
   const router = useRouter();
-  const pathname = usePathname();
 
   const handleLogout = () => {
     logout();
-
-    if (protectedRoutes.some((route) => pathname.match(route))) {
-      router.push('/');
-    }
+    router.push('/Resources');
   };
 
   return (
     <Popover>
       <PopoverTrigger>
         <Image
-          title={user?.username?.split(' ')[0]}
+          title={currentUser?.username?.split(' ')[0]}
           className="h-10 w-10 rounded-full object-cover"
           src={
-            user && user?.profilePicture
-              ? user.profilePicture
+            currentUser && currentUser?.profilePicture
+              ? currentUser.profilePicture
               : 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png'
           }
           sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
@@ -183,28 +136,28 @@ const ProfilePopover = () => {
         />
       </PopoverTrigger>
 
-      <PopoverContent className="mt-5 md:mr-[58px]">
+      <PopoverContent className="mt-5 md:mr-[20px]">
         <h4 className="text-lg font-semibold">My account</h4>
         <hr className="my-2 border-gray-300" />
 
-        {user && user.role === 'admin' && (
+        {currentUser && currentUser.role === 'admin' && (
           <div className="flex flex-col gap-2">
             <Link
-              href="/admin-dashboard"
+              href="/admin/dashboard"
               className="w-fit border-b-2 border-b-transparent hover:border-b-2 hover:border-b-primary"
             >
               Dashboard
             </Link>
 
             <Link
-              href="/profile/change-password"
+              href="/auth/change-password"
               className="w-fit border-b-2 border-b-transparent hover:border-b-2 hover:border-b-primary"
             >
               Change Password
             </Link>
 
             <Link
-              href="/profile/settings-profile"
+              href="/auth/settings-profile"
               className="w-fit border-b-2 border-b-transparent hover:border-b-2 hover:border-b-primary"
             >
               Settings Profile
@@ -218,24 +171,24 @@ const ProfilePopover = () => {
           </div>
         )}
 
-        {user && user.role === 'user' && (
+        {currentUser && currentUser.role === 'user' && (
           <div className="flex flex-col gap-2">
             <Link
-              href="/user-dashboard"
+              href="/user/dashboard"
               className="w-fit border-b-2 border-b-transparent hover:border-b-2 hover:border-b-primary"
             >
               Dashboard
             </Link>
 
             <Link
-              href="/profile/change-password"
+              href="/auth/change-password"
               className="w-fit border-b-2 border-b-transparent hover:border-b-2 hover:border-b-primary"
             >
               Change Password
             </Link>
 
             <Link
-              href="/profile/settings-profile"
+              href="/auth/settings-profile"
               className="w-fit border-b-2 border-b-transparent hover:border-b-2 hover:border-b-primary"
             >
               Settings Profile
