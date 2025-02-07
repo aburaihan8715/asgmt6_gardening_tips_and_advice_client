@@ -3,7 +3,6 @@
 import axiosInstance from '@/lib/AxiosInstance';
 import { FieldValues } from 'react-hook-form';
 
-// GET ALL
 export const getAllPosts = async ({
   page,
   limit,
@@ -42,7 +41,6 @@ export const getAllPosts = async ({
   }
 };
 
-// GET INFINITE POSTS.
 export const getInfinitePosts = async ({
   pageParam = 1,
   searchTerm = '',
@@ -85,7 +83,6 @@ export const getInfinitePosts = async ({
   }
 };
 
-// GET MY POSTS
 export const getMyPosts = async ({
   page,
   limit,
@@ -113,18 +110,7 @@ export const getMyPosts = async ({
   }
 };
 
-// GET TOP 5
-export const getTopFivePosts = async () => {
-  try {
-    const { data } = await axiosInstance.get('/api/v1/posts/top-5-posts');
-    return data;
-  } catch (error: any) {
-    throw new Error(error.response?.data?.message || error.message);
-  }
-};
-
-// GET ONE
-export const getPost = async (postId: string) => {
+export const getSinglePost = async (postId: string) => {
   try {
     const { data } = await axiosInstance.get(`/api/v1/posts/${postId}`);
     return data;
@@ -133,7 +119,6 @@ export const getPost = async (postId: string) => {
   }
 };
 
-// GET POST STATS
 export const getPostStats = async () => {
   try {
     const { data } = await axiosInstance.get(`/api/v1/posts/post-stats`);
@@ -143,7 +128,6 @@ export const getPostStats = async () => {
   }
 };
 
-// CREATE
 export const createPost = async (postData: FieldValues) => {
   try {
     const { data } = await axiosInstance.post('/api/v1/posts', postData);
@@ -153,7 +137,6 @@ export const createPost = async (postData: FieldValues) => {
   }
 };
 
-// UPDATE
 export const updatePost = async (
   postId: string,
   updatedPostData: FormData,
@@ -169,7 +152,6 @@ export const updatePost = async (
   }
 };
 
-// DELETE
 export const deletePost = async (postId: string) => {
   try {
     const { data } = await axiosInstance.delete(`/api/v1/posts/${postId}`);
@@ -179,7 +161,6 @@ export const deletePost = async (postId: string) => {
   }
 };
 
-// MAKE PREMIUM
 export const makePostPremium = async (postId: string) => {
   try {
     const { data } = await axiosInstance.patch(
@@ -191,7 +172,6 @@ export const makePostPremium = async (postId: string) => {
   }
 };
 
-// UPVOTE
 export const upvotePost = async (postId: string) => {
   try {
     const { data } = await axiosInstance.patch(
@@ -203,7 +183,6 @@ export const upvotePost = async (postId: string) => {
   }
 };
 
-// DOWNVOTE
 export const downvotePost = async (postId: string) => {
   try {
     const { data } = await axiosInstance.patch(
@@ -214,98 +193,3 @@ export const downvotePost = async (postId: string) => {
     throw new Error(error.response?.data?.message || error.message);
   }
 };
-
-// ===========comment related actions =================
-
-// // CREATE COMMENT OT A POST
-// export const createCommentOnPost = async (
-//   postId: string,
-//   content: string,
-// ) => {
-//   try {
-//     const { data } = await axiosInstance.post(
-//       `/api/v1/posts/${postId}/comments`,
-//       { content },
-//     );
-//     return data;
-//   } catch (error: any) {
-//     throw new Error(error.response?.data?.message || error.message);
-//   }
-// };
-
-// // GET COMMENTS OF A POST
-// export const getCommentsOfPost = async ({
-//   page,
-//   limit,
-//   searchTerm,
-//   postId,
-// }: {
-//   page?: number;
-//   limit?: number;
-//   searchTerm?: string;
-//   postId?: string;
-// }) => {
-//   try {
-//     let queryString = `/api/v1/posts/${postId}/comments`;
-
-//     const params = new URLSearchParams();
-
-//     if (page) params.append('page', page.toString());
-//     if (limit) params.append('limit', limit.toString());
-//     if (searchTerm) params.append('searchTerm', searchTerm);
-
-//     if (params.toString()) queryString += `?${params.toString()}`;
-
-//     const { data } = await axiosInstance.get(queryString);
-//     return data;
-//   } catch (error: any) {
-//     throw new Error(error.response?.data?.message || error.message);
-//   }
-// };
-
-// // UPDATE
-// export const updateCommentOfPost = async (
-//   postId: string,
-//   commentId: string,
-//   payload: { content: string },
-// ) => {
-//   try {
-//     const { data } = await axiosInstance.patch(
-//       `/api/v1/posts/${postId}/comments/${commentId}`,
-//       payload,
-//     );
-//     return data;
-//   } catch (error: any) {
-//     throw new Error(error.response?.data?.message || error.message);
-//   }
-// };
-
-// // DELETE
-// export const deleteCommentOfPost = async (
-//   postId: string,
-//   commentId: string,
-// ) => {
-//   try {
-//     const { data } = await axiosInstance.delete(
-//       `/api/v1/posts/${postId}/comments/${commentId}`,
-//     );
-//     return data;
-//   } catch (error: any) {
-//     throw new Error(error.response?.data?.message || error.message);
-//   }
-// };
-
-// // GET ONE
-// export const getCommentOfPost = async (
-//   postId: string,
-//   commentId: string,
-// ) => {
-//   try {
-//     const { data } = await axiosInstance.get(
-//       `/api/v1/posts/${postId}/comments/${commentId}`,
-//     );
-//     return data;
-//   } catch (error: any) {
-//     throw new Error(error.response?.data?.message || error.message);
-//   }
-// };

@@ -69,11 +69,11 @@ const CreatePost = () => {
   });
 
   const { mutate: createPostMutate, isPending } = useCreatePostMutation();
-  const { user } = useAuth();
+  const { currentUser, isCurrentUserLoading } = useAuth();
 
   const onSubmit = (data: TPostFormValues) => {
     const postData = {
-      user: user?._id,
+      user: currentUser?._id,
       title: data.title,
       description: data.description,
       category: data.category,
@@ -85,7 +85,6 @@ const CreatePost = () => {
     if (data.image) {
       formData.append('file', data.image);
     }
-
     createPostMutate(formData);
   };
 
@@ -101,7 +100,7 @@ const CreatePost = () => {
     }
   };
 
-  if (!user) {
+  if (isCurrentUserLoading) {
     return <LoadingSpinner />;
   }
 

@@ -1,5 +1,5 @@
 'use client';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import Image from 'next/image';
@@ -7,11 +7,14 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { FaPlusSquare } from 'react-icons/fa';
 import { PostSchemas } from '@/schemas/post.schema';
-import { useGetPost, useUpdatePostMutation } from '@/hooks/post.hook';
+import {
+  useGetSinglePost,
+  useUpdatePostMutation,
+} from '@/hooks/post.hook';
 import LoadingWithOverlay from '@/components/common/LoadingWithOverlay';
-import { useAuth } from '@/context/user.provider';
 import LoadingSpinner from '@/components/common/LoadingSpinner';
 import { useParams } from 'next/navigation';
+import { IPost } from '@/types';
 
 type TPostFormValues = {
   title: string;
@@ -58,9 +61,11 @@ const EditMyPost = () => {
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const { mutate: updatePostMutation, isPending } =
     useUpdatePostMutation();
-  const { user } = useAuth();
   const { postId } = useParams();
-  const { data: postData, isLoading } = useGetPost(postId as string);
+  const { data: postData, isLoading: isPostDataLoading } =
+    useGetSinglePost(postId as string);
+
+  const post: IPost = useMemo(() => postData?.data || {}, [postData]);
 
   const {
     register,
@@ -74,14 +79,14 @@ const EditMyPost = () => {
 
   // Update form values when postData is loaded
   useEffect(() => {
-    if (postData?.data) {
-      const { title, description, category, content } = postData.data;
+    if (Object.keys(post).length > 0) {
+      const { title, description, category, content } = post;
       setValue('title', title);
       setValue('description', description);
       setValue('category', category);
       setValue('content', content);
     }
-  }, [postData, setValue]);
+  }, [post, setValue]);
 
   const onSubmit = (data: TPostFormValues) => {
     const updatedPostData = {
@@ -117,7 +122,7 @@ const EditMyPost = () => {
     }
   };
 
-  if (!user || isLoading) {
+  if (isPostDataLoading) {
     return <LoadingSpinner />;
   }
 
@@ -219,7 +224,7 @@ const EditMyPost = () => {
               <div className="relative h-[150px] w-full md:h-[400px]">
                 <Image
                   priority={true}
-                  src={'https://dummyimage.com/600x400'}
+                  src={post.image || 'https://dummyimage.com/600x400'}
                   alt="User photo"
                   fill
                   className="rounded object-cover"

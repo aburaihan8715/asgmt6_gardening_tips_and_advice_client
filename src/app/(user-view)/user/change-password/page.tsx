@@ -3,7 +3,7 @@ import ChangePasswordForm from '@/components/common/ChangePasswordForm';
 
 const ChangePassword = () => {
   return (
-    <div className="mx-auto mt-10 max-w-2xl md:border md:p-5">
+    <div className="mx-auto mt-10 max-w-2xl rounded-md md:border md:p-5">
       <ChangePasswordForm />
     </div>
   );

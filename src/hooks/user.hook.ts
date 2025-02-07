@@ -5,10 +5,8 @@ import {
   followUser,
   getAllUsers,
   getFavouritePosts,
-  getMe,
   getRevenue,
   getSingleUser,
-  getTopFiveUsers,
   getUserStats,
   removeFavoritePost,
   unfollowUser,
@@ -20,26 +18,11 @@ import {
 } from '@tanstack/react-query';
 import { toast } from 'sonner';
 
-export const useGetMe = () => {
-  return useQuery({
-    queryKey: ['GET_ME'],
-    queryFn: async () => await getMe(),
-    enabled: false,
-  });
-};
-
 export const useGetSingleUser = (userId: string) => {
   return useQuery({
-    queryKey: ['GET_SINGLE_USER', userId],
+    queryKey: ['SINGLE_USER', userId],
     queryFn: async () => await getSingleUser(userId),
     enabled: userId ? true : false,
-  });
-};
-
-export const useGetTopFiveUsers = () => {
-  return useQuery({
-    queryKey: ['GET_TOP_USERS'],
-    queryFn: async () => await getTopFiveUsers(),
   });
 };
 
@@ -51,13 +34,12 @@ export const useGetAllUsers = ({
   limit?: number;
 }) => {
   return useQuery({
-    queryKey: ['GET_USERS', { page, limit }],
+    queryKey: ['USERS', { page, limit }],
     queryFn: async () => await getAllUsers({ page, limit }),
     // gcTime: 0,
   });
 };
 
-// Check has upvote for post
 export const useCheckHasUpvoteForPost = () => {
   return useQuery({
     queryKey: ['HAS_UPVOTE_FOR_POST'],
@@ -67,36 +49,33 @@ export const useCheckHasUpvoteForPost = () => {
 
 export const useGetFavouritePosts = () => {
   return useQuery({
-    queryKey: ['GET_FAVOURITE_POSTS'],
+    queryKey: ['FAVOURITE_POSTS'],
     queryFn: async () => await getFavouritePosts(),
   });
 };
 
 export const useGetUserStats = () => {
   return useQuery({
-    queryKey: ['GET_USER_STATS'],
+    queryKey: ['USER_STATS'],
     queryFn: async () => await getUserStats(),
   });
 };
 
 export const useGetRevenue = () => {
   return useQuery({
-    queryKey: ['GET_REVENUE'],
+    queryKey: ['REVENUE'],
     queryFn: async () => await getRevenue(),
   });
 };
 
-export const useFollow = () => {
+export const useFollow = (userId: string) => {
   const queryClient = useQueryClient();
   // Follow mutation
   const followMutation = useMutation({
     mutationFn: followUser,
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: ['GET_POSTS'],
-      });
-      queryClient.invalidateQueries({
-        queryKey: ['GET_USER'],
+        queryKey: ['SINGLE_USER', userId],
       });
       toast.success('Followed successfully!');
     },
@@ -110,10 +89,7 @@ export const useFollow = () => {
     mutationFn: unfollowUser,
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: ['GET_POSTS'],
-      });
-      queryClient.invalidateQueries({
-        queryKey: ['GET_USER'],
+        queryKey: ['SINGLE_USER', userId],
       });
       toast.success('Unfollow successfully!');
     },
@@ -130,16 +106,15 @@ export const useFollow = () => {
   };
 };
 
-// NOTE: It is also need to be updated
-
 interface IUseFavouriteProps {
   isPremium: boolean;
-  isFavourite: boolean;
   isVerified: boolean | undefined;
+  userId: string;
 }
 export const useFavourite = ({
   isPremium,
   isVerified,
+  userId,
 }: IUseFavouriteProps) => {
   const queryClient = useQueryClient();
 
@@ -147,11 +122,9 @@ export const useFavourite = ({
     mutationFn: addFavoritePost,
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: ['GET_POSTS'],
+        queryKey: ['SINGLE_USER', userId],
       });
-      queryClient.invalidateQueries({
-        queryKey: ['GET_USER'],
-      });
+
       toast.success('Add to favourite successfully!');
     },
     onError: (error: Error) => {
@@ -163,11 +136,9 @@ export const useFavourite = ({
     mutationFn: removeFavoritePost,
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: ['GET_POSTS'],
+        queryKey: ['SINGLE_USER', userId],
       });
-      queryClient.invalidateQueries({
-        queryKey: ['GET_USER'],
-      });
+
       toast.success('Remove from favourite successfully!');
     },
     onError: (error: Error) => {
@@ -195,23 +166,13 @@ export const useFavourite = ({
   };
 };
 
-// DELETE USER
 export const useDeleteUserMutation = () => {
   const queryClient = useQueryClient();
   return useMutation<unknown, Error, string>({
     mutationFn: async (id) => await deleteUser(id),
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: ['GET_USERS'],
-      });
-      queryClient.invalidateQueries({
-        queryKey: ['GET_TOP_POSTS'],
-      });
-      queryClient.invalidateQueries({
-        queryKey: ['GET_POSTS'],
-      });
-      queryClient.invalidateQueries({
-        queryKey: ['GET_ME'],
+        queryKey: ['USERS'],
       });
       toast.success('User deleted successfully.');
     },

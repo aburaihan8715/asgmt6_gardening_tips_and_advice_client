@@ -1,19 +1,11 @@
 'use client';
 import { useState } from 'react';
 
-import ActiveLinkDashboard from '@/components/common/ActiveLinkDashboard';
-import {
-  FaBookmark,
-  FaCog,
-  FaCrown,
-  FaEye,
-  FaHome,
-  FaLock,
-  FaPen,
-} from 'react-icons/fa';
 import UserNavbar from '../_components/Navbar';
 import UserDesktopSidebar from '../_components/DesktopSidebar';
-import UserMobileSidebar from '../_components/MobileSidebar';
+import Drawer from '@/components/common/Drawer';
+import PremiumButton from '@/components/common/PremiumButton';
+import { userSidebarLinks } from '../_constants';
 
 export default function TestLayout({
   children,
@@ -22,87 +14,6 @@ export default function TestLayout({
 }>) {
   const [isOpen, setIsOpen] = useState(false);
 
-  const handlePremium = () => {};
-
-  const links = (
-    <>
-      <p className="text-xs font-semibold uppercase opacity-50">User</p>
-
-      <li className="flex">
-        <ActiveLinkDashboard
-          className="flex w-full items-center gap-2"
-          href="/user/dashboard"
-        >
-          <FaHome className="text-base" />
-          <span className="">Dashboard</span>
-        </ActiveLinkDashboard>
-      </li>
-
-      <li className="flex">
-        <ActiveLinkDashboard
-          className="flex w-full items-center gap-2"
-          href="/user/create-post"
-        >
-          <FaPen className="text-base" />
-          <span className="">Create Post</span>
-        </ActiveLinkDashboard>
-      </li>
-
-      <li className="flex">
-        <ActiveLinkDashboard
-          className="flex w-full items-center gap-2"
-          href="/user/favourite-posts"
-        >
-          <FaBookmark className="text-base" />
-          <span className="">Favourite Posts</span>
-        </ActiveLinkDashboard>
-      </li>
-
-      <li className="flex">
-        <ActiveLinkDashboard
-          className="flex w-full items-center gap-2"
-          href="/user/my-posts"
-        >
-          <FaEye className="text-base" />
-          <span className="">My Posts</span>
-        </ActiveLinkDashboard>
-      </li>
-
-      <li onClick={handlePremium} className="flex">
-        <ActiveLinkDashboard
-          btn={true}
-          className="flex w-full items-center gap-2"
-        >
-          <FaCrown className="text-base" />
-          <span className="">Be premium</span>
-        </ActiveLinkDashboard>
-      </li>
-
-      <p className="text-xs font-semibold uppercase opacity-50">
-        Settings
-      </p>
-
-      <li className="flex">
-        <ActiveLinkDashboard
-          className="flex w-full items-center gap-2"
-          href="/user/settings-profile"
-        >
-          <FaCog className="text-base" />
-          <span className="">Update Profile</span>
-        </ActiveLinkDashboard>
-      </li>
-
-      <li className="flex">
-        <ActiveLinkDashboard
-          className="flex w-full items-center gap-2"
-          href="/user/change-password"
-        >
-          <FaLock className="text-base" />
-          <span className="">Change password</span>
-        </ActiveLinkDashboard>
-      </li>
-    </>
-  );
   return (
     <>
       {/* Navbar */}
@@ -121,11 +32,12 @@ export default function TestLayout({
       </div>
 
       {/* Mobile Sidebar */}
-      <UserMobileSidebar isOpen={isOpen} onClose={() => setIsOpen(false)}>
+      <Drawer isOpen={isOpen} onClose={() => setIsOpen(false)}>
         <ul className="flex flex-col gap-3 font-semibold text-gray-700">
-          {links}
+          {userSidebarLinks}
+          <PremiumButton />
         </ul>
-      </UserMobileSidebar>
+      </Drawer>
     </>
   );
 }

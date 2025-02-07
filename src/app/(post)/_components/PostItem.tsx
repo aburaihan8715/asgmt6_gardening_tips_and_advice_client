@@ -8,15 +8,11 @@ import LoadingWithOverlay from '@/components/common/LoadingWithOverlay';
 import { toast } from 'sonner';
 import LoadingSpinner from '@/components/common/LoadingSpinner';
 import { useRouter } from 'next/navigation';
-import { useGetSingleUser } from '@/hooks/user.hook';
 
-const Post = ({ post }: { post: IPost }) => {
+const PostItem = ({ post }: { post: IPost }) => {
   const router = useRouter();
-  const { user, isLoading: isUserLoading } = useAuth();
+  const { currentUser, isCurrentUserLoading } = useAuth();
 
-  const { data: updatedUserInfo, isLoading: isCurrentLoading } =
-    useGetSingleUser(user?._id as string);
-  const currentUser = updatedUserInfo?.data;
   const isVerified = currentUser?.isVerified;
   const isPremium = post?.isPremium;
   const role = currentUser?.role;
@@ -34,7 +30,7 @@ const Post = ({ post }: { post: IPost }) => {
     router.push(path);
   };
 
-  if (isUserLoading) {
+  if (isCurrentUserLoading) {
     return (
       <div className="mt-[90px]">
         <LoadingSpinner />
@@ -44,7 +40,7 @@ const Post = ({ post }: { post: IPost }) => {
 
   return (
     <>
-      {(isUserLoading || isCurrentLoading) && <LoadingWithOverlay />}
+      {isCurrentUserLoading && <LoadingWithOverlay />}
       <li className="group relative mb-6 flex flex-col gap-10 rounded-lg bg-white p-1 md:flex-row">
         {/* Post Image with Hover Overlay */}
         <div className="group relative aspect-[16/9] w-full flex-1 overflow-hidden rounded-lg">
@@ -164,4 +160,4 @@ const Post = ({ post }: { post: IPost }) => {
   );
 };
 
-export default Post;
+export default PostItem;

@@ -8,13 +8,9 @@ import {
   FaArrowUp,
   FaArrowDown,
 } from 'react-icons/fa';
-import { useGetPost, useVote } from '@/hooks/post.hook';
+import { useGetSinglePost, useVote } from '@/hooks/post.hook';
 import QuillContent from '@/components/common/QuillContent';
-import {
-  useFavourite,
-  useFollow,
-  useGetSingleUser,
-} from '@/hooks/user.hook';
+import { useFavourite, useFollow } from '@/hooks/user.hook';
 import LoadingWithOverlay from '@/components/common/LoadingWithOverlay';
 import LoadingSpinner from '@/components/common/LoadingSpinner';
 import { useAuth } from '@/context/user.provider';
@@ -26,16 +22,14 @@ const PostDetails = () => {
   const router = useRouter();
   const postId = params?.postId as string;
 
-  const { user, isLoading: isUserLoading } = useAuth();
-  const { data: updatedUserInfo } = useGetSingleUser(user?._id as string);
-  const currentUser = updatedUserInfo?.data;
+  const { currentUser, isCurrentUserLoading } = useAuth();
 
   const { data: postDetailsData, isLoading: isPostLoading } =
-    useGetPost(postId);
+    useGetSinglePost(postId);
   const post = postDetailsData?.data;
 
   const postUserId = post?.user?._id as string;
-  const userId = currentUser?._id;
+  const userId = currentUser?._id as string;
   const followings = currentUser?.followings || [];
   const isFollowing = followings?.includes(postUserId);
   const favourites = currentUser?.favourites || [];
@@ -43,7 +37,7 @@ const PostDetails = () => {
   const isOwnPost = currentUser?._id === post?.user?._id;
   const isVerified = currentUser?.isVerified;
   const isPremium = post?.isPremium;
-  const role = currentUser?.role;
+  const role = currentUser?.role as string;
 
   const {
     handleUpvote,
@@ -51,7 +45,7 @@ const PostDetails = () => {
     isUpvotePending,
     isDownvotePending,
   } = useVote({
-    user,
+    currentUser,
     userId,
     postId,
     post,
@@ -65,14 +59,14 @@ const PostDetails = () => {
     handleRemoveFromFavourite,
     isAddFavouritePending,
     isRemoveFavouritePending,
-  } = useFavourite({ isFavourite, isPremium, isVerified });
+  } = useFavourite({ isPremium, isVerified, userId });
 
   const {
     handleFollow,
     handleUnfollow,
     isFollowingPending,
     isUnfollowPending,
-  } = useFollow();
+  } = useFollow(userId);
 
   // HANDLE SHARE
   const handleShare = async () => {
@@ -111,7 +105,7 @@ const PostDetails = () => {
   };
 
   // LOADING SPINNER
-  if (isPostLoading || isUserLoading) {
+  if (isPostLoading || isCurrentUserLoading) {
     return (
       <div className="mt-[90px]">
         <LoadingSpinner />
@@ -204,7 +198,7 @@ const PostDetails = () => {
             </div>
 
             {/* Follow Button */}
-            {user && !isOwnPost && (
+            {currentUser && !isOwnPost && (
               <div>
                 {isFollowing && (
                   <button

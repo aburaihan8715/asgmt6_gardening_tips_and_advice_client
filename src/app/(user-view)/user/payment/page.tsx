@@ -11,7 +11,7 @@ const stripePromise = loadStripe(
 const Payment = () => {
   return (
     <section className="px-1 md:px-10">
-      <div className="flex h-screen flex-col items-center justify-center">
+      <div className="flex flex-col items-center justify-center">
         <div className="mb-4 flex justify-center">
           <SectionHeading heading="Payment" />
         </div>

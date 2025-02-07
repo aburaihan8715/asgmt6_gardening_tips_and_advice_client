@@ -4,7 +4,6 @@ import { useAuth } from '@/context/user.provider';
 import { IComment } from '@/types/comment.type';
 import Image from 'next/image';
 
-import React from 'react';
 import { FaEdit, FaTrash } from 'react-icons/fa';
 
 interface IProps {
@@ -23,9 +22,7 @@ const CommentItem = ({
   handleUpdate,
   commentDeleteError,
 }: IProps) => {
-  const { user } = useAuth();
-
-  // console.log(comments);
+  const { currentUser, isCurrentUserLoading } = useAuth();
 
   if (commentDeleteError) {
     return (
@@ -39,7 +36,9 @@ const CommentItem = ({
 
   return (
     <>
-      {isDeleteCommentPending && <LoadingWithOverlay />}
+      {(isDeleteCommentPending || isCurrentUserLoading) && (
+        <LoadingWithOverlay />
+      )}
       <div className="space-y-4">
         {comments && comments?.length > 0 ? (
           comments?.map((item) => {
@@ -75,7 +74,7 @@ const CommentItem = ({
                   </div>
 
                   {/* Edit and Delete Icons */}
-                  {commentUser?._id === user?._id && (
+                  {commentUser?._id === currentUser?._id && (
                     <div className="flex items-center space-x-2">
                       <button
                         onClick={() => handleUpdate(item?._id)}

@@ -29,7 +29,7 @@ export const useCreateComment = (postId: string) => {
 
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: ['GET_ALL_COMMENTS_ON_POST', postId],
+        queryKey: ['ALL_COMMENTS_ON_POST', postId],
       });
       toast.success('Comment created successfully.');
     },
@@ -41,14 +41,14 @@ export const useCreateComment = (postId: string) => {
 
 export const useGetAllCommentsOnPost = (postId: string) => {
   return useQuery({
-    queryKey: ['GET_ALL_COMMENTS_ON_POST', postId],
+    queryKey: ['ALL_COMMENTS_ON_POST', postId],
     queryFn: async () => getAllCommentsOnPost(postId),
   });
 };
 
 export const useGetSingleComment = (commentId: string) => {
   return useQuery({
-    queryKey: ['GET_SINGLE_COMMENT', commentId],
+    queryKey: ['SINGLE_COMMENT', commentId],
     queryFn: async () => await getSingleComment(commentId),
   });
 };
@@ -60,7 +60,7 @@ export const useDeleteComment = (postId: string) => {
     mutationFn: async (commentId) => deleteComment(commentId),
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: ['GET_ALL_COMMENTS_ON_POST', postId],
+        queryKey: ['ALL_COMMENTS_ON_POST', postId],
       });
       toast.success('Comment deleted successfully.');
     },
@@ -81,7 +81,7 @@ export const useUpdateComment = (postId: string) => {
 
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: ['GET_ALL_COMMENTS_ON_POST', postId],
+        queryKey: ['ALL_COMMENTS_ON_POST', postId],
       });
 
       toast.success('Comment updated successfully.');

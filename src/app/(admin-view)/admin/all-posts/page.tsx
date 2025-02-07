@@ -219,7 +219,6 @@ const AllPosts = () => {
   }
 
   if (isError) {
-    // console.log('======🔥🔥=======', error);
     return <ErrorMessage>{`Failed to fetch posts data!`}</ErrorMessage>;
   }
 

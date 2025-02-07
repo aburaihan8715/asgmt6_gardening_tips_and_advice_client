@@ -9,7 +9,7 @@ import {
 } from '@/actions/auth.action';
 import { useAuth } from '@/context/user.provider';
 
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
 import { FieldValues } from 'react-hook-form';
 import { toast } from 'sonner';
@@ -84,10 +84,15 @@ export const useResetPasswordMutation = () => {
   });
 };
 
-export const useSettingsProfileMutation = () => {
+export const useSettingsProfileMutation = (userId: string) => {
+  const queryClient = useQueryClient();
   return useMutation<any, Error, FieldValues>({
     mutationFn: async (profileData) => await settingsProfile(profileData),
     onSuccess: async () => {
+      queryClient.invalidateQueries({
+        queryKey: ['SINGLE_USER', userId],
+      });
+
       toast.success('Profile updated successfully');
     },
     onError: (error) => {

@@ -1,7 +1,7 @@
 'use client';
 
 import Image from 'next/image';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import SectionHeading from '@/components/common/SectionHeading';
@@ -19,11 +19,14 @@ interface IUserSettingsFormData {
 }
 
 export default function SettingsProfileForm() {
-  const { user } = useAuth();
-  const { mutate: profileMutate, isPending } =
-    useSettingsProfileMutation();
+  const [file, setFile] = useState<File | null>(null);
+  const [preview, setPreview] = useState<string | null>(null);
 
-  // console.log(user);
+  const { currentUser, isCurrentUserLoading } = useAuth();
+  const userId = currentUser?._id as string;
+
+  const { mutate: profileMutate, isPending } =
+    useSettingsProfileMutation(userId);
 
   const {
     register,
@@ -32,13 +35,10 @@ export default function SettingsProfileForm() {
   } = useForm<IUserSettingsFormData>({
     resolver: zodResolver(AuthSchemas.userSettingsSchema),
     defaultValues: {
-      username: user?.username,
-      email: user?.email,
+      username: currentUser?.username || '',
+      email: currentUser?.email || '',
     },
   });
-
-  const [file, setFile] = useState<File | null>(null);
-  const [preview, setPreview] = useState<string | null>(null);
 
   const onSubmit = (data: IUserSettingsFormData) => {
     const formData = new FormData();
@@ -46,25 +46,29 @@ export default function SettingsProfileForm() {
     if (file) {
       formData.append('file', file);
     }
-
-    // console.log(data);
     profileMutate(formData);
   };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files && e.target.files.length > 0) {
-      const selectedFile = e.target.files[0];
-      setFile(selectedFile);
+    const file = e.target.files?.[0];
 
-      // Generate a preview URL for the selected file
-      const previewUrl = URL.createObjectURL(selectedFile);
+    if (file) {
+      setFile(file);
+      const previewUrl = URL.createObjectURL(file);
       setPreview(previewUrl);
     }
   };
 
+  // Cleanup the object URL to prevent memory leaks
+  useEffect(() => {
+    return () => {
+      if (preview) URL.revokeObjectURL(preview);
+    };
+  }, [preview]);
+
   return (
     <>
-      {isPending && <LoadingWithOverlay />}
+      {(isPending || isCurrentUserLoading) && <LoadingWithOverlay />}
       <div className="flex justify-center">
         <SectionHeading heading="User Settings" />
       </div>
@@ -122,9 +126,8 @@ export default function SettingsProfileForm() {
           ) : (
             <Image
               src={
-                user && user?.profilePicture
-                  ? user.profilePicture
-                  : 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png'
+                currentUser?.profilePicture ||
+                'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png'
               }
               alt="User photo"
               width={96}
@@ -153,8 +156,6 @@ export default function SettingsProfileForm() {
           <Button type="submit">Save settings</Button>
         </div>
       </form>
-
-      <hr className="my-8" />
     </>
   );
 }

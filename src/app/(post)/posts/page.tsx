@@ -10,7 +10,7 @@ import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import React, { useEffect, useState } from 'react';
-import Post from '../_components/Post';
+import PostItem from '../_components/PostItem';
 import ErrorMessage from '@/components/common/ErrorMessage';
 import LoadingWithOverlay from '@/components/common/LoadingWithOverlay';
 import Container from '@/components/common/Container';
@@ -72,7 +72,7 @@ const Posts = () => {
               {data?.pages?.map((group, i) => (
                 <React.Fragment key={i}>
                   {group?.data?.map((item: IPost) => (
-                    <Post key={item._id} post={item} />
+                    <PostItem key={item._id} post={item} />
                   ))}
                 </React.Fragment>
               ))}

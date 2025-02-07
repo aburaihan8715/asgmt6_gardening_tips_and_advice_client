@@ -44,7 +44,7 @@ import { useState } from 'react';
 import Link from 'next/link';
 import LoadingWithOverlay from '@/components/common/LoadingWithOverlay';
 import ErrorMessage from '@/components/common/ErrorMessage';
-import { FaArrowDown, FaArrowUp } from 'react-icons/fa';
+import { FaArrowDown, FaArrowUp, FaEdit, FaTrash } from 'react-icons/fa';
 
 const MyPosts = () => {
   const [sorting, setSorting] = useState<SortingState>([]);
@@ -78,8 +78,8 @@ const MyPosts = () => {
     setCurrentPage(page);
   };
 
-  const handleDeletePost = (id: string) => {
-    Swal.fire({
+  const handleDeletePost = async (id: string) => {
+    const result = await Swal.fire({
       title: 'Are you sure?',
       text: "You won't be able to revert this!",
       icon: 'warning',
@@ -87,17 +87,16 @@ const MyPosts = () => {
       confirmButtonColor: '#3085d6',
       cancelButtonColor: '#d33',
       confirmButtonText: 'Yes, delete!',
-    }).then((result) => {
-      if (result.isConfirmed) {
-        // call delete api
-        postDeleteMutate(id);
-        Swal.fire({
-          title: 'Deleted!',
-          text: 'Your file has been deleted.',
-          icon: 'success',
-        });
-      }
     });
+
+    if (result.isConfirmed) {
+      postDeleteMutate(id);
+      Swal.fire({
+        title: 'Deleted!',
+        text: 'Your file has been deleted.',
+        icon: 'success',
+      });
+    }
   };
 
   const handleMakePremium = (id: string) => {
@@ -223,13 +222,15 @@ const MyPosts = () => {
         return (
           <div className="flex gap-3">
             <Link href={`edit-post/${id}`}>
-              <Button variant={'secondary'}>edit</Button>
+              <Button variant={'secondary'}>
+                <FaEdit />
+              </Button>
             </Link>
             <Button
               onClick={() => handleDeletePost(id)}
               variant={'destructive'}
             >
-              delete
+              <FaTrash />
             </Button>
             <Button
               onClick={() => handleMakePremium(id)}

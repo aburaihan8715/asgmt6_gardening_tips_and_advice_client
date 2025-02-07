@@ -11,6 +11,7 @@ import {
   useDeleteComment,
   useGetAllCommentsOnPost,
 } from '@/hooks/comment.hooks';
+import Swal from 'sweetalert2';
 
 const CommentList = () => {
   const [isUpdateFrom, setIsUpdateFrom] = useState(false);
@@ -29,8 +30,25 @@ const CommentList = () => {
     error: commentDeleteError,
   } = useDeleteComment(postId);
 
-  const handleDelete = (commentId: string) => {
-    deleteCommentMutate(commentId);
+  const handleDelete = async (commentId: string) => {
+    const result = await Swal.fire({
+      title: 'Are you sure?',
+      text: "You won't be able to revert this!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes!',
+    });
+
+    if (result.isConfirmed) {
+      deleteCommentMutate(commentId);
+      Swal.fire({
+        title: 'Deleted!',
+        text: 'Your comment has been deleted.',
+        icon: 'success',
+      });
+    }
   };
 
   const handleUpdate = (cId: string) => {

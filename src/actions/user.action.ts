@@ -1,17 +1,6 @@
 'use server';
-
 import axiosInstance from '@/lib/AxiosInstance';
 
-// GET ME
-export const getTopFiveUsers = async () => {
-  try {
-    const { data } = await axiosInstance.get(`/api/v1/users/top-5-users`);
-    return data;
-  } catch (error: any) {
-    throw new Error(error.response?.data?.message || error.message);
-  }
-};
-// GET ALL USERS
 export const getAllUsers = async ({
   page,
   limit,
@@ -36,17 +25,6 @@ export const getAllUsers = async ({
   }
 };
 
-// GET ME
-export const getMe = async () => {
-  try {
-    const { data } = await axiosInstance.get(`/api/v1/users/me`);
-    return data;
-  } catch (error: any) {
-    throw new Error(error.response?.data?.message || error.message);
-  }
-};
-
-// GET USER
 export const getSingleUser = async (userId: string) => {
   try {
     const { data } = await axiosInstance.get(`/api/v1/users/${userId}`);
@@ -56,7 +34,6 @@ export const getSingleUser = async (userId: string) => {
   }
 };
 
-// CHECK PREMIUM STATUS
 export const checkHasUpvoteForPost = async () => {
   try {
     const { data } = await axiosInstance.get(
@@ -68,7 +45,6 @@ export const checkHasUpvoteForPost = async () => {
   }
 };
 
-// GET FAVOURITE POSTS
 export const getFavouritePosts = async () => {
   try {
     const { data } = await axiosInstance.get(
@@ -80,7 +56,6 @@ export const getFavouritePosts = async () => {
   }
 };
 
-// GET USERS STATS
 export const getUserStats = async () => {
   try {
     const { data } = await axiosInstance.get(`/api/v1/users/user-stats`);
@@ -90,7 +65,6 @@ export const getUserStats = async () => {
   }
 };
 
-// GET REVENUE
 export const getRevenue = async () => {
   try {
     const { data } = await axiosInstance.get(`/api/v1/users/revenue`);
@@ -100,7 +74,6 @@ export const getRevenue = async () => {
   }
 };
 
-// FOLLOW USER
 export const followUser = async (postUserId: string) => {
   try {
     const { data } = await axiosInstance.patch(
@@ -112,7 +85,6 @@ export const followUser = async (postUserId: string) => {
   }
 };
 
-// UNFOLLOW USER
 export const unfollowUser = async (postUserId: string) => {
   try {
     const { data } = await axiosInstance.patch(
@@ -124,7 +96,6 @@ export const unfollowUser = async (postUserId: string) => {
   }
 };
 
-// ADD TO FAVOURITE
 export const addFavoritePost = async (postId: string) => {
   try {
     const { data } = await axiosInstance.patch(
@@ -136,7 +107,6 @@ export const addFavoritePost = async (postId: string) => {
   }
 };
 
-// REMOVE FROM FAVOURITE
 export const removeFavoritePost = async (postId: string) => {
   try {
     const { data } = await axiosInstance.patch(
@@ -148,7 +118,6 @@ export const removeFavoritePost = async (postId: string) => {
   }
 };
 
-// DELETE USER
 export const deleteUser = async (userId: string) => {
   try {
     const { data } = await axiosInstance.delete(`/api/v1/users/${userId}`);

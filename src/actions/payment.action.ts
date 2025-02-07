@@ -1,7 +1,6 @@
 'use server';
 import axiosInstance from '@/lib/AxiosInstance';
 
-// GET ALL PAYMENTS
 export const getAllPayments = async () => {
   try {
     const { data } = await axiosInstance.get(`/api/v1/payments`);
@@ -10,7 +9,7 @@ export const getAllPayments = async () => {
     throw new Error(error.response?.data?.message || error.message);
   }
 };
-// GET PAYMENT STATS
+
 export const getPaymentStats = async () => {
   try {
     const { data } = await axiosInstance.get(
@@ -22,7 +21,6 @@ export const getPaymentStats = async () => {
   }
 };
 
-// CREATE PAYMENT INTENT
 interface IIntent {
   price: number;
 }
@@ -38,7 +36,6 @@ export const createPaymentIntent = async (intentPrice: IIntent) => {
   }
 };
 
-// CREATE
 interface IPayment {
   email: string;
   transactionId: string;
