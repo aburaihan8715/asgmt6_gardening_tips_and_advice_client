@@ -10,7 +10,7 @@ import Container from '../../../components/common/Container';
 import LogoutButton from '../../../components/common/LogoutButton';
 import Drawer from '@/components/common/Drawer';
 import ProfilePopover from '@/components/common/ProfilePopover';
-import { postNavbarLinks } from '../_constants';
+import { postLinks } from '../_constants';
 
 // HEADER COMPONENT
 const Header = () => {
@@ -35,7 +35,7 @@ const Header = () => {
 
             <nav className="ml-auto hidden md:block">
               <ul className="flex gap-4 font-semibold text-gray-700">
-                {postNavbarLinks}
+                {postLinks}
               </ul>
             </nav>
 
@@ -58,8 +58,12 @@ const Header = () => {
       </header>
 
       {/* sidebar */}
-      <Drawer isOpen={isOpen} onClose={() => setIsOpen(false)}>
-        <ul className="flex flex-col gap-2">{postNavbarLinks}</ul>
+      <Drawer
+        isOpen={isOpen}
+        onClose={() => setIsOpen(false)}
+        title="Posts"
+      >
+        <ul className="flex flex-col gap-2">{postLinks}</ul>
       </Drawer>
     </>
   );

@@ -50,7 +50,7 @@ const CommentItem = ({
                   <Image
                     className="h-12 w-12 rounded-full object-cover"
                     src={
-                      commentUser.profilePicture ||
+                      commentUser?.profilePicture ||
                       'https://randomuser.me/api/portraits/women/6.jpg'
                     }
                     alt={`user image`}

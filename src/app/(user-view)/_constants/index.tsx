@@ -1,4 +1,3 @@
-import ActiveLink from '@/components/common/ActiveLink';
 import ActiveLinkDashboard from '@/components/common/ActiveLinkDashboard';
 import {
   FaBookmark,
@@ -6,6 +5,7 @@ import {
   FaEye,
   FaHome,
   FaLock,
+  FaNewspaper,
   FaPen,
 } from 'react-icons/fa';
 
@@ -53,6 +53,16 @@ export const userSidebarLinks = (
       </ActiveLinkDashboard>
     </li>
 
+    <li className="flex">
+      <ActiveLinkDashboard
+        className="flex w-full items-center gap-2"
+        href="/posts"
+      >
+        <FaNewspaper className="text-base" />
+        <span className="">News Feed</span>
+      </ActiveLinkDashboard>
+    </li>
+
     <p className="text-xs font-semibold uppercase opacity-50">Settings</p>
 
     <li className="flex">
@@ -79,8 +89,14 @@ export const userSidebarLinks = (
 
 export const userNavbarLinks = (
   <>
-    <li>
-      <ActiveLink href="/posts">News Feed</ActiveLink>
+    <li className="flex">
+      <ActiveLinkDashboard
+        className="flex w-full items-center gap-2"
+        href="/posts"
+      >
+        <FaNewspaper className="text-base" />
+        <span className="">News Feed</span>
+      </ActiveLinkDashboard>
     </li>
   </>
 );

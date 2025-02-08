@@ -116,8 +116,8 @@ const UserProvider = ({ children }: { children: ReactNode }) => {
     handleUser();
   }, []); // Avoid adding dependencies unless necessary
 
-  console.log('currentUser from context', currentUser);
-  console.log(' user form context', user);
+  // console.log('currentUser from context', currentUser);
+  // console.log(' user form context', user);
   return (
     <UserContext.Provider
       value={{

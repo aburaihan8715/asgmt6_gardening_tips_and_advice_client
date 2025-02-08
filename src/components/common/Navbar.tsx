@@ -29,16 +29,14 @@ const Navbar = ({ setIsOpen, links }: NavbarProps) => {
           <MdMenu />
         </button>
 
-        {links && (
-          <nav className="ml-auto hidden md:block">
-            <ul className="flex gap-4 font-semibold text-gray-700">
-              {links}
-            </ul>
-          </nav>
-        )}
-
         {/* LOGIN,PROFILE GROUP */}
         <div className="ml-auto flex items-center gap-4">
+          {links && (
+            <ul className="hidden gap-4 font-semibold text-gray-700 md:flex">
+              {links}
+            </ul>
+          )}
+
           {currentUser && (
             <div className="flex items-center">
               <ProfilePopover />

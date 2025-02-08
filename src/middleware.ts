@@ -5,9 +5,6 @@ export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
   const user = await getCurrentUser();
 
-  // // console.log('user from middleware', user);
-
-  // // Public routes accessible without authentication
   const publicAuthRoutes = [
     '/',
     '/auth/register',
@@ -15,12 +12,10 @@ export async function middleware(request: NextRequest) {
     '/auth/reset-password',
   ];
 
-  // // Unauthorized routes for admin
   const restrictedAdminRoutes = ['/posts', '/user'];
-  // // Unauthorized routes for user
   const restrictedUserRoutes = ['/admin'];
 
-  // Unauthenticated user handling
+  // If the user is not authenticated
   if (!user) {
     if (publicAuthRoutes.includes(pathname)) {
       return NextResponse.next();
@@ -28,14 +23,14 @@ export async function middleware(request: NextRequest) {
     return NextResponse.redirect(new URL('/', request.url));
   }
 
-  // Redirect authenticated users away from public auth routes
+  // Prevent logged-in users from accessing auth pages
   if (publicAuthRoutes.includes(pathname)) {
     return NextResponse.redirect(
-      new URL(`/${user?.role}/dashboard`, request.url),
+      new URL(`/${user.role}/dashboard`, request.url),
     );
   }
 
-  // Role-based redirection
+  // Role-based access control
   if (user.role === 'admin' && pathname.startsWith('/user')) {
     return NextResponse.redirect(new URL('/admin/dashboard', request.url));
   }
@@ -60,7 +55,6 @@ export async function middleware(request: NextRequest) {
     return NextResponse.redirect(new URL('/unauth', request.url));
   }
 
-  // Allow the request to proceed if no conditions match
   return NextResponse.next();
 }
 
@@ -71,5 +65,6 @@ export const config = {
     '/admin/:path*',
     '/user/:path*',
     '/posts/:path*',
+    '/unauth', // Ensure this is included
   ],
 };
