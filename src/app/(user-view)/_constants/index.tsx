@@ -1,3 +1,4 @@
+import ActiveLink from '@/components/common/ActiveLink';
 import ActiveLinkDashboard from '@/components/common/ActiveLinkDashboard';
 import {
   FaBookmark,
@@ -52,16 +53,6 @@ export const userSidebarLinks = (
       </ActiveLinkDashboard>
     </li>
 
-    {/* <li onClick={handlePremium} className="flex">
-      <ActiveLinkDashboard
-        btn={true}
-        className="flex w-full items-center gap-2"
-      >
-        <FaCrown className="text-base" />
-        <span className="">Be premium</span>
-      </ActiveLinkDashboard>
-    </li> */}
-
     <p className="text-xs font-semibold uppercase opacity-50">Settings</p>
 
     <li className="flex">
@@ -82,6 +73,14 @@ export const userSidebarLinks = (
         <FaLock className="text-base" />
         <span className="">Change password</span>
       </ActiveLinkDashboard>
+    </li>
+  </>
+);
+
+export const userNavbarLinks = (
+  <>
+    <li>
+      <ActiveLink href="/posts">News Feed</ActiveLink>
     </li>
   </>
 );

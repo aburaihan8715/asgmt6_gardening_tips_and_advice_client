@@ -1,17 +1,18 @@
 'use client';
-
 import BrandLogo from '@/components/common/BrandLogo';
 import LogoutButton from '@/components/common/LogoutButton';
 import ProfilePopover from '@/components/common/ProfilePopover';
 
 import { useAuth } from '@/context/user.provider';
+import { ReactNode } from 'react';
 
 import { MdMenu } from 'react-icons/md';
 
 interface NavbarProps {
   setIsOpen: (isOpen: boolean) => void;
+  links?: ReactNode;
 }
-const AdminNavbar = ({ setIsOpen }: NavbarProps) => {
+const Navbar = ({ setIsOpen, links }: NavbarProps) => {
   const { currentUser } = useAuth();
 
   return (
@@ -27,6 +28,14 @@ const AdminNavbar = ({ setIsOpen }: NavbarProps) => {
         >
           <MdMenu />
         </button>
+
+        {links && (
+          <nav className="ml-auto hidden md:block">
+            <ul className="flex gap-4 font-semibold text-gray-700">
+              {links}
+            </ul>
+          </nav>
+        )}
 
         {/* LOGIN,PROFILE GROUP */}
         <div className="ml-auto flex items-center gap-4">
@@ -47,4 +56,4 @@ const AdminNavbar = ({ setIsOpen }: NavbarProps) => {
   );
 };
 
-export default AdminNavbar;
+export default Navbar;

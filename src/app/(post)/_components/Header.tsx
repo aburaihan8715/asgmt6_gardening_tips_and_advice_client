@@ -10,7 +10,7 @@ import Container from '../../../components/common/Container';
 import LogoutButton from '../../../components/common/LogoutButton';
 import Drawer from '@/components/common/Drawer';
 import ProfilePopover from '@/components/common/ProfilePopover';
-import { postNavbarLinks } from './_constants';
+import { postNavbarLinks } from '../_constants';
 
 // HEADER COMPONENT
 const Header = () => {
@@ -19,9 +19,9 @@ const Header = () => {
 
   return (
     <>
-      <header className="sticky right-0 top-0 z-50 w-full bg-white px-1">
+      <header className="sticky right-0 top-0 z-50 w-full border-b bg-white px-1">
         <Container>
-          <div className="sticky top-0 z-20 flex h-[80px] w-full items-center gap-5 border-b">
+          <div className="sticky top-0 z-20 flex h-[80px] w-full items-center gap-5">
             <div className="hidden md:block">
               <BrandLogo />
             </div>

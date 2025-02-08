@@ -23,6 +23,9 @@ import { toast } from 'sonner';
 
 import { IUser } from '@/types';
 
+// =======================
+// Query
+// ========================
 export const useGetAllPosts = ({
   page,
   limit,
@@ -37,10 +40,7 @@ export const useGetAllPosts = ({
   voteFilter?: string;
 }) => {
   return useQuery({
-    queryKey: [
-      'GET_POSTS',
-      { page, limit, searchTerm, category, voteFilter },
-    ],
+    queryKey: ['POSTS', { page, limit, searchTerm, category, voteFilter }],
     queryFn: async () =>
       await getAllPosts({ page, limit, searchTerm, category, voteFilter }),
     // gcTime: 0,
@@ -59,7 +59,10 @@ export const useGetInfinitePosts = ({
   limit?: number;
 }) => {
   return useInfiniteQuery({
-    queryKey: ['posts', { searchTerm, category, voteFilter, limit }],
+    queryKey: [
+      'INFINITE_POSTS',
+      { searchTerm, category, voteFilter, limit },
+    ],
     queryFn: async ({ pageParam = 1 }) => {
       const { data, meta } = await getInfinitePosts({
         pageParam,
@@ -95,7 +98,7 @@ export const useGetMyPosts = ({
 
 export const useGetSinglePost = (postId: string) => {
   return useQuery({
-    queryKey: ['GET_POST', postId],
+    queryKey: ['SINGLE_POST', postId],
     queryFn: async () => await getSinglePost(postId),
   });
 };
@@ -107,6 +110,9 @@ export const useGetPostStats = () => {
   });
 };
 
+// =======================
+// Mutations
+// ========================
 export const useUpdatePostMutation = () => {
   const router = useRouter();
   return useMutation<unknown, Error, FieldValues>({
@@ -130,9 +136,11 @@ export const useDeletePostMutation = () => {
     onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: ['MY_POSTS'],
+        exact: false,
       });
       queryClient.invalidateQueries({
         queryKey: ['POSTS'],
+        exact: false,
       });
 
       toast.success('Post deleted successfully.');
@@ -150,13 +158,8 @@ export const useMakePostPremiumMutation = () => {
     mutationFn: async (id) => await makePostPremium(id),
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: ['GET_MY_POSTS'],
-      });
-      queryClient.invalidateQueries({
-        queryKey: ['GET_POSTS'],
-      });
-      queryClient.invalidateQueries({
-        queryKey: ['GET_TOP_5_POSTS'],
+        queryKey: ['MY_POSTS'],
+        exact: false,
       });
       toast.success('Post has been premium successfully.');
     },

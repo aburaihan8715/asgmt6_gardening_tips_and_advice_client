@@ -1,11 +1,11 @@
 'use client';
 import { useState } from 'react';
 
-import UserNavbar from '../_components/Navbar';
-import UserDesktopSidebar from '../_components/DesktopSidebar';
 import Drawer from '@/components/common/Drawer';
 import PremiumButton from '@/components/common/PremiumButton';
-import { userSidebarLinks } from '../_constants';
+import { userNavbarLinks, userSidebarLinks } from '../_constants';
+import DesktopSidebar from '@/components/common/DesktopSidebar';
+import Navbar from '@/components/common/Navbar';
 
 export default function TestLayout({
   children,
@@ -17,13 +17,13 @@ export default function TestLayout({
   return (
     <>
       {/* Navbar */}
-      <UserNavbar setIsOpen={setIsOpen} />
+      <Navbar setIsOpen={setIsOpen} links={userNavbarLinks} />
 
       <div className="flex flex-1 overflow-hidden">
         {/* Desktop Sidebar with Sticky Fix */}
         <div className="hidden md:block md:w-[250px]">
           <div className="fixed bottom-0 top-[80px] h-screen overflow-y-auto border-r pl-10 pr-2 pt-5 md:w-[250px]">
-            <UserDesktopSidebar />
+            <DesktopSidebar isBtn={true} links={userSidebarLinks} />
           </div>
         </div>
 
