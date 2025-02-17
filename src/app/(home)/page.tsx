@@ -80,20 +80,20 @@ const Login = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
         >
-          <div className="flex justify-center">
+          <div className="mb-2 flex justify-center">
             <SectionHeading heading="Login" />
           </div>
 
           <div className="mb-2 flex flex-wrap justify-center gap-2">
             <button
               onClick={() => handleCredentials('admin')}
-              className="border-b border-transparent transition duration-300 hover:border-green-600"
+              className="rounded-md bg-green-600 px-2 py-1 text-gray-200 transition duration-300"
             >
               admin credentials
             </button>
             <button
               onClick={() => handleCredentials('user')}
-              className="border-b border-transparent transition duration-300 hover:border-green-600"
+              className="rounded-md bg-green-600 px-2 py-1 text-gray-200 transition duration-300"
             >
               user credentials
             </button>
