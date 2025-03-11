@@ -14,12 +14,11 @@ import { useFavourite, useFollow } from '@/hooks/user.hook';
 import LoadingWithOverlay from '@/components/common/LoadingWithOverlay';
 import LoadingSpinner from '@/components/common/LoadingSpinner';
 import { useAuth } from '@/context/user.provider';
-import { useParams, useRouter } from 'next/navigation';
-import { toast } from 'sonner';
+import { useParams } from 'next/navigation';
 
 const PostDetails = () => {
   const params = useParams();
-  const router = useRouter();
+
   const postId = params?.postId as string;
 
   const { currentUser, isCurrentUserLoading } = useAuth();
@@ -86,23 +85,23 @@ const PostDetails = () => {
   };
 
   // HANDLE COMMENT
-  const handleComment = () => {
-    const postId = post?._id;
-    if (!postId) return;
+  // const handleComment = () => {
+  //   const postId = post?._id;
+  //   if (!postId) return;
 
-    const pathForCreate = `/create-comment?postId=${postId}`;
-    const pathForCommentList = `/comments?postId=${postId}`;
-    const path =
-      post?.numberOfComments > 0 ? pathForCommentList : pathForCreate;
+  //   const pathForCreate = `/create-comment?postId=${postId}`;
+  //   const pathForCommentList = `/comments?postId=${postId}`;
+  //   const path =
+  //     post?.numberOfComments > 0 ? pathForCommentList : pathForCreate;
 
-    if (isPremium && !isVerified) {
-      if (role !== 'admin') {
-        return toast.warning('You need to be verified first!!');
-      }
-    }
+  //   if (isPremium && !isVerified) {
+  //     if (role !== 'admin') {
+  //       return toast.warning('You need to be verified first!!');
+  //     }
+  //   }
 
-    router.push(path);
-  };
+  //   router.push(path);
+  // };
 
   // LOADING SPINNER
   if (isPostLoading || isCurrentUserLoading) {
@@ -250,7 +249,7 @@ const PostDetails = () => {
 
             <div>
               <span
-                onClick={handleComment}
+                // onClick={handleComment}
                 className="flex items-center space-x-2"
               >
                 <FaCommentAlt className="text-gray-400" />

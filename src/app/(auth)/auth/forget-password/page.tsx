@@ -5,6 +5,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import LoadingWithOverlay from '@/components/common/LoadingWithOverlay';
 import { AuthSchemas } from '@/schemas/auth.schema';
 import { useForgetPasswordMutation } from '@/hooks/auth.hook';
+import Link from 'next/link';
 
 type TForgotPasswordFormValues = {
   email: string;
@@ -74,12 +75,12 @@ const ForgotPassword: React.FC = () => {
           </form>
 
           <div className="mt-4 text-center">
-            <a
-              href="/auth/login"
+            <Link
+              href="/"
               className="text-sm text-gray-600 hover:text-green-500"
             >
               Back to Login
-            </a>
+            </Link>
           </div>
         </div>
       </div>

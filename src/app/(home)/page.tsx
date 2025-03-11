@@ -80,20 +80,20 @@ const Login = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
         >
-          <div className="mb-2 flex justify-center">
+          <div className="mb-5 flex justify-center">
             <SectionHeading heading="Login" />
           </div>
 
-          <div className="mb-2 flex flex-wrap justify-center gap-2">
+          <div className="mb-2 flex flex-wrap justify-between gap-2">
             <button
               onClick={() => handleCredentials('admin')}
-              className="rounded-md bg-green-600 px-2 py-1 text-gray-200 transition duration-300"
+              className="rounded-md bg-green-600 px-5 py-1 text-gray-200 transition duration-300 hover:bg-green-800"
             >
               admin credentials
             </button>
             <button
               onClick={() => handleCredentials('user')}
-              className="rounded-md bg-green-600 px-2 py-1 text-gray-200 transition duration-300"
+              className="rounded-md bg-green-600 px-5 py-1 text-gray-200 transition duration-300 hover:bg-green-800"
             >
               user credentials
             </button>
@@ -115,7 +115,7 @@ const Login = () => {
                   </label>
                   <Link
                     href="/auth/forget-password"
-                    className="text-sm text-green-700 hover:text-green-800"
+                    className="text-sm text-green-700 hover:text-green-800 hover:underline"
                   >
                     Forget Password?
                   </Link>
@@ -202,7 +202,7 @@ const Login = () => {
               Don&apos;t have an account?{' '}
               <Link
                 href="/auth/register"
-                className="font-medium text-green-700 hover:text-green-800"
+                className="font-medium text-green-700 hover:text-green-800 hover:underline"
               >
                 Register
               </Link>

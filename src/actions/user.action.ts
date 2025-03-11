@@ -1,5 +1,6 @@
 'use server';
 import axiosInstance from '@/lib/AxiosInstance';
+import { FieldValues } from 'react-hook-form';
 
 export const getAllUsers = async ({
   page,
@@ -28,6 +29,29 @@ export const getAllUsers = async ({
 export const getSingleUser = async (userId: string) => {
   try {
     const { data } = await axiosInstance.get(`/api/v1/users/${userId}`);
+    return data;
+  } catch (error: any) {
+    throw new Error(error.response?.data?.message || error.message);
+  }
+};
+
+// settings profile
+export const updateMe = async (profileData: FieldValues) => {
+  try {
+    const { data } = await axiosInstance.patch(
+      '/api/v1/users/update-me',
+      profileData,
+    );
+
+    return data;
+  } catch (error: any) {
+    throw new Error(error.response?.data?.message || error.message);
+  }
+};
+
+export const getMe = async () => {
+  try {
+    const { data } = await axiosInstance.get(`/api/v1/users/me`);
     return data;
   } catch (error: any) {
     throw new Error(error.response?.data?.message || error.message);

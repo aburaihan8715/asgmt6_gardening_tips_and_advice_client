@@ -1,14 +1,6 @@
-// problems
-01. after change I want to logout
-
-
-
-
-//  need to update readme file
-
-
-
-
+// pending
+1.need to update readme file
+2. need to be used skelton component
 
 
 
@@ -21,78 +13,9 @@ https://cdn.pixabay.com/photo/2017/11/10/04/47/image-2935360_1280.png
 // dummy image
 https://via.placeholder.com/400x200
 
-
-
-// pending
-1. function are should be optimized
-2. actions and hooks should be optimized (like authActions and AuthHooks)
-
-
-
-// problems
-1. delete comment
-2. infinite scrolling
-3. edit comment not implemented
-4. after login not redirecting
-5. password change is not working
-
-
-
 // category
 'Vegetables' | 'Flowers' | 'Landscaping' | 'Others';
 
-
-// NOTE: action implemented only one place it need to be implemented more 2 components
-
-
-
-
-## 1st best project live link client:
-https://asgmt9-multi-vendor-e-commerce.netlify.app
-
-## 1st best project github link client:
-https://github.com/aburaihan8715/asgmt9_multi_vendor_e_commerce_ui
-
-## 1st best project live link server:
-https://asgmt9-multi-vendor-e-commerce-api.vercel.app
-
-## 1st best project github link server:
-https://github.com/aburaihan8715/asgmt9_multi_vendor_e_commerce_api
-
-## 1st best project Credentials:
-## Admin
-- email: aadmin@gmail.com
-- password: test1234
-
-## Vendor
-- email: avendor@gmail.com
-- password: test1234
-
-## Customer
-- email: acustomer@gmail.com
-- password: test1234
-
-## 2nd best project live link client:
-https://asgmt6-gardening-tips-and-advice-client.vercel.app
-
-## 2nd best project github link client:
-https://github.com/aburaihan8715/asgmt6_gardening_tips_and_advice_client
-
-## 2nd best project live link server:
-https://asgmt6-gardening-tips-and-advice-api.vercel.app
-
-## 2nd best project github link server:
-https://github.com/aburaihan8715/asgmt6_gardening_tips_and_advice_api
-
-## 2nd best project Credentials:
-
-## Admin
-- email: admin@gmail.com
-- password: test1234
-
-## User
-- email: admin@gmail.com
-- password: test1234
 
 
 

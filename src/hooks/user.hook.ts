@@ -5,17 +5,20 @@ import {
   followUser,
   getAllUsers,
   getFavouritePosts,
+  getMe,
   getRevenue,
   getSingleUser,
   getUserStats,
   removeFavoritePost,
   unfollowUser,
+  updateMe,
 } from '@/actions/user.action';
 import {
   useMutation,
   useQuery,
   useQueryClient,
 } from '@tanstack/react-query';
+import { FieldValues } from 'react-hook-form';
 import { toast } from 'sonner';
 
 export const useGetSingleUser = (userId: string) => {
@@ -23,6 +26,31 @@ export const useGetSingleUser = (userId: string) => {
     queryKey: ['SINGLE_USER', userId],
     queryFn: async () => await getSingleUser(userId),
     enabled: userId ? true : false,
+  });
+};
+
+export const useGetMe = (userId: string) => {
+  return useQuery({
+    queryKey: ['ME', userId],
+    queryFn: async () => await getMe(),
+    enabled: userId ? true : false,
+  });
+};
+
+export const useUpdateMe = (userId: string) => {
+  const queryClient = useQueryClient();
+  return useMutation<any, Error, FieldValues>({
+    mutationFn: async (profileData) => await updateMe(profileData),
+    onSuccess: async () => {
+      queryClient.invalidateQueries({
+        queryKey: ['ME', userId],
+      });
+
+      toast.success('Profile updated successfully');
+    },
+    onError: (error) => {
+      toast.error(error.message);
+    },
   });
 };
 

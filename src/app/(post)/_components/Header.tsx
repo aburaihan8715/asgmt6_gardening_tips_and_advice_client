@@ -11,11 +11,14 @@ import LogoutButton from '../../../components/common/LogoutButton';
 import Drawer from '@/components/common/Drawer';
 import ProfilePopover from '@/components/common/ProfilePopover';
 import { postLinks } from '../_constants';
+import Link from 'next/link';
 
 // HEADER COMPONENT
 const Header = () => {
   const [isOpen, setIsOpen] = useState(false);
   const { currentUser } = useAuth();
+
+  console.log('currentUser from header', currentUser);
 
   return (
     <>
@@ -23,7 +26,9 @@ const Header = () => {
         <Container>
           <div className="sticky top-0 z-20 flex h-[80px] w-full items-center gap-5">
             <div className="hidden md:block">
-              <BrandLogo />
+              <Link href={`/`}>
+                <BrandLogo />
+              </Link>
             </div>
             {/* menu button */}
             <button

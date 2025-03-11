@@ -46,7 +46,7 @@ export const logout = async () => {
 export const changePassword = async (passwordData: FieldValues) => {
   try {
     const { data } = await axiosInstance.patch(
-      '/api/v1/auth/change-password',
+      '/api/v1/auth/update-password',
       passwordData,
     );
     return data;
@@ -86,20 +86,6 @@ export const resetPassword = async (passwordResetData: FieldValues) => {
           Authorization: `${passwordResetData.passwordResetToken}`,
         },
       },
-    );
-
-    return data;
-  } catch (error: any) {
-    throw new Error(error.response?.data?.message || error.message);
-  }
-};
-
-// settings profile
-export const settingsProfile = async (profileData: FieldValues) => {
-  try {
-    const { data } = await axiosInstance.patch(
-      '/api/v1/auth/settings-profile',
-      profileData,
     );
 
     return data;

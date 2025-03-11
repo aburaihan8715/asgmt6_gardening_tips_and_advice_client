@@ -1,10 +1,5 @@
 import ActiveLinkDashboard from '@/components/common/ActiveLinkDashboard';
-import {
-  FaNewspaper,
-  FaPhoneAlt,
-  FaInfoCircle,
-  FaTachometerAlt,
-} from 'react-icons/fa';
+import { FaNewspaper, FaTachometerAlt } from 'react-icons/fa';
 
 export const postLinks = (
   <>
@@ -17,7 +12,7 @@ export const postLinks = (
         <span className="">News Feed</span>
       </ActiveLinkDashboard>
     </li>
-    <li className="flex">
+    {/* <li className="flex">
       <ActiveLinkDashboard
         className="flex w-full items-center gap-2"
         href="/about"
@@ -25,8 +20,8 @@ export const postLinks = (
         <FaInfoCircle className="text-base" />
         <span className="">About</span>
       </ActiveLinkDashboard>
-    </li>
-    <li className="flex">
+    </li> */}
+    {/* <li className="flex">
       <ActiveLinkDashboard
         className="flex w-full items-center gap-2"
         href="/contact"
@@ -34,7 +29,7 @@ export const postLinks = (
         <FaPhoneAlt className="text-base" />
         <span className="">Contact</span>
       </ActiveLinkDashboard>
-    </li>
+    </li> */}
 
     <li className="flex">
       <ActiveLinkDashboard

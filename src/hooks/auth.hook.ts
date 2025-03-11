@@ -5,11 +5,10 @@ import {
   loginUser,
   registerUser,
   resetPassword,
-  settingsProfile,
 } from '@/actions/auth.action';
 import { useAuth } from '@/context/user.provider';
 
-import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useMutation } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
 import { FieldValues } from 'react-hook-form';
 import { toast } from 'sonner';
@@ -20,7 +19,7 @@ export const useRegisterMutation = () => {
     mutationFn: async (registerData) => await registerUser(registerData),
     onSuccess: () => {
       toast.success('User registration successful.');
-      router.push('/login');
+      router.push('/');
     },
     onError: (error) => {
       toast.error(error.message);
@@ -76,24 +75,7 @@ export const useResetPasswordMutation = () => {
       await resetPassword(passwordResetData),
     onSuccess: async () => {
       toast.success('Password reset successfully');
-      router.push('/login');
-    },
-    onError: (error) => {
-      toast.error(error.message);
-    },
-  });
-};
-
-export const useSettingsProfileMutation = (userId: string) => {
-  const queryClient = useQueryClient();
-  return useMutation<any, Error, FieldValues>({
-    mutationFn: async (profileData) => await settingsProfile(profileData),
-    onSuccess: async () => {
-      queryClient.invalidateQueries({
-        queryKey: ['SINGLE_USER', userId],
-      });
-
-      toast.success('Profile updated successfully');
+      router.push('/');
     },
     onError: (error) => {
       toast.error(error.message);

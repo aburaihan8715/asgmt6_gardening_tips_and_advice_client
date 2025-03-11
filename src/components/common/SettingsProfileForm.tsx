@@ -9,8 +9,9 @@ import { FaPlusSquare } from 'react-icons/fa';
 import { useAuth } from '@/context/user.provider';
 import LoadingWithOverlay from '@/components/common/LoadingWithOverlay';
 import { AuthSchemas } from '@/schemas/auth.schema';
-import { useSettingsProfileMutation } from '@/hooks/auth.hook';
+
 import { Button } from '../ui/button';
+import { useUpdateMe } from '@/hooks/user.hook';
 
 // Interface for the form data
 interface IUserSettingsFormData {
@@ -25,8 +26,7 @@ export default function SettingsProfileForm() {
   const { currentUser, isCurrentUserLoading } = useAuth();
   const userId = currentUser?._id as string;
 
-  const { mutate: profileMutate, isPending } =
-    useSettingsProfileMutation(userId);
+  const { mutate: profileMutate, isPending } = useUpdateMe(userId);
 
   const {
     register,

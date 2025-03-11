@@ -127,7 +127,7 @@ const PostItem = ({ post }: { post: IPost }) => {
             {post?.description.slice(0, 150)}... {''}
             <button
               onClick={handleViewDetail}
-              className="font-semibold text-green-600 underline"
+              className="text-base font-medium text-green-600 underline"
             >
               Read more
             </button>
