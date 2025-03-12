@@ -8,6 +8,7 @@ import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import LoadingWithOverlay from '@/components/common/LoadingWithOverlay';
 import { AuthSchemas } from '@/schemas/auth.schema';
 import { useResetPasswordMutation } from '@/hooks/auth.hook';
+import Link from 'next/link';
 
 type TResetPasswordFormValues = {
   newPassword: string;
@@ -100,6 +101,15 @@ const ResetPassword: React.FC = () => {
               >
                 Reset Password
               </button>
+            </div>
+            {/* Back to login */}
+            <div className="mt-4 text-center">
+              <Link
+                href="/"
+                className="text-sm text-gray-600 hover:text-green-500"
+              >
+                Back to Login
+              </Link>
             </div>
           </form>
         </div>

@@ -20,7 +20,7 @@ const monthNames = [
 
 const date = new Date();
 const currentYear = date.getFullYear();
-const previousYear = currentYear - 1;
+// const previousYear = currentYear - 1;
 interface IChartData {
   month: number;
   numberOfPayments: number;
@@ -39,7 +39,7 @@ const PaymentChart = () => {
   return (
     <div>
       <Chart
-        title={`Payment Analytics-${previousYear}`}
+        title={`Payment Analytics-${currentYear}`}
         data={data}
         grid
         dataKey="payments"

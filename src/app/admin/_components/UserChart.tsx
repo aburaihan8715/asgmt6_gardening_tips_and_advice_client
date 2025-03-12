@@ -1,6 +1,6 @@
 'use client';
 import Chart from '@/components/common/Chart';
-import { useGetPostStats } from '@/hooks/post.hook';
+import { useGetUserStats } from '@/hooks/user.hook';
 import React from 'react';
 
 const monthNames = [
@@ -20,30 +20,30 @@ const monthNames = [
 
 const date = new Date();
 const currentYear = date.getFullYear();
-const previousYear = currentYear - 1;
+// const previousYear = currentYear - 1;
 interface IChartData {
   month: number;
-  numberOfPosts: number;
+  numberOfUsers: number;
 }
 
-const PostChart = () => {
-  const { data: postStats } = useGetPostStats();
-  const data: IChartData[] = postStats?.data?.map((item: IChartData) => ({
+const UserChart = () => {
+  const { data: userStats } = useGetUserStats();
+  const data: IChartData[] = userStats?.data?.map((item: IChartData) => ({
     ...item,
     month: monthNames[item.month - 1],
-    posts: item.numberOfPosts,
+    users: item.numberOfUsers,
   }));
 
   return (
     <div>
       <Chart
-        title={`Post Analytics-${previousYear}`}
+        title={`User Analytics-${currentYear}`}
         data={data}
         grid
-        dataKey="posts"
+        dataKey="users"
       />
     </div>
   );
 };
 
-export default PostChart;
+export default UserChart;

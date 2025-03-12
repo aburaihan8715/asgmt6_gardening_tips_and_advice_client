@@ -8,9 +8,9 @@ export async function middleware(request: NextRequest) {
 
   const publicAuthRoutes = [
     '/',
-    '/auth/register',
-    '/auth/forget-password',
-    '/auth/reset-password',
+    '/register',
+    '/forget-password',
+    '/reset-password',
   ];
 
   // const restrictedAdminRoutes = ['/posts', '/user'];
@@ -66,7 +66,9 @@ export async function middleware(request: NextRequest) {
 export const config = {
   matcher: [
     '/',
-    '/auth/:path*',
+    '/register',
+    '/forget-password',
+    '/reset-password',
     '/admin/:path*',
     '/user/:path*',
     '/posts/:path*',

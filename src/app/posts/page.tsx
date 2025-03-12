@@ -10,7 +10,7 @@ import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import React, { useEffect, useState } from 'react';
-import PostItem from '../_components/PostItem';
+import PostItem from './_components/PostItem';
 import ErrorMessage from '@/components/common/ErrorMessage';
 import LoadingWithOverlay from '@/components/common/LoadingWithOverlay';
 import Container from '@/components/common/Container';

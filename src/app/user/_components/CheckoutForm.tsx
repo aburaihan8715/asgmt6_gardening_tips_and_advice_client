@@ -15,6 +15,7 @@ import {
   useElements,
 } from '@stripe/react-stripe-js';
 import { FormEvent, useEffect, useState } from 'react';
+import Link from 'next/link';
 
 const CheckoutForm = () => {
   const stripe = useStripe();
@@ -179,6 +180,16 @@ const CheckoutForm = () => {
             {isPaymentComplete ? 'Payment Completed' : 'Confirm'}{' '}
             {/* Button text update */}
           </Button>
+        </div>
+
+        {/* Back to login */}
+        <div className="mt-4 text-center">
+          <Link
+            href="/posts"
+            className="text-sm text-gray-600 hover:text-green-500"
+          >
+            Back to post
+          </Link>
         </div>
       </form>
 

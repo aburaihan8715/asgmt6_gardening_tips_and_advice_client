@@ -191,7 +191,7 @@ const EditMyPost = () => {
               className="mb-1 block text-sm font-medium text-green-700"
               htmlFor="description"
             >
-              Description
+              Overview
             </label>
             <textarea
               id="description"

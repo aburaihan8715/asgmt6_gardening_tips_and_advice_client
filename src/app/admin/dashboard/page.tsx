@@ -1,12 +1,12 @@
 'use client';
 import React from 'react';
-import UserChart from '../../_components/UserChart';
-import PostChart from '../../_components/PostChart';
-import PaymentChart from '../../_components/PaymentChart';
-import PaymentCard from '../../_components/PaymentCard';
-import UserCard from '../../_components/UserCard';
-import PostCard from '../../_components/PostCard';
-import RevenueCard from '../../_components/RevenueCard';
+import UserChart from '../_components/UserChart';
+import PostChart from '../_components/PostChart';
+import PaymentChart from '../_components/PaymentChart';
+import PaymentCard from '../_components/PaymentCard';
+import UserCard from '../_components/UserCard';
+import PostCard from '../_components/PostCard';
+import RevenueCard from '../_components/RevenueCard';
 import { useAuth } from '@/context/user.provider';
 
 const AdminDashboard = () => {
