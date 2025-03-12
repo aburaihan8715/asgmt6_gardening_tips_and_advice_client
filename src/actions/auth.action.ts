@@ -4,6 +4,7 @@ import { cookies } from 'next/headers';
 import { FieldValues } from 'react-hook-form';
 import axiosInstance from '@/lib/AxiosInstance';
 import { jwtDecode } from 'jwt-decode';
+
 // register
 export const registerUser = async (registerData: FieldValues) => {
   try {
@@ -112,3 +113,5 @@ export const getCurrentUser = async () => {
 
   return decodedToken;
 };
+
+// An error occurred in the Server Components render. The specific message is omitted in production builds to avoid leaking sensitive details. A digest property is included on this error instance which may provide additional details about the nature of the error.
