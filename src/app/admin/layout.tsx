@@ -6,7 +6,7 @@ import { adminSidebarLinks } from './_constants';
 import DesktopSidebar from '@/components/common/DesktopSidebar';
 import Navbar from '@/components/common/Navbar';
 
-export default function TestLayout({
+export default function AdminLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;

@@ -7,7 +7,7 @@ import { userNavbarLinks, userSidebarLinks } from './_constants';
 import DesktopSidebar from '@/components/common/DesktopSidebar';
 import Navbar from '@/components/common/Navbar';
 
-export default function TestLayout({
+export default function UserLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
