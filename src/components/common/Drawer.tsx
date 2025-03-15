@@ -30,7 +30,7 @@ const Drawer: React.FC<IDrawerProps> = ({
 
           {/* Sidebar */}
           <motion.div
-            className="relative flex h-full w-[250px] flex-col bg-white p-5 shadow-lg"
+            className="relative flex h-full w-[250px] flex-col bg-white p-5 shadow-md"
             initial={{ x: '-100%' }}
             animate={{ x: 0 }}
             exit={{ x: '-100%' }}

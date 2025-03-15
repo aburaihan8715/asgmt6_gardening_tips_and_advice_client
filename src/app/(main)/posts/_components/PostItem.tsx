@@ -2,7 +2,7 @@
 
 import Image from 'next/image';
 import { FaCommentAlt, FaArrowUp, FaArrowDown } from 'react-icons/fa';
-import { IPost } from '@/types/postData.type';
+import { IPost } from '@/types/post.type';
 import { useAuth } from '@/context/user.provider';
 import LoadingWithOverlay from '@/components/common/LoadingWithOverlay';
 import { toast } from 'sonner';

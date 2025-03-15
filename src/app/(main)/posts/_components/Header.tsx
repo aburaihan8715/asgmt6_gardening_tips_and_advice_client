@@ -2,12 +2,12 @@
 
 import { useState } from 'react';
 
-import BrandLogo from '../../../components/common/BrandLogo';
+import BrandLogo from '../../../../components/common/BrandLogo';
 import { MdMenu } from 'react-icons/md';
 import { useAuth } from '@/context/user.provider';
 
-import Container from '../../../components/common/Container';
-import LogoutButton from '../../../components/common/LogoutButton';
+import Container from '../../../../components/common/Container';
+import LogoutButton from '../../../../components/common/LogoutButton';
 import Drawer from '@/components/common/Drawer';
 import ProfilePopover from '@/components/common/ProfilePopover';
 import { postLinks } from '../_constants';
@@ -24,7 +24,7 @@ const Header = () => {
     <>
       <header className="sticky right-0 top-0 z-50 w-full border-b bg-white px-1">
         <Container>
-          <div className="sticky top-0 z-20 flex h-[80px] w-full items-center gap-5">
+          <div className="sticky top-0 z-20 flex h-[70px] w-full items-center gap-5">
             <div className="hidden md:block">
               <Link href={`/`}>
                 <BrandLogo />

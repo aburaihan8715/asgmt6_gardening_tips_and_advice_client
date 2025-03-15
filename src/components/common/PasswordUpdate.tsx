@@ -17,7 +17,7 @@ interface IPasswordChangeFormValues {
   newPassword: string;
 }
 
-const ChangePasswordForm = () => {
+const PasswordUpdate = () => {
   const {
     register,
     handleSubmit,
@@ -49,9 +49,9 @@ const ChangePasswordForm = () => {
   return (
     <>
       {isPending && <LoadingWithOverlay />}
-      <div className="mx-auto mt-12 rounded-md bg-white md:p-8">
+      <div className="mx-auto mt-12 rounded-md bg-white px-1 md:p-8">
         <div className="flex justify-center">
-          <SectionHeading heading="Change Password" />
+          <SectionHeading heading="update password" />
         </div>
 
         <form className="space-y-6" onSubmit={handleSubmit(onSubmit)}>
@@ -128,4 +128,4 @@ const ChangePasswordForm = () => {
   );
 };
 
-export default ChangePasswordForm;
+export default PasswordUpdate;

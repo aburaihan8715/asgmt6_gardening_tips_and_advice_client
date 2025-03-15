@@ -1,17 +1,24 @@
 'use client';
 import React from 'react';
-import Card from './Card';
-import { FaDollarSign } from 'react-icons/fa';
+import { FaWallet } from 'react-icons/fa';
 import { useGetAllPayments } from '@/hooks/payment.hook';
+import InfoCard from './InfoCard';
 
 const PaymentCard = () => {
-  const { data, isLoading } = useGetAllPayments();
+  const { data, isLoading } = useGetAllPayments({});
   const payments = data?.data || [];
   const count = payments.length || 0;
 
   if (isLoading) return 'loading...';
 
-  return <Card title="Payments" count={count} icon={<FaDollarSign />} />;
+  return (
+    <InfoCard
+      bg="bg-yellow-100"
+      title="Payments"
+      count={count}
+      icon={<FaWallet />}
+    />
+  );
 };
 
 export default PaymentCard;

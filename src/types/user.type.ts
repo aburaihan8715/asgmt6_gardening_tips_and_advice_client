@@ -13,4 +13,5 @@ export interface IUser {
   isDeleted?: boolean;
   role: 'user' | 'admin' | 'superAdmin';
   favourites?: string[];
+  createdAt?: Date;
 }

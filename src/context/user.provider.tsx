@@ -6,9 +6,9 @@ import {
   useState,
 } from 'react';
 
-import { IUser } from '@/types';
 import { getCurrentUser } from '@/actions/auth.action';
 import { useGetMe } from '@/hooks/user.hook';
+import { IUser } from '@/types/user.type';
 
 const UserContext = createContext<IUserProviderValues | undefined>(
   undefined,

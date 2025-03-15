@@ -1,6 +1,6 @@
 'use client';
 import { useGetInfinitePosts } from '@/hooks/post.hook';
-import { IPost } from '@/types/postData.type';
+import { IPost } from '@/types/post.type';
 import { useDebouncedCallback } from 'use-debounce';
 import { useInView } from 'react-intersection-observer';
 

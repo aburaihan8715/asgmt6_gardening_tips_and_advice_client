@@ -26,6 +26,15 @@ export const getAllUsers = async ({
   }
 };
 
+export const getFiveNewUsers = async () => {
+  try {
+    const { data } = await axiosInstance.get('/api/v1/users/new-5-users');
+    return data;
+  } catch (error: any) {
+    throw new Error(error.response?.data?.message || error.message);
+  }
+};
+
 export const getSingleUser = async (userId: string) => {
   try {
     const { data } = await axiosInstance.get(`/api/v1/users/${userId}`);
@@ -35,7 +44,6 @@ export const getSingleUser = async (userId: string) => {
   }
 };
 
-// settings profile
 export const updateMe = async (profileData: FieldValues) => {
   try {
     const { data } = await axiosInstance.patch(

@@ -18,7 +18,7 @@ const Navbar = ({ setIsOpen, links }: NavbarProps) => {
 
   return (
     <header className="sticky right-0 top-0 z-50 w-full bg-white px-1">
-      <div className="sticky top-0 z-20 flex h-[80px] w-full items-center gap-5 border-b md:px-10">
+      <div className="sticky top-0 z-20 flex h-[70px] w-full items-center gap-5 shadow md:px-10">
         <div className="hidden md:block">
           <Link href={`/`}>
             <BrandLogo />

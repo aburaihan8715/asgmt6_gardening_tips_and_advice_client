@@ -17,7 +17,7 @@ interface IProps {
 export default function Chart({ title, data, dataKey, grid }: IProps) {
   return (
     <div className="">
-      <h3 className="mb-2 font-semibold">{title}</h3>
+      <h2 className="mb-2 text-2xl font-medium text-gray-700">{title}</h2>
       <ResponsiveContainer width="100%" aspect={4 / 1}>
         <LineChart data={data}>
           <XAxis dataKey="month" stroke="#5550bd" />

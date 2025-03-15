@@ -1,8 +1,8 @@
 'use client';
 import React from 'react';
-import Card from './Card';
 import { FaPaperPlane } from 'react-icons/fa';
 import { useGetAllPosts } from '@/hooks/post.hook';
+import InfoCard from './InfoCard';
 
 const PostCard = () => {
   const { data, isLoading } = useGetAllPosts({});
@@ -11,7 +11,14 @@ const PostCard = () => {
 
   if (isLoading) return 'loading...';
 
-  return <Card title="Posts" count={count} icon={<FaPaperPlane />} />;
+  return (
+    <InfoCard
+      bg="bg-blue-100"
+      title="Posts"
+      count={count}
+      icon={<FaPaperPlane />}
+    />
+  );
 };
 
 export default PostCard;

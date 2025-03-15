@@ -17,23 +17,23 @@ export async function middleware(request: NextRequest) {
   // const restrictedUserRoutes = ['/admin'];
 
   // If the user is not authenticated
-  if (!user) {
-    if (publicAuthRoutes.includes(pathname)) {
-      return NextResponse.next();
-    }
-    return NextResponse.redirect(new URL('/', request.url));
-  }
+  // if (!user) {
+  //   if (publicAuthRoutes.includes(pathname)) {
+  //     return NextResponse.next();
+  //   }
+  //   return NextResponse.redirect(new URL('/', request.url));
+  // }
 
   // Prevent logged-in users from accessing auth pages
-  if (publicAuthRoutes.includes(pathname)) {
-    if (user.role === 'admin') {
-      return NextResponse.redirect(
-        new URL('/admin/dashboard', request.url),
-      );
-    } else if (user.role === 'user') {
-      return NextResponse.redirect(new URL('/posts', request.url));
-    }
-  }
+  // if (publicAuthRoutes.includes(pathname)) {
+  //   if (user.role === 'admin') {
+  //     return NextResponse.redirect(
+  //       new URL('/admin/dashboard', request.url),
+  //     );
+  //   } else if (user.role === 'user') {
+  //     return NextResponse.redirect(new URL('/posts', request.url));
+  //   }
+  // }
 
   // Role-based access control
   // if (user.role === 'admin' && pathname.startsWith('/user')) {
@@ -63,15 +63,15 @@ export async function middleware(request: NextRequest) {
   return NextResponse.next();
 }
 
-export const config = {
-  matcher: [
-    '/',
-    '/register',
-    '/forget-password',
-    '/reset-password',
-    '/admin/:path*',
-    '/user/:path*',
-    '/posts/:path*',
-    '/unauth', // Ensure this is included
-  ],
-};
+// export const config = {
+//   matcher: [
+//     '/',
+//     '/register',
+//     '/forget-password',
+//     '/reset-password',
+//     '/admin/:path*',
+//     '/user/:path*',
+//     '/posts/:path*',
+//     '/unauth',
+//   ],
+// };

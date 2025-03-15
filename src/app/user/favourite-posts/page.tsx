@@ -34,7 +34,7 @@ import {
 import Image from 'next/image';
 
 import LoadingSpinner from '@/components/common/LoadingSpinner';
-import { IPost } from '@/types/postData.type';
+import { IPost } from '@/types/post.type';
 import { useState } from 'react';
 import ErrorMessage from '@/components/common/ErrorMessage';
 import { useGetFavouritePosts } from '@/hooks/user.hook';

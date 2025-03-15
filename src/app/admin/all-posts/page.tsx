@@ -35,7 +35,7 @@ import Image from 'next/image';
 import { useDeletePostMutation, useGetAllPosts } from '@/hooks/post.hook';
 import LoadingSpinner from '@/components/common/LoadingSpinner';
 import ErrorMessage from '@/components/common/ErrorMessage';
-import { IPost } from '@/types/postData.type';
+import { IPost } from '@/types/post.type';
 import Pagination from '@/components/common/Pagination';
 import { useState } from 'react';
 

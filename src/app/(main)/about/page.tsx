@@ -78,7 +78,7 @@ const AboutUs = () => {
                 initial={{ opacity: 0, scale: 0.95 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ duration: 0.6 }}
-                className="flex flex-col items-center rounded-lg bg-white p-6 text-center shadow-lg transition-shadow duration-300 ease-in-out hover:shadow-xl"
+                className="flex flex-col items-center rounded-lg bg-white p-6 text-center shadow-md transition-shadow duration-300 ease-in-out hover:shadow-xl"
               >
                 <div className="relative h-32 w-32 overflow-hidden rounded-full">
                   <Image

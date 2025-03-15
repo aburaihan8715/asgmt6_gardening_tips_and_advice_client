@@ -2,7 +2,7 @@
 import SectionHeading from '@/components/common/SectionHeading';
 import { Elements } from '@stripe/react-stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
-import CheckoutForm from '../_components/CheckoutForm';
+import CheckoutForm from '../../user/_components/CheckoutForm';
 
 const stripePromise = loadStripe(
   process.env.NEXT_PUBLIC_STRIPE_PK as string,

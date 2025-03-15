@@ -5,6 +5,7 @@ import {
   followUser,
   getAllUsers,
   getFavouritePosts,
+  getFiveNewUsers,
   getMe,
   getRevenue,
   getSingleUser,
@@ -20,6 +21,12 @@ import {
 } from '@tanstack/react-query';
 import { FieldValues } from 'react-hook-form';
 import { toast } from 'sonner';
+
+interface IUseFavouriteProps {
+  isPremium: boolean;
+  isVerified: boolean | undefined;
+  userId: string;
+}
 
 export const useGetSingleUser = (userId: string) => {
   return useQuery({
@@ -65,6 +72,12 @@ export const useGetAllUsers = ({
     queryKey: ['USERS', { page, limit }],
     queryFn: async () => await getAllUsers({ page, limit }),
     // gcTime: 0,
+  });
+};
+export const useGetFiveNewUsers = () => {
+  return useQuery({
+    queryKey: ['NEW_USERS'],
+    queryFn: async () => await getFiveNewUsers(),
   });
 };
 
@@ -134,11 +147,6 @@ export const useFollow = (userId: string) => {
   };
 };
 
-interface IUseFavouriteProps {
-  isPremium: boolean;
-  isVerified: boolean | undefined;
-  userId: string;
-}
 export const useFavourite = ({
   isPremium,
   isVerified,

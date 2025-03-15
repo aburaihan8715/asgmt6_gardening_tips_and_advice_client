@@ -4,12 +4,15 @@ interface IProps {
   title?: string;
   count?: number;
   icon?: ReactNode;
+  bg?: string;
 }
 
-const Card = ({ title, count, icon }: IProps) => {
+const InfoCard = ({ title, count, icon, bg }: IProps) => {
   return (
-    <div>
-      <article className="rounded-lg border border-gray-100 bg-white p-10">
+    <div className="">
+      <article
+        className={`${bg ? bg : 'bg-white'} rounded-lg p-10 shadow-md`}
+      >
         <div>
           <h5 className="text-center font-semibold text-gray-500">
             {title}
@@ -26,4 +29,4 @@ const Card = ({ title, count, icon }: IProps) => {
   );
 };
 
-export default Card;
+export default InfoCard;

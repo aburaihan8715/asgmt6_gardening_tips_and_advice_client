@@ -27,7 +27,9 @@ export default function AdminLayout({
         </div>
 
         {/* Main Content */}
-        <div className="flex-1 overflow-y-auto p-4">{children}</div>
+        <div className="flex-1 overflow-y-auto pb-4 pl-4 pt-4">
+          {children}
+        </div>
       </div>
 
       {/* Mobile Sidebar */}

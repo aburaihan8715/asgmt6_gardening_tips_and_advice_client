@@ -1,4 +1,4 @@
-import { IUser } from './userData.type';
+import { IUser } from './user.type';
 
 export interface IPost {
   _id: string;

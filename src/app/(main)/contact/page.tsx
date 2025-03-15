@@ -123,7 +123,7 @@ const ContactUs = () => {
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.6 }}
-              className="rounded-lg bg-white p-8 shadow-lg"
+              className="rounded-lg bg-white p-8 shadow-md"
             >
               <div className="mb-4">
                 <motion.label

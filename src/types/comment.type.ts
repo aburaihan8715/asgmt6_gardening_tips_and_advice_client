@@ -1,5 +1,5 @@
-import { IPost } from './postData.type';
-import { IUser } from './userData.type';
+import { IPost } from './post.type';
+import { IUser } from './user.type';
 
 export interface IComment {
   _id: string;

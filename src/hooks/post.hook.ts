@@ -11,6 +11,7 @@ import {
   updatePost,
   upvotePost,
 } from '@/actions/post.action';
+import { IUser } from '@/types/user.type';
 import {
   useInfiniteQuery,
   useMutation,
@@ -20,8 +21,6 @@ import {
 import { useRouter } from 'next/navigation';
 import { FieldValues } from 'react-hook-form';
 import { toast } from 'sonner';
-
-import { IUser } from '@/types';
 
 // =======================
 // Query
