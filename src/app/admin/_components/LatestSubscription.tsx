@@ -10,12 +10,15 @@ import {
 import { useGetNewFivePayments } from '@/hooks/payment.hook';
 import { IPayment } from '@/types/payment.type';
 import { parseISO, format } from 'date-fns';
+import CustomSkeleton from '@/components/common/CustomSkeleton';
 
 const LatestSubscription = () => {
   const { data: paymentData, isLoading } = useGetNewFivePayments();
   const latestPayments = paymentData?.data || [];
 
-  if (isLoading) return 'loading...';
+  if (isLoading) {
+    return <CustomSkeleton type="list" />;
+  }
   return (
     <div className="flex-1 rounded-md p-1 shadow-md md:p-5">
       <h2 className="mb-2 text-2xl font-medium text-gray-700">

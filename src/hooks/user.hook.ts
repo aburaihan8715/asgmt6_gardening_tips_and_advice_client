@@ -19,7 +19,7 @@ import {
   useQuery,
   useQueryClient,
 } from '@tanstack/react-query';
-import { FieldValues } from 'react-hook-form';
+
 import { toast } from 'sonner';
 
 interface IUseFavouriteProps {
@@ -46,7 +46,7 @@ export const useGetMe = (userId: string) => {
 
 export const useUpdateMe = (userId: string) => {
   const queryClient = useQueryClient();
-  return useMutation<any, Error, FieldValues>({
+  return useMutation<any, Error, any>({
     mutationFn: async (profileData) => await updateMe(profileData),
     onSuccess: async () => {
       queryClient.invalidateQueries({

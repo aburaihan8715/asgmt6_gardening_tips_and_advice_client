@@ -52,7 +52,7 @@ https://drive.google.com/file/d/15O-LW3DjDBaJ2u9oGfeR-CHuxuB-nMmR/view?usp=shari
 
 ## Packages used:
 
-1. framer-motion
+1. motion
 2. react-hook-form
 3. zod
 4. Tanstack query

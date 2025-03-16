@@ -1,29 +1,34 @@
 'use client';
+
 import Swal from 'sweetalert2';
 import { ColumnDef } from '@tanstack/react-table';
+
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
-import Image from 'next/image';
+
+import { useDeletePostMutation } from '@/hooks/post.hook';
 import LoadingSpinner from '@/components/common/LoadingSpinner';
+
 import { useState } from 'react';
-import { useDeleteUserMutation, useGetAllUsers } from '@/hooks/user.hook';
 
-import DataTable from '@/components/common/DataTable';
 import LoadingWithOverlay from '@/components/common/LoadingWithOverlay';
+import DataTable from '@/components/common/DataTable';
+import { useGetAllPayments } from '@/hooks/payment.hook';
+import { parseISO, format } from 'date-fns';
 
-const AllUsers = () => {
+const AllPayments = () => {
   const [currentPage, setCurrentPage] = useState<number>(1);
   const itemsPerPage = 5;
-  const { mutate: userDeleteMutate, isPending: isUserDeletePending } =
-    useDeleteUserMutation();
+  const { mutate: postDeleteMutate, isPending: isDeletePostPending } =
+    useDeletePostMutation();
 
-  const { data: userData, isLoading: isUsersLoading } = useGetAllUsers({
+  const { data: paymentData, isLoading } = useGetAllPayments({
     page: currentPage,
     limit: itemsPerPage,
   });
 
-  const users = userData?.data || [];
-  const meta = userData?.meta || {};
+  const payments = paymentData?.data || [];
+  const meta = paymentData?.meta || {};
 
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
@@ -41,7 +46,7 @@ const AllUsers = () => {
     }).then((result) => {
       if (result.isConfirmed) {
         // call delete api
-        userDeleteMutate(id);
+        postDeleteMutate(id);
         Swal.fire({
           title: 'Deleted!',
           text: 'Your file has been deleted.',
@@ -52,7 +57,6 @@ const AllUsers = () => {
   };
 
   const columns: ColumnDef<any>[] = [
-    // CHECK
     {
       id: 'select',
       header: ({ table }) => (
@@ -78,51 +82,35 @@ const AllUsers = () => {
       enableHiding: false,
     },
 
-    // IMAGE
-    {
-      accessorKey: 'profilePicture',
-      header: 'Image',
-      cell: ({ row }) => {
-        const image = row.getValue('profilePicture') as string;
-        return (
-          <Image
-            width={48}
-            height={48}
-            src={
-              image ||
-              'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png'
-            }
-            alt="user"
-            className="h-10 w-10 rounded object-cover md:h-12 md:w-12"
-          />
-        );
-      },
-    },
-
-    // TITLE
     {
       accessorKey: 'email',
-      header: 'Email',
-      cell: ({ row }) => <div className="">{row.getValue('email')}</div>,
+      header: 'User',
+      cell: ({ row }) => (
+        <div className="text-nowrap capitalize">
+          {row.getValue('email')}
+        </div>
+      ),
     },
 
-    // TYPE
     {
-      accessorKey: 'isVerified',
-      header: () => <span className="whitespace-nowrap">User Type</span>,
+      accessorKey: 'transactionId',
+      header: 'Transaction Id',
       cell: ({ row }) => {
-        const isVerified = row.getValue('isVerified');
-        return (
-          <div
-            className={`uppercase ${isVerified ? 'text-orange-400' : ''}`}
-          >
-            {isVerified ? 'premium' : 'basic'}
-          </div>
-        );
+        return <div>{row.getValue('transactionId')}</div>;
       },
     },
 
-    // ACTIONS
+    {
+      accessorKey: 'createdAt',
+      header: 'Date',
+      cell: ({ row }) => {
+        const isoDate = row.getValue('createdAt');
+        const formattedDate = format(parseISO(`${isoDate}`), 'dd-MM-yyyy');
+
+        return <div>{formattedDate}</div>;
+      },
+    },
+
     {
       id: 'actions',
       header: 'Actions',
@@ -142,16 +130,16 @@ const AllUsers = () => {
     },
   ];
 
-  if (isUsersLoading) {
+  if (isLoading) {
     return <LoadingSpinner />;
   }
 
   return (
     <>
-      {isUserDeletePending && <LoadingWithOverlay />}
+      {isDeletePostPending && <LoadingWithOverlay />}
       <DataTable
-        type="users"
-        data={users}
+        type="payments"
+        data={payments}
         columns={columns}
         meta={meta}
         handlePageChange={handlePageChange}
@@ -161,4 +149,4 @@ const AllUsers = () => {
   );
 };
 
-export default AllUsers;
+export default AllPayments;

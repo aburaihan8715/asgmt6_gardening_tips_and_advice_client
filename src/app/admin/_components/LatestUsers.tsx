@@ -6,14 +6,15 @@ import { useGetFiveNewUsers } from '@/hooks/user.hook';
 import { format, parseISO } from 'date-fns';
 import { IUser } from '@/types/user.type';
 import Link from 'next/link';
-import { useAuth } from '@/context/user.provider';
+import CustomSkeleton from '@/components/common/CustomSkeleton';
 
 const LatestUsers = () => {
   const { data, isLoading } = useGetFiveNewUsers();
   const users = data?.data || [];
-  const { currentUser, isCurrentUserLoading } = useAuth();
 
-  if (isLoading || isCurrentUserLoading) return 'loading...';
+  if (isLoading) {
+    return <CustomSkeleton type="list" />;
+  }
   return (
     <div className="rounded-md p-1 shadow-md md:p-5">
       <h2 className="mb-5 text-2xl font-medium text-gray-700">
@@ -43,7 +44,7 @@ const LatestUsers = () => {
             </div>
 
             <Link
-              href={`/${currentUser?.role}/profile`}
+              href={`/profile?id=${item._id}`}
               className="flex items-center gap-2 rounded-lg bg-gray-200 px-4 py-1"
             >
               <EyeIcon size={16} />

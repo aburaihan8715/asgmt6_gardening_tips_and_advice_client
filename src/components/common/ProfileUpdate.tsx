@@ -5,13 +5,13 @@ import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import SectionHeading from '@/components/common/SectionHeading';
-import { FaPlusSquare } from 'react-icons/fa';
 import { useAuth } from '@/context/user.provider';
 import LoadingWithOverlay from '@/components/common/LoadingWithOverlay';
 import { AuthSchemas } from '@/schemas/auth.schema';
 
 import { Button } from '../ui/button';
 import { useUpdateMe } from '@/hooks/user.hook';
+import { Camera } from 'lucide-react';
 
 // Interface for the form data
 interface IUserSettingsFormData {
@@ -71,7 +71,7 @@ export default function ProfileUpdate() {
       {(isPending || isCurrentUserLoading) && <LoadingWithOverlay />}
 
       <div className="rounded-md bg-white px-1 md:p-8">
-        <div className="flex justify-center">
+        <div className="mb-5 flex justify-center">
           <SectionHeading heading="update profile" />
         </div>
 
@@ -115,7 +115,7 @@ export default function ProfileUpdate() {
             )}
           </div>
 
-          <div className="">
+          <div className="relative">
             {/* Show the preview if a file is selected */}
             {preview ? (
               <Image
@@ -123,7 +123,7 @@ export default function ProfileUpdate() {
                 alt="User photo preview"
                 width={96}
                 height={96}
-                className="mb-4 h-24 w-24 rounded-full object-cover"
+                className="mb-4 h-[150px] w-[150px] rounded-full border-2 border-dashed border-gray-900 object-cover p-2"
               />
             ) : (
               <Image
@@ -134,7 +134,7 @@ export default function ProfileUpdate() {
                 alt="User photo"
                 width={96}
                 height={96}
-                className="mb-4 h-24 w-24 rounded-full object-cover"
+                className="mb-4 h-[150px] w-[150px] rounded-full border-2 border-dashed border-gray-900 object-cover p-2"
               />
             )}
 
@@ -147,10 +147,9 @@ export default function ProfileUpdate() {
             />
             <label
               htmlFor="photo"
-              className="ml-2 flex w-fit cursor-pointer items-center gap-2 text-xl text-gray-700"
+              className="absolute bottom-5 left-24 flex w-fit cursor-pointer items-center gap-2 rounded-lg bg-black/50 px-3 py-1 text-xl text-white transition hover:bg-black/70"
             >
-              <FaPlusSquare />
-              <span>Image</span>
+              <Camera />
             </label>
           </div>
 

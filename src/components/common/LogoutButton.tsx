@@ -1,6 +1,6 @@
 'use client';
 import { useEffect, useState } from 'react';
-import { FaSignOutAlt } from 'react-icons/fa';
+import { FiLogOut } from 'react-icons/fi';
 import { Button } from '../ui/button';
 import { logout } from '@/actions/auth.action';
 import { useAuth } from '@/context/user.provider';
@@ -26,7 +26,7 @@ const LogoutButton = () => {
 
   return (
     <Button onClick={handleLogout} className="flex items-center space-x-2">
-      <FaSignOutAlt />
+      <FiLogOut />
       <span>Logout</span>
     </Button>
   );

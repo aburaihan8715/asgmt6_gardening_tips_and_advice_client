@@ -177,19 +177,9 @@ const CheckoutForm = () => {
               isPaymentComplete
             } // Disable if payment complete
           >
-            {isPaymentComplete ? 'Payment Completed' : 'Confirm'}{' '}
+            {isPaymentComplete ? 'Payment Completed' : 'pay 💰 10 Dolors'}{' '}
             {/* Button text update */}
           </Button>
-        </div>
-
-        {/* Back to login */}
-        <div className="mt-4 text-center">
-          <Link
-            href="/posts"
-            className="text-sm text-gray-600 hover:text-green-500"
-          >
-            Back to post
-          </Link>
         </div>
       </form>
 
@@ -199,6 +189,16 @@ const CheckoutForm = () => {
           Transaction complete with transaction ID: {transactionId}
         </p>
       )}
+
+      {/* Back to login */}
+      <div className="mt-4 text-center">
+        <Link
+          href="/posts"
+          className="text-sm text-gray-600 hover:text-green-500"
+        >
+          Back to post
+        </Link>
+      </div>
     </>
   );
 };

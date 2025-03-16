@@ -9,12 +9,13 @@ import {
   FaArrowDown,
 } from 'react-icons/fa';
 import { useGetSinglePost, useVote } from '@/hooks/post.hook';
-import QuillContent from '@/components/common/QuillContent';
 import { useFavourite, useFollow } from '@/hooks/user.hook';
 import LoadingWithOverlay from '@/components/common/LoadingWithOverlay';
 import LoadingSpinner from '@/components/common/LoadingSpinner';
 import { useAuth } from '@/context/user.provider';
 import { useParams } from 'next/navigation';
+import Link from 'next/link';
+import QuillContent from '@/components/common/QuillContent';
 
 const PostDetails = () => {
   const params = useParams();
@@ -84,25 +85,6 @@ const PostDetails = () => {
     }
   };
 
-  // HANDLE COMMENT
-  // const handleComment = () => {
-  //   const postId = post?._id;
-  //   if (!postId) return;
-
-  //   const pathForCreate = `/create-comment?postId=${postId}`;
-  //   const pathForCommentList = `/comments?postId=${postId}`;
-  //   const path =
-  //     post?.numberOfComments > 0 ? pathForCommentList : pathForCreate;
-
-  //   if (isPremium && !isVerified) {
-  //     if (role !== 'admin') {
-  //       return toast.warning('You need to be verified first!!');
-  //     }
-  //   }
-
-  //   router.push(path);
-  // };
-
   // LOADING SPINNER
   if (isPostLoading || isCurrentUserLoading) {
     return (
@@ -163,19 +145,21 @@ const PostDetails = () => {
           {/* Author Information */}
           <div className="mt-2 flex items-center gap-5 text-sm text-gray-500">
             <div className="flex items-center">
-              <div className="relative mr-3 h-10 w-10 rounded-full object-cover">
-                <Image
-                  fill
-                  src={
-                    post?.user?.profilePicture
-                      ? post?.user?.profilePicture
-                      : 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png'
-                  }
-                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                  alt={post?.user?.username}
-                  className="rounded-full object-cover"
-                />
-              </div>
+              <Link href={`/profile`}>
+                <div className="relative mr-3 h-10 w-10 rounded-full object-cover">
+                  <Image
+                    fill
+                    src={
+                      post?.user?.profilePicture
+                        ? post?.user?.profilePicture
+                        : 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png'
+                    }
+                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                    alt={post?.user?.username}
+                    className="rounded-full object-cover"
+                  />
+                </div>
+              </Link>
               <div>
                 <div className="flex items-center">
                   <span>by {post?.user?.username}</span>

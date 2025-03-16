@@ -8,6 +8,7 @@ import LoadingWithOverlay from '@/components/common/LoadingWithOverlay';
 import { toast } from 'sonner';
 import LoadingSpinner from '@/components/common/LoadingSpinner';
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 
 const PostItem = ({ post }: { post: IPost }) => {
   const router = useRouter();
@@ -41,8 +42,9 @@ const PostItem = ({ post }: { post: IPost }) => {
   return (
     <>
       {isCurrentUserLoading && <LoadingWithOverlay />}
-      <li className="group relative mb-6 flex flex-col gap-10 rounded-lg bg-white p-1 md:flex-row">
+      <div className="group relative mb-6 flex flex-col gap-10 rounded-lg bg-white p-1 md:flex-row">
         {/* Post Image with Hover Overlay */}
+
         <div className="group relative aspect-[16/9] w-full flex-1 overflow-hidden rounded-lg">
           <Image
             src={
@@ -85,19 +87,21 @@ const PostItem = ({ post }: { post: IPost }) => {
           {/* Author Information */}
           <div className="mt-2 flex items-center gap-5 text-sm text-gray-500">
             <div className="flex items-center">
-              <div className="relative mr-3 h-5 w-5 rounded-full object-cover md:h-10 md:w-10">
-                <Image
-                  fill
-                  src={
-                    post?.user?.profilePicture
-                      ? post?.user?.profilePicture
-                      : 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png'
-                  }
-                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                  alt={post?.user?.username || 'User profile'}
-                  className="rounded-full object-cover"
-                />
-              </div>
+              <Link href={`/profile?id=${post?.user?._id}`}>
+                <div className="relative mr-3 h-5 w-5 rounded-full object-cover md:h-10 md:w-10">
+                  <Image
+                    fill
+                    src={
+                      post?.user?.profilePicture
+                        ? post?.user?.profilePicture
+                        : 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png'
+                    }
+                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                    alt={post?.user?.username || 'User profile'}
+                    className="rounded-full object-cover"
+                  />
+                </div>
+              </Link>
               <div>
                 <div className="flex items-center">
                   <span>by {post?.user?.username}</span>
@@ -155,7 +159,7 @@ const PostItem = ({ post }: { post: IPost }) => {
             </div>
           </div>
         </div>
-      </li>
+      </div>
     </>
   );
 };

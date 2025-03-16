@@ -3,10 +3,12 @@ import {
   FaBookmark,
   FaCog,
   FaEye,
-  FaHome,
-  FaLock,
+  FaInfoCircle,
   FaNewspaper,
   FaPen,
+  FaPhoneAlt,
+  FaTachometerAlt,
+  FaUserCircle,
 } from 'react-icons/fa';
 
 export const userSidebarLinks = (
@@ -18,7 +20,7 @@ export const userSidebarLinks = (
         className="flex w-full items-center gap-2"
         href="/user/dashboard"
       >
-        <FaHome className="text-base" />
+        <FaTachometerAlt className="text-base" />
         <span className="">Dashboard</span>
       </ActiveLinkDashboard>
     </li>
@@ -53,35 +55,25 @@ export const userSidebarLinks = (
       </ActiveLinkDashboard>
     </li>
 
-    <li className="flex">
-      <ActiveLinkDashboard
-        className="flex w-full items-center gap-2"
-        href="/posts"
-      >
-        <FaNewspaper className="text-base" />
-        <span className="">News Feed</span>
-      </ActiveLinkDashboard>
-    </li>
-
     <p className="text-xs font-semibold uppercase opacity-50">Settings</p>
 
     <li className="flex">
       <ActiveLinkDashboard
         className="flex w-full items-center gap-2"
-        href="/user/settings-profile"
+        href="/settings"
       >
         <FaCog className="text-base" />
-        <span className="">Update Profile</span>
+        <span className="">Profile settings</span>
       </ActiveLinkDashboard>
     </li>
 
     <li className="flex">
       <ActiveLinkDashboard
         className="flex w-full items-center gap-2"
-        href="/user/change-password"
+        href="/profile"
       >
-        <FaLock className="text-base" />
-        <span className="">Change password</span>
+        <FaUserCircle className="text-base" />
+        <span className="">Profile</span>
       </ActiveLinkDashboard>
     </li>
   </>
@@ -96,6 +88,24 @@ export const userNavbarLinks = (
       >
         <FaNewspaper className="text-base" />
         <span className="">News Feed</span>
+      </ActiveLinkDashboard>
+    </li>
+    <li className="flex">
+      <ActiveLinkDashboard
+        className="flex w-full items-center gap-2"
+        href="/about"
+      >
+        <FaInfoCircle className="text-base" />
+        <span className="">About</span>
+      </ActiveLinkDashboard>
+    </li>
+    <li className="flex">
+      <ActiveLinkDashboard
+        className="flex w-full items-center gap-2"
+        href="/contact"
+      >
+        <FaPhoneAlt className="text-base" />
+        <span className="">Contact</span>
       </ActiveLinkDashboard>
     </li>
   </>

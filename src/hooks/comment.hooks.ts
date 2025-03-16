@@ -10,7 +10,6 @@ import {
   useQuery,
   useQueryClient,
 } from '@tanstack/react-query';
-import { FieldValues } from 'react-hook-form';
 
 import { toast } from 'sonner';
 
@@ -74,7 +73,7 @@ export const useDeleteComment = (postId: string) => {
 export const useUpdateComment = (postId: string) => {
   const queryClient = useQueryClient();
 
-  return useMutation<unknown, Error, FieldValues>({
+  return useMutation<unknown, Error, any>({
     mutationFn: async ({ commentId, payload }) => {
       return updateComment(commentId, payload);
     },

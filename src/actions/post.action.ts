@@ -1,7 +1,6 @@
 'use server';
 
 import axiosInstance from '@/lib/AxiosInstance';
-import { FieldValues } from 'react-hook-form';
 
 export const getAllPosts = async ({
   page,
@@ -9,12 +8,14 @@ export const getAllPosts = async ({
   searchTerm,
   category,
   voteFilter,
+  user,
 }: {
   page?: number;
   limit?: number;
   searchTerm?: string;
   category?: string;
   voteFilter?: string;
+  user?: string;
 }) => {
   try {
     let queryString = '/api/v1/posts';
@@ -30,6 +31,7 @@ export const getAllPosts = async ({
     } else if (voteFilter && voteFilter === 'downvotesCount') {
       params.append('sort', '-downvotesCount');
     }
+    if (user) params.append('user', user.toString());
 
     if (params.toString()) queryString += `?${params.toString()}`;
 
@@ -128,7 +130,7 @@ export const getPostStats = async () => {
   }
 };
 
-export const createPost = async (postData: FieldValues) => {
+export const createPost = async (postData: Record<string, unknown>) => {
   try {
     const { data } = await axiosInstance.post('/api/v1/posts', postData);
     return data;

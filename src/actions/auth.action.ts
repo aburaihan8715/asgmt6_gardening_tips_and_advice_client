@@ -27,8 +27,8 @@ export const loginUser = async (loginData: FieldValues) => {
     );
 
     if (data.success) {
-      cookies().set('accessToken', data?.data?.accessToken);
-      cookies().set('refreshToken', data?.data?.refreshToken);
+      (await cookies()).set('accessToken', data?.data?.accessToken);
+      (await cookies()).set('refreshToken', data?.data?.refreshToken);
     }
 
     return data;
@@ -39,8 +39,8 @@ export const loginUser = async (loginData: FieldValues) => {
 
 // logout
 export const logout = async () => {
-  cookies().delete('accessToken');
-  cookies().delete('refreshToken');
+  (await cookies()).delete('accessToken');
+  (await cookies()).delete('refreshToken');
 };
 
 // change password
@@ -97,7 +97,7 @@ export const resetPassword = async (passwordResetData: FieldValues) => {
 
 // get current user
 export const getCurrentUser = async () => {
-  const accessToken = cookies().get('accessToken')?.value;
+  const accessToken = (await cookies()).get('accessToken')?.value;
 
   let decodedToken = null;
 

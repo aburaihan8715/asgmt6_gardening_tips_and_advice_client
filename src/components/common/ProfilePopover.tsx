@@ -40,17 +40,17 @@ const ProfilePopover = () => {
           </Link>
 
           <Link
-            href={`/${currentUser?.role}/change-password`}
+            href={`/settings`}
             className="w-fit border-b-2 border-b-transparent hover:border-b-2 hover:border-b-primary"
           >
-            Change Password
+            settings
           </Link>
 
           <Link
-            href={`/${currentUser?.role}/settings-profile`}
+            href={`/profile?id=${currentUser?._id}`}
             className="w-fit border-b-2 border-b-transparent hover:border-b-2 hover:border-b-primary"
           >
-            Settings Profile
+            Profile
           </Link>
 
           <LogoutButton />

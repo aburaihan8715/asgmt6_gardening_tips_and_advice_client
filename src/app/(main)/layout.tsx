@@ -1,4 +1,4 @@
-import Header from '@/app/(main)/posts/_components/Header';
+import Header from '@/app/(main)/_components/Header';
 import Notification from '@/components/common/Notification';
 import ScrollTop from '@/components/common/ScrollToTop';
 

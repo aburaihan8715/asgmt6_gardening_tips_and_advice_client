@@ -1,6 +1,5 @@
 'use server';
 import axiosInstance from '@/lib/AxiosInstance';
-import { FieldValues } from 'react-hook-form';
 
 export const getAllUsers = async ({
   page,
@@ -44,7 +43,7 @@ export const getSingleUser = async (userId: string) => {
   }
 };
 
-export const updateMe = async (profileData: FieldValues) => {
+export const updateMe = async (profileData: Record<string, unknown>) => {
   try {
     const { data } = await axiosInstance.patch(
       '/api/v1/users/update-me',

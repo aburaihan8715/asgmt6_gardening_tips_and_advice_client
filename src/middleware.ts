@@ -17,12 +17,12 @@ export async function middleware(request: NextRequest) {
   // const restrictedUserRoutes = ['/admin'];
 
   // If the user is not authenticated
-  // if (!user) {
-  //   if (publicAuthRoutes.includes(pathname)) {
-  //     return NextResponse.next();
-  //   }
-  //   return NextResponse.redirect(new URL('/', request.url));
-  // }
+  if (!user) {
+    if (publicAuthRoutes.includes(pathname)) {
+      return NextResponse.next();
+    }
+    return NextResponse.redirect(new URL('/', request.url));
+  }
 
   // Prevent logged-in users from accessing auth pages
   // if (publicAuthRoutes.includes(pathname)) {
@@ -63,15 +63,16 @@ export async function middleware(request: NextRequest) {
   return NextResponse.next();
 }
 
-// export const config = {
-//   matcher: [
-//     '/',
-//     '/register',
-//     '/forget-password',
-//     '/reset-password',
-//     '/admin/:path*',
-//     '/user/:path*',
-//     '/posts/:path*',
-//     '/unauth',
-//   ],
-// };
+export const config = {
+  matcher: [
+    '/admin/:path*',
+    '/user/:path*',
+    '/',
+    '/register',
+    '/forget-password',
+    '/reset-password',
+    '/payment',
+    '/profile',
+    '/settings',
+  ],
+};

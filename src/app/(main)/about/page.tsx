@@ -1,7 +1,7 @@
 'use client';
 import SectionHeading from '@/components/common/SectionHeading';
 import Image from 'next/image'; // Import the Image component from next/image
-import { motion } from 'framer-motion';
+import { motion } from 'motion/react';
 
 const teamMembers = [
   {
@@ -31,18 +31,17 @@ const AboutUs = () => {
   return (
     <div className="mt-[80px] bg-gray-50 text-gray-800 md:mt-0">
       {/* Our Mission Section */}
-      <section className="bg-white py-20">
+      <section className="bg-white py-10">
         <div className="md:px-10">
           <motion.div
             initial={{ opacity: 0, y: 50 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
-            className="text-center"
           >
-            <div className="flex justify-center">
+            <div className="mb-5 flex justify-center">
               <SectionHeading heading="Our Mission" />
             </div>
-            <p className="mx-auto max-w-md text-lg">
+            <p className="mx-auto max-w-2xl text-lg">
               Our mission is to inspire and empower people to grow their
               own gardens, no matter the space or experience level. We
               believe gardening is a rewarding and sustainable way to
@@ -59,12 +58,12 @@ const AboutUs = () => {
             initial={{ opacity: 0, y: 50 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
-            className="mb-12 text-center"
+            className="mb-12"
           >
-            <div className="flex justify-center">
+            <div className="mb-5 flex justify-center">
               <SectionHeading heading="Meet the Team" />
             </div>
-            <p className="mx-auto mb-8 max-w-md text-lg">
+            <p className="mx-auto mb-8 max-w-2xl text-lg">
               Our team consists of passionate gardeners and experts in
               horticulture, landscaping, and plant care. We are dedicated
               to sharing our knowledge and helping you cultivate your own
@@ -107,12 +106,11 @@ const AboutUs = () => {
             initial={{ opacity: 0, y: 50 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
-            className="text-center"
           >
-            <div className="flex justify-center">
+            <div className="mb-5 flex justify-center">
               <SectionHeading heading="Our Story" />
             </div>
-            <p className="mx-auto max-w-md text-lg">
+            <p className="mx-auto max-w-2xl text-lg">
               Our journey began with a simple love for gardening. Over the
               years, we have grown from a small community of garden
               enthusiasts to a platform that educates, inspires, and

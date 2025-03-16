@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import Link from 'next/link';
-import { motion } from 'framer-motion';
+import { motion } from 'motion/react';
 
 import SectionHeading from '@/components/common/SectionHeading';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';

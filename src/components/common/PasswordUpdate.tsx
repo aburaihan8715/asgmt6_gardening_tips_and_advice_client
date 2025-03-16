@@ -50,7 +50,7 @@ const PasswordUpdate = () => {
     <>
       {isPending && <LoadingWithOverlay />}
       <div className="mx-auto mt-12 rounded-md bg-white px-1 md:p-8">
-        <div className="flex justify-center">
+        <div className="mb-5 flex justify-center">
           <SectionHeading heading="update password" />
         </div>
 

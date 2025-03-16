@@ -19,7 +19,7 @@ import {
   useQueryClient,
 } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
-import { FieldValues } from 'react-hook-form';
+
 import { toast } from 'sonner';
 
 // =======================
@@ -31,17 +31,29 @@ export const useGetAllPosts = ({
   searchTerm,
   category,
   voteFilter,
+  user,
 }: {
   page?: number;
   limit?: number;
   searchTerm?: string;
   category?: string;
   voteFilter?: string;
+  user?: string;
 }) => {
   return useQuery({
-    queryKey: ['POSTS', { page, limit, searchTerm, category, voteFilter }],
+    queryKey: [
+      'POSTS',
+      { page, limit, searchTerm, category, voteFilter, user },
+    ],
     queryFn: async () =>
-      await getAllPosts({ page, limit, searchTerm, category, voteFilter }),
+      await getAllPosts({
+        page,
+        limit,
+        searchTerm,
+        category,
+        voteFilter,
+        user,
+      }),
     // gcTime: 0,
   });
 };
@@ -114,7 +126,7 @@ export const useGetPostStats = () => {
 // ========================
 export const useUpdatePostMutation = () => {
   const router = useRouter();
-  return useMutation<unknown, Error, FieldValues>({
+  return useMutation<unknown, Error, any>({
     mutationFn: async (options) =>
       await updatePost(options.postId, options.formData),
     onSuccess: () => {
@@ -264,7 +276,7 @@ export const useVote = ({
 
 export const useCreatePostMutation = () => {
   const router = useRouter();
-  return useMutation<any, Error, FieldValues>({
+  return useMutation<any, Error, any>({
     mutationFn: async (postData) => await createPost(postData),
     onSuccess: () => {
       toast.success('Post created successfully.');

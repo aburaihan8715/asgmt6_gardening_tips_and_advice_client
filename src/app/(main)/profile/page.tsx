@@ -1,17 +1,39 @@
 'use client'; // Only for App Router
 
 import { useState } from 'react';
-import { motion } from 'framer-motion';
+import { motion } from 'motion/react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Pencil, Camera } from 'lucide-react';
+import { useSearchParams } from 'next/navigation';
+import { useGetSingleUser } from '@/hooks/user.hook';
+import { IUser } from '@/types/user.type';
+import { useGetAllPosts } from '@/hooks/post.hook';
+import { IPost } from '@/types/post.type';
 
 export default function Profile() {
+  const searchParams = useSearchParams();
+  const id = searchParams.get('id') as string;
+  const { data: userData, isLoading: isUserLoading } =
+    useGetSingleUser(id);
+  const user: IUser = userData?.data || {};
+
+  const { data: postData, isLoading: isPostLoading } = useGetAllPosts({
+    user: user._id,
+  });
+  const posts: IPost[] = postData?.data || [];
+
+  console.log(posts);
+
   const [bio, setBio] = useState(
     'Web Developer | Tech Enthusiast | Music Lover',
   );
   const [editing, setEditing] = useState(false);
   const [bioInput, setBioInput] = useState(bio);
+
+  if (isUserLoading || isPostLoading) {
+    return 'Loading...';
+  }
 
   return (
     <div className="min-h-screen bg-gray-100 dark:bg-gray-900">
@@ -33,15 +55,18 @@ export default function Profile() {
       <div className="mx-auto max-w-4xl px-4">
         <div className="relative -mt-16 flex items-center">
           <Image
-            src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png"
+            src={
+              user?.profilePicture ||
+              'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png'
+            }
             alt="Profile"
             width={150}
             height={150}
-            className="rounded-full border-4 border-white shadow-lg"
+            className="w[150px] h-[150px] rounded-full border-4 border-white object-cover shadow-lg"
           />
           <div className="ml-4">
             <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
-              John Doe
+              {user.username || 'anonymous'}
             </h1>
             {editing ? (
               <div className="mt-1 flex items-center gap-2">
@@ -101,19 +126,19 @@ export default function Profile() {
           transition={{ duration: 0.4 }}
           className="mt-6 space-y-4"
         >
-          {Array.from({ length: 3 }).map((_, i) => (
-            <div
-              key={i}
-              className="rounded-lg bg-white p-4 shadow dark:bg-gray-800"
+          {posts?.map((item) => (
+            <Link
+              href={`/posts/${item._id}`}
+              key={item?._id}
+              className="block rounded-lg bg-white p-4 shadow dark:bg-gray-800"
             >
               <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
-                Post Title {i + 1}
+                {item?.title}
               </h2>
               <p className="mt-1 text-gray-600 dark:text-gray-300">
-                This is a sample post description. Add images, links, and
-                more!
+                {item?.description}
               </p>
-            </div>
+            </Link>
           ))}
         </motion.div>
       </div>

@@ -1,5 +1,12 @@
 import ActiveLinkDashboard from '@/components/common/ActiveLinkDashboard';
-import { FaCog, FaComments, FaEye, FaHome, FaLock } from 'react-icons/fa';
+import {
+  FaCog,
+  FaMoneyBillWave,
+  FaRegNewspaper,
+  FaTachometerAlt,
+  FaUserCircle,
+  FaUsers,
+} from 'react-icons/fa';
 
 export const adminSidebarLinks = (
   <>
@@ -10,7 +17,7 @@ export const adminSidebarLinks = (
         className="flex w-full items-center gap-2"
         href="/admin/dashboard"
       >
-        <FaHome className="text-base" />
+        <FaTachometerAlt className="text-base" />
         <span className="">Dashboard</span>
       </ActiveLinkDashboard>
     </li>
@@ -20,8 +27,8 @@ export const adminSidebarLinks = (
         className="flex w-full items-center gap-2"
         href="/admin/all-posts"
       >
-        <FaComments className="text-base" />
-        <span className="">All Posts</span>
+        <FaRegNewspaper className="text-base" />
+        <span className="">Posts</span>
       </ActiveLinkDashboard>
     </li>
 
@@ -30,8 +37,18 @@ export const adminSidebarLinks = (
         className="flex w-full items-center gap-2"
         href="/admin/all-users"
       >
-        <FaEye className="text-base" />
-        <span className="">All Users</span>
+        <FaUsers className="text-base" />
+        <span className="">Users</span>
+      </ActiveLinkDashboard>
+    </li>
+
+    <li className="flex">
+      <ActiveLinkDashboard
+        className="flex w-full items-center gap-2"
+        href="/admin/all-payments"
+      >
+        <FaMoneyBillWave className="text-base" />
+        <span className="">Payments</span>
       </ActiveLinkDashboard>
     </li>
 
@@ -39,19 +56,19 @@ export const adminSidebarLinks = (
     <li className="flex">
       <ActiveLinkDashboard
         className="flex w-full items-center gap-2"
-        href="/admin/settings-profile"
+        href="/settings"
       >
         <FaCog className="text-base" />
-        <span className="">Update Profile</span>
+        <span className="">Profile settings</span>
       </ActiveLinkDashboard>
     </li>
     <li className="flex">
       <ActiveLinkDashboard
         className="flex w-full items-center gap-2"
-        href="/admin/change-password"
+        href="/profile"
       >
-        <FaLock className="text-base" />
-        <span className="">Change password</span>
+        <FaUserCircle className="text-base" />
+        <span className="">Profile</span>
       </ActiveLinkDashboard>
     </li>
   </>

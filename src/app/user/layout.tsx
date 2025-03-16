@@ -2,7 +2,6 @@
 import { useState } from 'react';
 
 import Drawer from '@/components/common/Drawer';
-import PremiumButton from '@/components/common/PremiumButton';
 import { userNavbarLinks, userSidebarLinks } from './_constants';
 import DesktopSidebar from '@/components/common/DesktopSidebar';
 import Navbar from '@/components/common/Navbar';
@@ -23,7 +22,7 @@ export default function UserLayout({
         {/* Desktop Sidebar with Sticky Fix */}
         <div className="hidden md:block md:w-[250px]">
           <div className="fixed bottom-0 top-[80px] h-screen overflow-y-auto border-r pl-10 pr-2 pt-5 md:w-[250px]">
-            <DesktopSidebar isBtn={true} links={userSidebarLinks} />
+            <DesktopSidebar links={userSidebarLinks} />
           </div>
         </div>
 
@@ -35,7 +34,6 @@ export default function UserLayout({
       <Drawer isOpen={isOpen} onClose={() => setIsOpen(false)}>
         <ul className="flex flex-col gap-3 font-semibold text-gray-700">
           {userSidebarLinks}
-          <PremiumButton />
         </ul>
       </Drawer>
     </>

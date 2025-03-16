@@ -1,19 +1,22 @@
 'use client';
-import React, { useState } from 'react';
+
+import 'react-quill-new/dist/quill.snow.css';
+import React, { useEffect, useState } from 'react';
 import dynamic from 'next/dynamic'; // Import dynamic
-import 'react-quill/dist/quill.snow.css';
 import Image from 'next/image';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { FaPlusSquare } from 'react-icons/fa';
 import { PostSchemas } from '@/schemas/post.schema';
 import { useCreatePostMutation } from '@/hooks/post.hook';
 import LoadingWithOverlay from '@/components/common/LoadingWithOverlay';
 import { useAuth } from '@/context/user.provider';
 import LoadingSpinner from '@/components/common/LoadingSpinner';
+import { Camera } from 'lucide-react';
 
 // Dynamically import ReactQuill to disable SSR
-const ReactQuill = dynamic(() => import('react-quill'), { ssr: false });
+const ReactQuill = dynamic(() => import('react-quill-new'), {
+  ssr: false,
+});
 
 type TPostFormValues = {
   title: string;
@@ -25,38 +28,34 @@ type TPostFormValues = {
 
 const modules = {
   toolbar: [
-    [{ header: '1' }, { header: '2' }, { font: [] }],
-    [{ list: 'ordered' }, { list: 'bullet' }],
+    [{ header: [1, 2, false] }],
     ['bold', 'italic', 'underline', 'strike', 'blockquote'],
-    [{ align: [] }],
-    [{ indent: '-1' }, { indent: '+1' }],
-    [{ color: [] }, { background: [] }],
-    ['link', 'image', 'code-block'],
+    [
+      { list: 'ordered' },
+      { list: 'bullet' },
+      { indent: '-1' },
+      { indent: '+1' },
+    ],
+    ['link', 'image'],
     ['clean'],
   ],
 };
 
 const formats = [
   'header',
-  'font',
-  'size',
   'bold',
   'italic',
   'underline',
   'strike',
   'blockquote',
   'list',
-  'bullet',
   'indent',
   'link',
   'image',
-  'align',
-  'color',
-  'background',
-  'code-block',
 ];
 
 const CreatePost = () => {
+  const [isMounted, setIsMounted] = useState(false);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const {
     register,
@@ -99,6 +98,10 @@ const CreatePost = () => {
       reader.readAsDataURL(file);
     }
   };
+
+  useEffect(() => {
+    setIsMounted(true); // Set the flag once the component has mounted
+  }, []);
 
   if (isCurrentUserLoading) {
     return <LoadingSpinner />;
@@ -187,7 +190,7 @@ const CreatePost = () => {
           </div>
 
           {/* Image Input with Preview */}
-          <div>
+          <div className="relative">
             {imagePreview ? (
               <div className="relative h-[150px] w-full md:h-[400px]">
                 <Image
@@ -195,7 +198,7 @@ const CreatePost = () => {
                   src={imagePreview}
                   alt="User photo preview"
                   fill
-                  className="rounded object-cover"
+                  className="rounded-md border-2 border-dashed border-gray-600 object-cover p-5"
                 />
               </div>
             ) : (
@@ -205,7 +208,7 @@ const CreatePost = () => {
                   src={'https://dummyimage.com/600x400'}
                   alt="User photo"
                   fill
-                  className="rounded object-cover"
+                  className="rounded-md border-2 border-dashed border-gray-600 object-cover p-5"
                 />
               </div>
             )}
@@ -217,14 +220,13 @@ const CreatePost = () => {
               onChange={handleImageChange}
               className="hidden w-full text-sm text-gray-500 file:mr-4 file:rounded file:border-0 file:bg-green-50 file:px-4 file:py-2 file:text-green-700 hover:file:bg-green-100"
             />
+
             <label
               htmlFor="photo"
-              className="mt-4 flex cursor-pointer items-center justify-center gap-2 rounded border border-green-300 py-2 text-center text-xl text-green-700"
+              className="absolute bottom-1/4 right-1/2 translate-x-1/2 cursor-pointer rounded-lg bg-black/50 px-3 py-1 text-white transition hover:bg-black/70"
             >
-              <div className="flex items-center gap-3">
-                <FaPlusSquare />
-                <span>Image</span>
-              </div>
+              <Camera size={18} className="mr-1 inline-block" /> Update
+              Cover
             </label>
           </div>
 
@@ -237,17 +239,19 @@ const CreatePost = () => {
               Content
             </label>
             {/* Render ReactQuill only on client */}
-            <ReactQuill
-              placeholder="Write your advice..."
-              theme="snow"
-              value={watch('content') || ''}
-              onChange={(content) =>
-                setValue('content', content, { shouldValidate: true })
-              }
-              modules={modules}
-              formats={formats}
-              className="rounded-md border border-green-300"
-            />
+            {isMounted && (
+              <ReactQuill
+                placeholder="Write your advice..."
+                theme="snow"
+                value={watch('content') || ''}
+                onChange={(content) =>
+                  setValue('content', content, { shouldValidate: true })
+                }
+                modules={modules}
+                formats={formats}
+                className="rounded-md border border-green-300"
+              />
+            )}
             {errors.content && (
               <p className="text-xs text-red-500">
                 {errors.content.message}

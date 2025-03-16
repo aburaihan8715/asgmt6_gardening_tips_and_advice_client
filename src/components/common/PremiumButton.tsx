@@ -1,5 +1,5 @@
-import React from 'react';
-import ActiveLinkDashboard from './ActiveLinkDashboard';
+'use client';
+
 import { FaCrown } from 'react-icons/fa';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/context/user.provider';
@@ -34,7 +34,7 @@ const PremiumButton = () => {
       });
 
       if (result.isConfirmed) {
-        router.push('/user/payment');
+        router.push('/payment');
       }
     }
   };
@@ -44,15 +44,13 @@ const PremiumButton = () => {
   }
 
   return (
-    <li onClick={handlePremium} className="flex">
-      <ActiveLinkDashboard
-        btn={true}
-        className="flex w-full items-center gap-2"
-      >
-        <FaCrown className="text-base" />
-        <span className="">Be premium</span>
-      </ActiveLinkDashboard>
-    </li>
+    <button
+      onClick={handlePremium}
+      className="flex w-full items-center gap-2 rounded-md bg-green-500 px-3 py-1 text-white"
+    >
+      <FaCrown className="text-base" />
+      <span className="">Premium access</span>
+    </button>
   );
 };
 
