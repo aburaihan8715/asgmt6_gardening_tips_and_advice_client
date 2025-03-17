@@ -8,7 +8,6 @@ import {
   FaPen,
   FaPhoneAlt,
   FaTachometerAlt,
-  FaUserCircle,
 } from 'react-icons/fa';
 
 export const userSidebarLinks = (
@@ -67,7 +66,7 @@ export const userSidebarLinks = (
       </ActiveLinkDashboard>
     </li>
 
-    <li className="flex">
+    {/* <li className="flex">
       <ActiveLinkDashboard
         className="flex w-full items-center gap-2"
         href="/profile"
@@ -75,7 +74,7 @@ export const userSidebarLinks = (
         <FaUserCircle className="text-base" />
         <span className="">Profile</span>
       </ActiveLinkDashboard>
-    </li>
+    </li> */}
   </>
 );
 

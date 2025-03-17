@@ -4,7 +4,6 @@ import {
   FaMoneyBillWave,
   FaRegNewspaper,
   FaTachometerAlt,
-  FaUserCircle,
   FaUsers,
 } from 'react-icons/fa';
 
@@ -62,7 +61,7 @@ export const adminSidebarLinks = (
         <span className="">Profile settings</span>
       </ActiveLinkDashboard>
     </li>
-    <li className="flex">
+    {/* <li className="flex">
       <ActiveLinkDashboard
         className="flex w-full items-center gap-2"
         href="/profile"
@@ -70,6 +69,6 @@ export const adminSidebarLinks = (
         <FaUserCircle className="text-base" />
         <span className="">Profile</span>
       </ActiveLinkDashboard>
-    </li>
+    </li> */}
   </>
 );
