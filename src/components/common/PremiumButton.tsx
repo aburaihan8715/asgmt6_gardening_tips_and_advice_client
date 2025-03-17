@@ -9,7 +9,7 @@ import Swal from 'sweetalert2';
 
 const PremiumButton = () => {
   const router = useRouter();
-  const { isLoading: isUserLoading, currentUser } = useAuth();
+  const { currentUser, isCurrentUserLoading } = useAuth();
   const { data: hasUpvoteForPostData, isLoading: isCheckUpvoteLoading } =
     useCheckHasUpvoteForPost();
 
@@ -39,7 +39,7 @@ const PremiumButton = () => {
     }
   };
 
-  if (isUserLoading || isCheckUpvoteLoading) {
+  if (isCurrentUserLoading || isCheckUpvoteLoading) {
     return <p>Loading...</p>;
   }
 
