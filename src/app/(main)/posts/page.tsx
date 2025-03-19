@@ -150,7 +150,7 @@ const Posts = () => {
                   </RadioGroup>
                 </div>
 
-                <div className="flex gap-4">
+                <div className="flex flex-col gap-4">
                   <Button
                     className="w-full md:w-auto"
                     onClick={handleClearFilter}

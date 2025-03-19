@@ -36,7 +36,7 @@ const AdminDashboard = () => {
         <UserLineChart />
       </div>
 
-      <div className="flex gap-10">
+      <div className="flex flex-col gap-10 md:flex-row">
         <LatestUsers />
         <LatestSubscription />
       </div>

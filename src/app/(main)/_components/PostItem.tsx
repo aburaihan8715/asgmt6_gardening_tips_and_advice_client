@@ -42,7 +42,7 @@ const PostItem = ({ post }: { post: IPost }) => {
   return (
     <>
       {isCurrentUserLoading && <LoadingWithOverlay />}
-      <div className="group relative mb-6 flex flex-col gap-10 rounded-lg bg-white p-1 md:flex-row">
+      <div className="group relative mb-6 flex flex-col gap-10 rounded-lg bg-white p-1 lg:flex-row">
         {/* Post Image with Hover Overlay */}
 
         <div className="group relative aspect-[16/9] w-full flex-1 overflow-hidden rounded-lg">

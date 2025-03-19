@@ -94,13 +94,13 @@ const Login = () => {
           <div className="mb-2 flex flex-wrap justify-between gap-2">
             <button
               onClick={() => handleCredentials('admin')}
-              className="rounded-md bg-green-600 px-5 py-1 text-gray-200 transition duration-300 hover:bg-green-800"
+              className="rounded-md bg-green-600 px-2 py-1 text-gray-200 transition duration-300 hover:bg-green-800 md:px-5"
             >
               admin credentials
             </button>
             <button
               onClick={() => handleCredentials('user')}
-              className="rounded-md bg-green-600 px-5 py-1 text-gray-200 transition duration-300 hover:bg-green-800"
+              className="rounded-md bg-green-600 px-2 py-1 text-gray-200 transition duration-300 hover:bg-green-800 md:px-5"
             >
               user credentials
             </button>

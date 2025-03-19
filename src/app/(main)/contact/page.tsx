@@ -135,15 +135,15 @@ const ContactUs = () => {
           </p>
         </motion.div>
 
-        <div className="flex flex-col p-10 sm:flex-row">
-          <div className="flex-1 rounded-md bg-white p-10">
+        <div className="flex flex-col sm:flex-row md:p-10">
+          <div className="flex-1 rounded-md bg-white md:p-10">
             <div className="">
               <motion.form
                 onSubmit={handleSubmit}
                 initial={{ opacity: 0, scale: 0.95 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ duration: 0.6 }}
-                className="rounded-lg bg-white p-8 shadow-md"
+                className="rounded-lg bg-white p-3 shadow-md md:p-8"
               >
                 <div className="mb-4">
                   <motion.label

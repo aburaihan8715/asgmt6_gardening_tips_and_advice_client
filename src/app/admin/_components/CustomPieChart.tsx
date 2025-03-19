@@ -63,7 +63,7 @@ const CustomPieChart = () => {
         </ResponsiveContainer>
       </div>
 
-      <div className="flex justify-center gap-10">
+      <div className="flex justify-center gap-2 md:gap-10">
         {data.map((item) => (
           <div className="" key={item.name}>
             <div className="flex items-center gap-2">

@@ -46,9 +46,9 @@ const PremiumButton = () => {
   return (
     <button
       onClick={handlePremium}
-      className="flex w-full items-center gap-2 rounded-md bg-green-500 px-3 py-1 text-white"
+      className="flex w-full items-center justify-center gap-2 rounded-md bg-green-500 px-3 py-1 text-white"
     >
-      <FaCrown className="text-base" />
+      <FaCrown className="hidden text-base lg:block" />
       <span className="">Premium access</span>
     </button>
   );
